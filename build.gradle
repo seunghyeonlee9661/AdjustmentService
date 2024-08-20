@@ -64,9 +64,10 @@ jar {
 				'Main-Class': 'com.sparta.adjustment.AdjustmentApplication'  // 여기에 메인 클래스의 패키지와 클래스 이름을 입력하세요
 		)
 	}
-
 	// 모든 의존성을 포함
 	from {
 		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
 	}
+	// 중복 항목 처리 전략 추가
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
