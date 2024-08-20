@@ -22,7 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
+//    private final EmailService emailService;
     private final RedisService redisService;
     private final JwtUtil jwtUtil;
 
@@ -48,10 +48,10 @@ public class UserService {
     public ResponseEntity<String> requestUploader(UserDetailsImpl userDetails) {
         String code = UUID.randomUUID().toString();
         String username = userDetails.getUsername();
-        if(emailService.sendUploaderRequestEmail(username,code)){ // 메일 발송
-            redisService.save(RedisService.UPLOADER_REQUEST_PREFIX,code,username,RedisService.UPLOADER_REQUEST_DURATION); // Redis에 저장
-            return ResponseEntity.ok("메일 전송이 완료되었습니다.");
-        }
+//        if(emailService.sendUploaderRequestEmail(username,code)){ // 메일 발송
+//            redisService.save(RedisService.UPLOADER_REQUEST_PREFIX,code,username,RedisService.UPLOADER_REQUEST_DURATION); // Redis에 저장
+//            return ResponseEntity.ok("메일 전송이 완료되었습니다.");
+//        }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("메일 전송에 실패했습니다.");
     }
 
