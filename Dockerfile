@@ -20,7 +20,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8081
 
 # Run the application
 CMD ["java", "-jar", "build/libs/adjustment-0.0.1-SNAPSHOT.jar"]
