@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.util.TimeZone;
 
-@EnableJpaAuditing
 @SpringBootApplication
 @ComponentScan(basePackages = "com.sparta.adjustment") // 필요한 패키지 경로 지정
 public class AdjustmentApplication {
