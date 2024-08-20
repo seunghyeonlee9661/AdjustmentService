@@ -14,13 +14,3 @@ public class AdjustmentApplication {
 		SpringApplication.run(AdjustmentApplication.class, args);
 	}
 }
-
-@RestController
-@RequestMapping("/api")
-class HelloController {
-
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello, World!";
-	}
-}
