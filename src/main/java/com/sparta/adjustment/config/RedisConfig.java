@@ -19,15 +19,11 @@ public class RedisConfig {
     @Value("${spring.redis.host}") // Redis 주소
     private String host;
 
-    @Value("${spring.redis.port}") // Redis 포트
-    private int port;
-
-
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName(host);
-        redisConfiguration.setPort(port);
+        redisConfiguration.setPort(6379);
         return new LettuceConnectionFactory(redisConfiguration);
     }
 
