@@ -23,4 +23,4 @@ RUN ./gradlew build -x test
 EXPOSE 8081
 
 # Run the application
-CMD ["java", "-jar", "build/libs/adjustment-0.0.1-SNAPSHOT.jar"]
+CMD ["./gradlew", "bootRun"]
