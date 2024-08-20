@@ -16,6 +16,11 @@ COPY src /app/src
 # Ensure gradlew is executable
 RUN chmod +x ./gradlew
 
+# Check if environment variables are set correctly
+RUN echo "MYSQL_USER: $MYSQL_USER"
+RUN echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+RUN echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+
 # Build the application without running tests
 RUN ./gradlew build -x test
 
