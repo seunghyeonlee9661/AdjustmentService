@@ -4,8 +4,11 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
-# Copy application files
-COPY app /app
+# Copy all files from current directory to the container's /app directory
+COPY . /app
+
+# Ensure gradlew is executable
+RUN chmod +x ./gradlew
 
 # Build the application
 RUN ./gradlew build
