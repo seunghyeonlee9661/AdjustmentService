@@ -1,7 +1,7 @@
 package com.sparta.adjustment.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.adjustment.DTO.UserLoginRequestDTO;
+import com.sparta.adjustment.dto.UserLoginRequestDTO;
 import com.sparta.adjustment.entity.User;
 import com.sparta.adjustment.security.JwtUtil;
 import com.sparta.adjustment.security.UserDetailsImpl;

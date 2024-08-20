@@ -60,11 +60,9 @@ public class JwtUtil {
     public String createAccessToken(User user) {
         Map<String, Object> additionalClaims = new HashMap<>();
         /* 클레임으로정보 추가 가능*/
-        additionalClaims.put("nickname", user.getNickname());
         Date date = new Date();
         return BEARER_PREFIX + Jwts.builder()
-                        .setSubject(String.valueOf(user.getEmail())) // 사용자 식별자값(ID)
-                        .addClaims(additionalClaims) // 추가 클레임
+                        .setSubject(String.valueOf(user.getUsername())) // 사용자 식별자값(ID)
                         .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_VALIDITY)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
@@ -75,7 +73,7 @@ public class JwtUtil {
     public String createRefreshToken(User user) {
         Date date = new Date();
         return Jwts.builder()
-                        .setSubject(String.valueOf(user.getEmail())) // 사용자 식별자값(ID)
+                        .setSubject(String.valueOf(user.getUsername())) // 사용자 식별자값(ID)
                         .setExpiration(new Date(date.getTime() + RedisService.REFRESH_TOKEN_VALIDITY)) // 만료 시간
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
