@@ -1,5 +1,4 @@
 package com.sparta.adjustment;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,5 +8,4 @@ public class AdjustmentApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AdjustmentApplication.class, args);
 	}
-
 }
