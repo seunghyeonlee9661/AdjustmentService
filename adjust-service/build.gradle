@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':common') // common 모듈 추가
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -50,14 +51,6 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
     // 메일 보내는 기능
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-}
-
-project(':common') {
-    // 공통 코드
-    bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
-    jar { enabled = true }
-    dependencies {
-    }
 }
 
 tasks.named('test') {

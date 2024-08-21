@@ -7,6 +7,12 @@ plugins {
 group = 'com.sparta.module'
 version = '0.0.1-COMMON-SNAPSHOT'
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -24,6 +30,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+tasks.named('jar') {
+    enabled = true
 }
