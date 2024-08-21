@@ -4,9 +4,6 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
-# Print the current working directory
-RUN echo "Current directory: $(pwd)"
-
 # Copy necessary files from the build context
 COPY gradlew /app/
 COPY gradle /app/gradle
