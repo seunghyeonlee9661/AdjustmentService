@@ -3,7 +3,6 @@ FROM openjdk:17-jdk-slim
 
 # Set environment variables
 ENV WORKDIR_PATH=/adjust-service
-ENV JAR_PATH=build/libs/adjustment-*.jar
 ENV JAR_FILE=app.jar
 
 # Set working directory
@@ -23,7 +22,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # Copy the built JAR file
-COPY ${JAR_PATH} ${JAR_FILE}
+COPY build/libs/adjustment-0.0.1-ADJUST-SNAPSHOT.jar ${JAR_FILE}
 
 # Expose port
 EXPOSE 8080
