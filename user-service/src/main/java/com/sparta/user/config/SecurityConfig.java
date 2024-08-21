@@ -10,6 +10,7 @@ import com.sparta.common.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ import java.util.Arrays;
 작성자 : 이승현
 JWT 시큐리티 관련
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
 @AllArgsConstructor
@@ -71,13 +73,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CORS 설정
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 적용
-                // CSRF 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
-                // 세션 관리 설정
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 접근 권한 설정
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
                                 .requestMatchers(HttpMethod.GET, "/api/adjust/test").permitAll()
@@ -85,20 +82,13 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/user/test").permitAll()
                                 .anyRequest().authenticated()
                 )
-//                .authorizeHttpRequests(authorizeHttpRequests ->
-//                        authorizeHttpRequests
-//                                .anyRequest().permitAll() // 모든 요청을 허용
-//                )
-                // 에러 핸들러 설정
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
-                // 로그인 처리 설정
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/api/user/login")
                                 .loginProcessingUrl("/api/user/login")
                                 .permitAll()
                 )
-                // 로그아웃 처리 설정
                 .logout(logout ->
                         logout
                                 .logoutUrl("/api/user/logout")
@@ -109,6 +99,7 @@ public class SecurityConfig {
                 .addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        log.info("Security filter chain configured.");
         return http.build();
     }
     /* 패스워드 인코딩 */
