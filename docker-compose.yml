@@ -22,7 +22,7 @@ services:
 
   user-service:
     build:
-      context: ./user_service
+      context: ./user-service
       dockerfile: Dockerfile
     container_name: user_service
     ports:
@@ -35,7 +35,7 @@ services:
 
   video-service:
     build:
-      context: ./video_service
+      context: ./video-service
       dockerfile: Dockerfile
     container_name: video_service
     ports:
@@ -48,7 +48,7 @@ services:
 
   adjust-service:
     build:
-      context: ./adjust_service
+      context: ./adjust-service
       dockerfile: Dockerfile
     container_name: adjust_service
     ports:
