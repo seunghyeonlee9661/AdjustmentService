@@ -72,3 +72,10 @@ jar {
 	// 중복 항목 처리 전략 추가
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+bootJar {
+	enabled = false
+}
+jar {
+	enabled = true
+}
