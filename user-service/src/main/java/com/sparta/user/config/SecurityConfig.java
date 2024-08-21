@@ -78,19 +78,17 @@ public class SecurityConfig {
                 // 세션 관리 설정
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 접근 권한 설정
-//                .authorizeHttpRequests(authorizeHttpRequests ->
-//                        authorizeHttpRequests
-//                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-//                                .requestMatchers("/error").permitAll() // 오류
-//                                .requestMatchers(HttpMethod.GET,"/api/adjust/test").permitAll() // 오류
-//                                .requestMatchers(HttpMethod.GET,"/api/video/test").permitAll() // 오류
-//                                .requestMatchers(HttpMethod.GET,"/api/user/test").permitAll() // 오류
-//                                .anyRequest().authenticated()
-//                )
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
-                                .anyRequest().permitAll() // 모든 요청을 허용
+                                .requestMatchers(HttpMethod.GET, "/api/adjust/test").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/video/test").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/user/test").permitAll()
+                                .anyRequest().authenticated()
                 )
+//                .authorizeHttpRequests(authorizeHttpRequests ->
+//                        authorizeHttpRequests
+//                                .anyRequest().permitAll() // 모든 요청을 허용
+//                )
                 // 에러 핸들러 설정
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 // 로그인 처리 설정
@@ -109,7 +107,7 @@ public class SecurityConfig {
                                 .permitAll()
                 )
                 .addFilterBefore(new RequestLoggingFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
