@@ -1,5 +1,5 @@
 rootProject.name = 'adjustment'
 include 'common'
 include 'user-service'
-include 'adjust-service'
 include 'video-service'
+include 'adjust-service'

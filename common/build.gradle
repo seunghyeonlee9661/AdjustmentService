@@ -1,6 +1,5 @@
 plugins {
-    id 'java-library'
-    id 'org.springframework.boot' version '3.3.2'
+    id 'java-library'  // Spring Boot 플러그인 대신 Java Library 플러그인 사용
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -33,10 +32,4 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
-bootJar {
-    enabled = false  // Spring Boot 애플리케이션 JAR 생성 비활성화
-}
-
-jar {
-    enabled = true  // 일반 JAR 파일 생성 활성화
-}
+// Spring Boot 플러그인 관련 설정 제거
