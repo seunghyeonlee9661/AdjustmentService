@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/adjust")
+@RequestMapping("/api")
 class AdjustController {
-    @GetMapping("/test")
+    @GetMapping("/adjust/test")
     public String hello() {
         return "Hello, this is Adjustment Controller";
     }
