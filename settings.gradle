@@ -3,4 +3,3 @@ include 'user-service'
 include 'adjust-service'
 include 'video-service'
 include 'common'
-

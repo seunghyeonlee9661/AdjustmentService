@@ -23,5 +23,5 @@ COPY build/libs/adjustment-*.jar app.jar
 # Expose port
 EXPOSE 8080
 
-# Run the application
-CMD ["java", "-jar", "app.jar"]
+# Run the application using Gradle
+CMD ["./gradlew", "bootRun"]
