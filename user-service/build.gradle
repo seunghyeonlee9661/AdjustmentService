@@ -55,6 +55,6 @@ tasks.named('test') {
 }
 
 bootJar {
-    mainClassName = 'com.sparta.user.UserServiceApplication'
+    mainClass.set('com.sparta.user.UserServiceApplication') // 변경된 설정
     archiveFileName.set("adjustment-${version}.jar")
 }

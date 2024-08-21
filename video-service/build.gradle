@@ -56,7 +56,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+
 bootJar {
-    mainClassName = 'com.sparta.video.VideoServiceApplication'
+    mainClass.set('com.sparta.video.VideoServiceApplication') // 변경된 설정
     archiveFileName.set("adjustment-${version}.jar")
 }
