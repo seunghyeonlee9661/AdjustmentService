@@ -28,4 +28,5 @@ COPY build/libs/adjustment-0.0.1-ADJUST-SNAPSHOT.jar ${JAR_FILE}
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "${JAR_FILE}"]
+CMD ["java", "-jar", "/adjust-service/app.jar"]
+

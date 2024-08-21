@@ -28,4 +28,4 @@ COPY build/libs/adjustment-0.0.1-USER-SNAPSHOT.jar ${JAR_FILE}
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "${JAR_FILE}"]
+CMD ["java", "-jar", "/user-service/app.jar"]
