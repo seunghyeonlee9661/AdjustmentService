@@ -20,12 +20,39 @@ services:
     ports:
       - "6379:6379"
 
-  app:
+  user-service:
     build:
-      context: .
-    container_name: spring_app
+      context: ./user_service
+      dockerfile: Dockerfile
+    container_name: user_service
     ports:
       - "8081:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  video-service:
+    build:
+      context: ./video_service
+      dockerfile: Dockerfile
+    container_name: video_service
+    ports:
+      - "8082:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  adjust-service:
+    build:
+      context: ./adjust_service
+      dockerfile: Dockerfile
+    container_name: adjust_service
+    ports:
+      - "8083:8080"
     env_file:
       - .env
     depends_on:
