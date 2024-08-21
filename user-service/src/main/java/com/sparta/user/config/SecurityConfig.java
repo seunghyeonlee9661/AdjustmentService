@@ -72,34 +72,38 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 // CORS 설정
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 적용
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 적용
                 // CSRF 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
                 // 세션 관리 설정
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 접근 권한 설정
+//                .authorizeHttpRequests(authorizeHttpRequests ->
+//                        authorizeHttpRequests
+//                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//                                .requestMatchers("/error").permitAll() // 오류
+//                                .requestMatchers(HttpMethod.GET,"/api/adjust/test").permitAll() // 오류
+//                                .requestMatchers(HttpMethod.GET,"/api/video/test").permitAll() // 오류
+//                                .requestMatchers(HttpMethod.GET,"/api/user/test").permitAll() // 오류
+//                                .anyRequest().authenticated()
+//                )
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/error").permitAll() // 오류
-                                .requestMatchers(HttpMethod.GET,"/api/adjust/test").permitAll() // 오류
-                                .requestMatchers(HttpMethod.GET,"/api/video/test").permitAll() // 오류
-                                .requestMatchers(HttpMethod.GET,"/api/user/test").permitAll() // 오류
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll() // 모든 요청을 허용
                 )
                 // 에러 핸들러 설정
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 // 로그인 처리 설정
                 .formLogin(formLogin ->
                         formLogin
-                                .loginPage("/login")
-                                .loginProcessingUrl("/api/login")
+                                .loginPage("/api/user/login")
+                                .loginProcessingUrl("/api/user/login")
                                 .permitAll()
                 )
                 // 로그아웃 처리 설정
                 .logout(logout ->
                         logout
-                                .logoutUrl("/api/logout")
+                                .logoutUrl("/api/user/logout")
                                 .addLogoutHandler(this::handleLogout)
                                 .logoutSuccessHandler(this::handleLogoutSuccess)
                                 .permitAll()
@@ -136,15 +140,15 @@ public class SecurityConfig {
         response.getWriter().write("Logout successful");
     }
 // 4번 시도
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용된 메소드
-        configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
-        configuration.setAllowCredentials(true); // 자격 증명 허용
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*")); // 모든 출처 허용
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용된 메소드
+//        configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
+//        configuration.setAllowCredentials(true); // 자격 증명 허용
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 }
