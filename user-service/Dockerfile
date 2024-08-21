@@ -24,4 +24,4 @@ COPY build/libs/adjustment-*.jar app.jar
 EXPOSE 8080
 
 # Run the application using Gradle
-CMD ["./gradlew", "bootRun"]
+CMD ["java", "-jar", "app.jar"]
