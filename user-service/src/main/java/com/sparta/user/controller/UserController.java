@@ -16,30 +16,30 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "User API")
-@RequestMapping("/api")
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 //    private final KakaoLoginService kakaoLoginService;
 
-    @GetMapping("/test/users")
+    @GetMapping("/test")
     public String hello() {
         return "Hello, this is User Controller";
     }
 
     /* 사용자 정보 반환 */
-    @GetMapping("/users")
+    @GetMapping("")
     public ResponseEntity<UserResponseDTO> findUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ResponseEntity.ok(new UserResponseDTO(userDetails.getUser()));
     }
 
     /* 사용자 회원가입 */
-    @PostMapping("/users")
+    @PostMapping("")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserCreateRequestDTO requestDTO) {
         return userService.createUser(requestDTO);
     }
 
     /* 사용자 회원탈퇴 */
-    @DeleteMapping("/users")
+    @DeleteMapping("")
     public ResponseEntity<String> removeUser(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) throws IOException {
         return userService.removeUser(userDetails,res);
     }

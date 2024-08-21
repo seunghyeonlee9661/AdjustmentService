@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "User API")
-@RequestMapping("/api")
+@RequestMapping("/video")
 public class VideoController {
 
     private final VideoService videoService;
 
-    @GetMapping("/test/videos")
+    @GetMapping("/test")
     public String hello() {
         return "Hello, this is Videos Controller";
     }
 
     /* 비디오 목록 페이지 불러오기 */
-    @GetMapping("/videos")
+    @GetMapping("")
     public ResponseEntity<Page<VideoListResponseDTO>> findVideoList(@RequestParam(value = "page", defaultValue = "0") int page){
         return videoService.getVideoList(page);
     }
 
     /* 비디오 재생 */
-    @GetMapping("/videos/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VideoDetailResponseDTO> playVideo(@PathVariable("id") long id, @AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
         return videoService.playVideo(id,userDetails,request);
     }
