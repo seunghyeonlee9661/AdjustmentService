@@ -46,11 +46,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(jwtUtil.getUserInfoFromToken(jwtUtil.substringToken(newAccessToken)).getSubject()); // 새 토큰에서 사용자 정보를 추출
                     jwtUtil.addTokenToCookie(newAccessToken, res);// 새로운 액세스 토큰을 쿠키에 추가
                     setAuthentication(userDetails, req);// 사용자 인증 설정
-                } else {
-                    // 리프레시 토큰이 만료된 경우
-                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    res.getWriter().write("Refresh Token expired or invalid.");
-                    return;
+//                } else {
+//                    // 리프레시 토큰이 만료된 경우
+//                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//                    res.getWriter().write("Refresh Token expired or invalid.");
+//                    return;
                 }
             }
         }
