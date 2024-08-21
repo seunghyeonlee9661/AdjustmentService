@@ -15,7 +15,7 @@ COPY video-service/src /app/src
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build --stacktrace --info -x test
+RUN ./gradlew clean build --no-build-cache
 
 # Copy the built JAR file
 COPY build/libs/adjustment-*.jar app.jar
