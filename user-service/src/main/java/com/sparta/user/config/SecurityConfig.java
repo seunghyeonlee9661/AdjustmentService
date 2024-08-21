@@ -77,12 +77,16 @@ public class SecurityConfig {
                 // 세션 관리 설정
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // 접근 권한 설정
+//                .authorizeHttpRequests(authorizeHttpRequests ->
+//                        authorizeHttpRequests
+//                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+//                                .requestMatchers("/error").permitAll() // 오류
+//                                .requestMatchers("/api/hello").permitAll() // 오류
+//                                .anyRequest().authenticated()
+//                )
                 .authorizeHttpRequests(authorizeHttpRequests ->
                         authorizeHttpRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers("/error").permitAll() // 오류
-                                .requestMatchers("/api/hello").permitAll() // 오류
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()  // 모든 요청을 허용
                 )
                 // 에러 핸들러 설정
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
