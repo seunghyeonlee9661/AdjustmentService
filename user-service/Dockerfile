@@ -4,6 +4,9 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
+# Print the file list in the root directory of the container
+RUN echo "Files in / directory:" && ls -l /
+
 # Copy Gradle files and source code from the root context
 COPY ../gradlew /app/
 COPY ../gradle /app/gradle/
