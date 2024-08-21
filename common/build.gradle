@@ -1,14 +1,11 @@
 plugins {
-    id 'java-library'  // Spring Boot 플러그인 대신 Java Library 플러그인 사용
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.sparta.module'
-version = '0.0.1-COMMON-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+group = 'com.sparta'
+version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
@@ -16,20 +13,38 @@ java {
     }
 }
 
-dependencies {
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // Validation 관련 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+repositories {
+    mavenCentral()
 }
 
-// Spring Boot 플러그인 관련 설정 제거
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    enabled = false  // Spring Boot 애플리케이션 JAR 생성 비활성화
+}
+
+jar {
+    enabled = true  // 일반 JAR 파일 생성 활성화
+}
