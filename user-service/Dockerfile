@@ -7,9 +7,9 @@ WORKDIR /app
 # Copy Gradle files from the root context to the service context
 COPY gradlew /app/
 COPY gradle /app/gradle/
-COPY build.gradle /app/
+COPY user-service/build.gradle /app/
 COPY settings.gradle /app/
-COPY src /app/src
+COPY user-service/src /app/src
 
 # Ensure gradlew is executable
 RUN chmod +x gradlew
@@ -18,7 +18,7 @@ RUN chmod +x gradlew
 RUN ./gradlew build -x test
 
 # Copy the built JAR file
-COPY build/libs/user-service-*.jar app.jar
+COPY build/libs/adjustment-*.jar app.jar
 
 # Expose port
 EXPOSE 8080
