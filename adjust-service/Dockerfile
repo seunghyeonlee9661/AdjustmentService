@@ -4,19 +4,20 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
-# Copy gradle wrapper and build files
-COPY ../gradlew /app/
-COPY ../gradle /app/gradle
-COPY ../build.gradle /app/
-COPY ../settings.gradle /app/
+# Print the current working directory
+RUN echo "Current directory: $(pwd)"
 
-# Copy source code
+# Copy necessary files from the build context
+COPY gradlew /app/
+COPY gradle /app/gradle
+COPY build.gradle /app/
+COPY settings.gradle /app/
 COPY src /app/src
 
-# Make gradlew executable
+# Ensure gradlew is executable
 RUN chmod +x ./gradlew
 
-# Build the application
+# Build the application without running tests
 RUN ./gradlew build -x test
 
 # Copy the built JAR file
@@ -26,4 +27,4 @@ COPY build/libs/adjustment-*.jar app.jar
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+CMD ["java", "-jar", "app.jar"]
