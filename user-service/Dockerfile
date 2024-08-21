@@ -9,7 +9,7 @@ COPY gradlew /app/
 COPY gradle /app/gradle/
 COPY build.gradle /app/
 COPY settings.gradle /app/
-COPY user-service/src /app/src
+COPY src /app/src
 
 # Ensure gradlew is executable
 RUN chmod +x gradlew
