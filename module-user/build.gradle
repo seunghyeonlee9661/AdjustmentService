@@ -5,3 +5,10 @@ dependencies {
 springBoot{
     mainClass.set('com.sparta.UserApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
+
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
+}
