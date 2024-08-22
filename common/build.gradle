@@ -4,8 +4,9 @@ plugins {
 }
 
 dependencies {
-    // 여기에 필요한 의존성 추가
+    implementation 'org.springframework.boot:spring-boot-starter'
 }
+
 
 bootJar {
     enabled = false  // 기본적으로 Spring Boot 애플리케이션 JAR 생성 비활성화
