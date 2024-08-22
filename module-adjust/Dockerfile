@@ -4,34 +4,11 @@ FROM openjdk:17-jdk-slim
 # Set working directory
 WORKDIR /app
 
-# Copy Gradle files from the root context to the service context
-#COPY gradlew /app/
-#COPY gradle /app/gradle/
-#COPY module-adjust/build.gradle /app/
-#COPY settings.gradle /app/
-#COPY module-adjust/src /app/src
+# Copy the built JAR file from the local context
+# Make sure to match the actual JAR file name
+COPY build/libs/adjustment.module-adjust.jar app.jar
 
-COPY gradlew /app/
-COPY gradle /app/gradle/
-COPY settings.gradle /app/
-COPY build.gradle /app/
-COPY module-common/build.gradle /app/module-common/
-COPY module-adjust/build.gradle /app/module-adjust/
-COPY module-common/src /app/module-common/src
-COPY module-adjust/src /app/module-adjust/src
-
-# Ensure gradlew is executable
-RUN chmod +x gradlew
-
-RUN ./gradlew wrapper --gradle-version 8.8
-
-# Build the application
-RUN ./gradlew build -x test --stacktrace
-
-# Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
-
-# Expose port
+# Expose the port your application will run on
 EXPOSE 8080
 
 # Run the application
