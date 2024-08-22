@@ -14,6 +14,7 @@ WORKDIR /app
 COPY gradlew /app/
 COPY gradle /app/gradle/
 COPY settings.gradle /app/
+COPY build.gradle /app/
 COPY module-common/build.gradle /app/module-common/
 COPY module-adjust/build.gradle /app/module-adjust/
 COPY module-common/src /app/module-common/src
