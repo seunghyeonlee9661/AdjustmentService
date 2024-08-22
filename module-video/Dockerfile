@@ -23,15 +23,14 @@ COPY module-video/src /app/module-video/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
-RUN ./gradlew clean
-## Build the application
-#RUN ./gradlew build -x test
-#
-## Copy the built JAR file
-#COPY build/libs/adjustment-*.jar app.jar
+# Build the application
+RUN ./gradlew build -x test
+
+# Copy the built JAR file
+COPY build/libs/adjustment-*.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
-# Run the application with Gradle bootRun
-CMD ["./gradlew", "bootRun"]
+# Run the application
+CMD ["java", "-jar", "app.jar"]
