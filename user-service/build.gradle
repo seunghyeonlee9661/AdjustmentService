@@ -1,8 +1,3 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.2'
-}
-
 dependencies {
     // spring web
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -12,7 +7,10 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
-bootJar {
-    mainClass.set('com.sparta.user.UserServiceApplication') // 변경된 설정
-    archiveFileName.set("adjustment-${version}.jar")
-}
+bootJar { enabled = true }
+jar { enabled = false }
+
+//bootJar {
+//    mainClass.set('com.sparta.user.UserServiceApplication') // 변경된 설정
+//    archiveFileName.set("adjustment-${version}.jar")
+//}
