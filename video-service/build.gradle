@@ -3,5 +3,9 @@
 //    archiveFileName.set("adjustment-${version}.jar")
 //}
 
+dependencies {
+    implementation project(':common')
+}
+
 bootJar { enabled = true }
 jar { enabled = false }

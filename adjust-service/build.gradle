@@ -2,6 +2,9 @@
 //    mainClass.set('com.sparta.adjust.AdjustServiceApplication') // 변경된 설정
 //    archiveFileName.set("adjustment-${version}.jar")
 //}
+dependencies {
+    implementation project(':common')
+}
 
 bootJar { enabled = true }
 jar { enabled = false }
