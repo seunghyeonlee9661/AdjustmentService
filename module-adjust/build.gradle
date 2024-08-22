@@ -2,10 +2,6 @@ dependencies {
     implementation project(':module-common')
 }
 
-bootRun {
-    mainClass = 'com.example.MainApplication' // 여기에 실제 메인 클래스 경로를 입력하세요
-}
-
-application  {
+springBoot{
     mainClass.set('com.sparta.AdjustApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
