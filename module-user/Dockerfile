@@ -23,6 +23,7 @@ COPY module-user/src /app/module-user/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
+RUN ./gradlew clean
 ## Build the application
 #RUN ./gradlew build -x test
 #

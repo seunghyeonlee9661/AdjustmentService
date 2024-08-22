@@ -23,6 +23,7 @@ COPY module-video/src /app/module-video/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
+RUN ./gradlew clean
 ## Build the application
 #RUN ./gradlew build -x test
 #
