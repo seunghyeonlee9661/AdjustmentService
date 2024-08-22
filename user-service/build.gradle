@@ -1,4 +1,6 @@
 plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
 }
 
 repositories {
@@ -6,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':common')
     // spring web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     // jwt
