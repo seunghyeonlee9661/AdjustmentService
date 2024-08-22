@@ -51,4 +51,22 @@ subprojects {
 	}
 }
 
+project(":user-service") {
+	dependencies {
+		implementation project(":common")
+	}
+}
+
+project(":video-service") {
+	dependencies {
+		implementation project(":common")
+	}
+}
+
+project(":adjust-service") {
+	dependencies {
+		implementation project(":common")
+	}
+}
+
 bootJar.enabled = false
