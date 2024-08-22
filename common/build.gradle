@@ -1,9 +1,12 @@
 plugins {
-    id 'java-library'
-    id 'org.springframework.boot' version '3.3.2'
+    id 'java'
+    id 'org.springframework.boot'
 }
 
 dependencies {
+    // 여기에 필요한 의존성 추가
 }
 
-bootJar.enabled = false
+bootJar {
+    enabled = false  // 기본적으로 Spring Boot 애플리케이션 JAR 생성 비활성화
+}
