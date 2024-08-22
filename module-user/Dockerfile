@@ -23,6 +23,8 @@ COPY module-user/src /app/module-user/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
+RUN ./gradlew wrapper --gradle-version 8.8
+
 # Build the application
 RUN ./gradlew build -x test
 
