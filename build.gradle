@@ -38,6 +38,7 @@ subprojects {
 		implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	}
 	sourceCompatibility = '17'
+
 	configurations {
 		compileOnly {
 			extendsFrom annotationProcessor
@@ -51,25 +52,24 @@ subprojects {
 	}
 }
 
-project(':user-service') { // 컴파일 시 multi-module-database 로딩
+project(':user-service') {
 	dependencies {
-		compileOnly project(':common')
+		implementation project(':common')
 	}
 }
 
-project(':video-service') { // 컴파일 시 multi-module-database 로딩
+project(':video-service') {
 	dependencies {
-		compileOnly project(':common')
+		implementation project(':common')
 	}
 }
 
-project(':adjust-service') { // 컴파일 시 multi-module-database 로딩
+project(':adjust-service') {
 	dependencies {
-		compileOnly project(':common')
+		implementation project(':common')
 	}
 }
-
-project(':common') { // multi-module-databse는 bootJar로 패키징 할 필요 없음
+project(':common') {
 	bootJar { enabled = false }
 	jar { enabled = true }
 }
