@@ -1,12 +1,3 @@
-plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.3.2'
-}
-
-dependencies {
-    implementation project(':common')
-}
-
 bootJar {
     mainClass.set('com.sparta.video.VideoServiceApplication') // 변경된 설정
     archiveFileName.set("adjustment-${version}.jar")
