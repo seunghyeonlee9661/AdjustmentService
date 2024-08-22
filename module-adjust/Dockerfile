@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy the built JAR file from the local context
 # Make sure to match the actual JAR file name
-COPY build/libs/adjustment.module-adjust.jar app.jar
+COPY module-adjust/build/libs/adjustment.module-adjust.jar app.jar
 
 # Expose the port your application will run on
 EXPOSE 8080
