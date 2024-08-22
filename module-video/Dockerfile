@@ -7,9 +7,9 @@ WORKDIR /app
 # Copy Gradle files from the root context to the service context
 COPY gradlew /app/
 COPY gradle /app/gradle/
-COPY adjust-service/build.gradle /app/
+COPY module-video/build.gradle /app/
 COPY settings.gradle /app/
-COPY adjust-service/src /app/src
+COPY module-video/src /app/src
 
 # Ensure gradlew is executable
 RUN chmod +x gradlew
