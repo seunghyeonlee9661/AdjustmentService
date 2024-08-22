@@ -68,5 +68,3 @@ project(":adjust-service") {
 		implementation project(":common")
 	}
 }
-
-bootJar.enabled = false
