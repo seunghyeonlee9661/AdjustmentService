@@ -3,9 +3,5 @@ dependencies {
 }
 
 bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
+    mainClass = 'com.sparta.UserApplication'
 }

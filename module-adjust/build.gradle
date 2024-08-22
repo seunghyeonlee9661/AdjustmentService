@@ -1,3 +1,7 @@
 dependencies {
     implementation project(':module-common')
 }
+
+bootJar {
+    mainClass = 'com.sparta.AdjustApplication'
+}
