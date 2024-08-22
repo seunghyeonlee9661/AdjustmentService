@@ -1,5 +1,5 @@
 # Base image
-FROM openjdk:21-jdk-slim
+FROM openjdk:17-jdk-slim
 
 # Set working directory
 WORKDIR /app
@@ -14,11 +14,8 @@ COPY module-user/src /app/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
-# Print Gradle version (optional, for debugging)
-RUN ./gradlew --version
-
-# Build the application with detailed output
-RUN ./gradlew build -x test --info
+# Build the application
+RUN ./gradlew build -x test
 
 # Copy the built JAR file
 COPY build/libs/adjustment-*.jar app.jar
