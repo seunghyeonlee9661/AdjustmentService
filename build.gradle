@@ -12,7 +12,6 @@ repositories {
 subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 	group 'com.example'
 	version '0.0.1-SNAPSHOT'
-	sourceCompatibility = '17'
 
 	apply plugin: 'java'
 	apply plugin: 'java-library'
