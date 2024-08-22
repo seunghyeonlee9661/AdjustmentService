@@ -2,6 +2,6 @@ dependencies {
     implementation project(':module-common')
 }
 
-bootJar {
-    mainClass = 'com.sparta.VideoApplication'
+springBoot {
+    mainClass.set('com.sparta.VideoApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
