@@ -5,11 +5,19 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy Gradle files from the root context to the service context
+#COPY gradlew /app/
+#COPY gradle /app/gradle/
+#COPY module-video/build.gradle /app/
+#COPY settings.gradle /app/
+#COPY module-video/src /app/src
+
 COPY gradlew /app/
 COPY gradle /app/gradle/
-COPY module-video/build.gradle /app/
 COPY settings.gradle /app/
-COPY module-video/src /app/src
+COPY module-common/build.gradle /app/module-common/
+COPY module-video/build.gradle /app/module-video/
+COPY module-common/src /app/module-common/src
+COPY module-video/src /app/module-video/src
 
 # Ensure gradlew is executable
 RUN chmod +x gradlew
