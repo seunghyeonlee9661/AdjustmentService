@@ -1,5 +1,6 @@
 rootProject.name = 'adjustment'
-include 'common'
-include 'user-service'
-include 'video-service'
-include 'adjust-service'
+include 'module-user'
+include 'module-video'
+include 'module-common'
+include 'module-adjust'
+

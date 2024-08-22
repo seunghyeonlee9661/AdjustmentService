@@ -23,7 +23,7 @@ services:
   user-service:
     build:
       context: ./  # Root context for the build
-      dockerfile: user-service/Dockerfile
+      dockerfile: module-user/Dockerfile
     container_name: user_service
     ports:
       - "8081:8080"
@@ -36,7 +36,7 @@ services:
   video-service:
     build:
       context: ./  # Root context for the build
-      dockerfile: video-service/Dockerfile
+      dockerfile: module-video/Dockerfile
     container_name: video_service
     ports:
       - "8082:8080"
@@ -49,7 +49,7 @@ services:
   adjust-service:
     build:
       context: ./  # Root context for the build
-      dockerfile: adjust-service/Dockerfile
+      dockerfile: module-adjust/Dockerfile
     container_name: adjust_service
     ports:
       - "8083:8080"
