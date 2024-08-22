@@ -23,14 +23,14 @@ COPY module-adjust/src /app/module-adjust/src
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
-# Build the application
-RUN ./gradlew build -x test
-
-# Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
+## Build the application
+#RUN ./gradlew build -x test
+#
+## Copy the built JAR file
+#COPY build/libs/adjustment-*.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
-# Run the application
-CMD ["java", "-jar", "app.jar"]
+# Run the application with Gradle bootRun
+CMD ["./gradlew", "bootRun"]
