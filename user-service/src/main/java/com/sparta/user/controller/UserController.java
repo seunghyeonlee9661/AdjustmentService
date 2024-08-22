@@ -3,7 +3,6 @@ import com.sparta.common.dto.UserCreateRequestDTO;
 import com.sparta.common.dto.UserResponseDTO;
 import com.sparta.user.security.UserDetailsImpl;
 import com.sparta.user.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "User API")
 @RequestMapping("/api")
 public class UserController {
     private final UserService userService;

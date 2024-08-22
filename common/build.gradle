@@ -1,47 +1,5 @@
 plugins {
-    id 'java-library'
-    id 'org.springframework.boot' version '3.3.2'
-    id 'io.spring.dependency-management' version '1.1.6'
-}
-
-group = 'com.sparta'
-version = '0.0.1-SNAPSHOT'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
-repositories {
-    mavenCentral()
 }
 
 dependencies {
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
-    // Validation 관련 의존성
-    api 'org.springframework.boot:spring-boot-starter-validation'
-
-    // JPA
-    api 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // Redis
-    api 'org.springframework.boot:spring-boot-starter-data-redis'
-}
-
-
-test {
-    useJUnitPlatform()
-}
-
-bootJar {
-    enabled = false  // Spring Boot 애플리케이션 JAR 생성 비활성화
-}
-
-jar {
-    enabled = true  // 일반 JAR 파일 생성 활성화
 }
