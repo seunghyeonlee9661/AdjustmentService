@@ -2,7 +2,6 @@ plugins {
 }
 
 dependencies {
-    implementation project(':common') // common 모듈 추가
 }
 
 bootJar {
