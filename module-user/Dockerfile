@@ -14,6 +14,8 @@ COPY module-common/src /app/module-common/src
 
 COPY module-user/build.gradle /app/module-user/
 COPY module-user/src /app/module-user/src
+
+#Copy settings.gradle for module
 COPY module-user/settings.gradle /app/
 
 # Ensure gradlew is executable

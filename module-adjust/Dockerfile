@@ -7,7 +7,6 @@ WORKDIR /app
 # Copy Gradle files from the root context to the service context
 COPY gradlew /app/
 COPY gradle /app/gradle/
-COPY settings.gradle /app/
 COPY build.gradle /app/
 
 COPY module-common/build.gradle /app/module-common/
@@ -16,20 +15,23 @@ COPY module-common/src /app/module-common/src
 COPY module-adjust/build.gradle /app/module-adjust/
 COPY module-adjust/src /app/module-adjust/src
 
+#Copy settings.gradle for module
+COPY module-adjust/settings.gradle /app/
+
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
-RUN ./gradlew wrapper --gradle-version 8.8
-
 # Build the application
-RUN ./gradlew :module-adjust:build -x test --stacktrace
+RUN ./gradlew build -x test --stacktrace
 
-# Copy the built JAR file using the exact name
-COPY module-adjust/build/libs/adjustment.module-adjust.jar app.jar
+# Check the build output directory
+RUN ls -l module-adjust/build/libs/
+
+# Copy the built JAR file to /app.jar
+RUN cp module-adjust/build/libs/module-adjust-0.0.1-SNAPSHOT.jar /app.jar
 
 # Expose port
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "app.jar"]
-
+CMD ["java", "-jar", "/app.jar"]

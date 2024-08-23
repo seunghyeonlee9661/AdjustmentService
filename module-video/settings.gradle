@@ -1,0 +1,3 @@
+rootProject.name = 'adjustment'
+include 'module-video'
+include 'module-common'
