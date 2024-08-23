@@ -26,7 +26,7 @@ RUN ./gradlew clean
 RUN rm -rf build/
 
 # 해당 모듈에 의존성을 가진 정보만 빌드하도록 설정
-RUN ./gradlew :module-use:clean :module-use:build -x test --info
+RUN ./gradlew :module-user:clean :module-user:build -x test --info
 
 # Copy the built JAR file using the exact name
 COPY module-user/build/libs/adjustment.module-user.jar app.jar
