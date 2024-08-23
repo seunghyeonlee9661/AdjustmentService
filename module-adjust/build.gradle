@@ -5,3 +5,7 @@ dependencies {
 springBoot{
     mainClass.set('com.sparta.AdjustApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
+
+bootJar {
+    archiveFileName = 'app.jar'
+}
