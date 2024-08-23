@@ -1,0 +1,4 @@
+rootProject.name = 'adjustment'
+include 'module-user'
+include 'module-common'
+
