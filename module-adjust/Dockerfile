@@ -24,9 +24,6 @@ RUN chmod +x gradlew
 # Build the application
 RUN ./gradlew build -x test --stacktrace
 
-# Check the build output directory
-RUN ls -l module-adjust/build/libs/
-
 # Copy the built JAR file to /app.jar
 RUN cp module-adjust/build/libs/module-adjust.jar /app.jar
 

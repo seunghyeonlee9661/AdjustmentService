@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 class UserController {
     @GetMapping("/test")
     public String hello() {
-        return "Hello, this is Adjustment Controller";
+        return "Hello, this is User Controller";
     }
 }
