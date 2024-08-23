@@ -29,7 +29,7 @@ RUN ./gradlew wrapper --gradle-version 8.8
 RUN ./gradlew :module-user:build -x test --stacktrace
 
 # Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
+COPY module-user/build/libs/adjustment-*.jar app.jar
 
 # Expose port
 EXPOSE 8080
