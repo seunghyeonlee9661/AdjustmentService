@@ -5,3 +5,11 @@ dependencies {
 springBoot{
     mainClass.set('com.sparta.AdjustApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
+
+tasks.named('bootJar') {
+    enabled = false
+}
+
+tasks.named('jar') {
+    enabled = true
+}
