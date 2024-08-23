@@ -26,7 +26,7 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper --gradle-version 8.8
 
 # Build the application
-RUN ./gradlew build -x test --stacktrace
+RUN ./gradlew :module-user:build -x test --stacktrace
 
 # Copy the built JAR file
 COPY build/libs/adjustment-*.jar app.jar
