@@ -26,13 +26,14 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper --gradle-version 8.8
 
 # Build the application
-RUN ./gradlew build -x test --stacktrace
+RUN ./gradlew :module-adjust:build -x test --stacktrace
 
-# Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
+# Copy the built JAR file using the exact name
+COPY module-video/build/libs/adjustment.module-adjust.jar app.jar
 
 # Expose port
 EXPOSE 8080
 
 # Run the application
 CMD ["java", "-jar", "app.jar"]
+

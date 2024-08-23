@@ -5,12 +5,6 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy Gradle files from the root context to the service context
-#COPY gradlew /app/
-#COPY gradle /app/gradle/
-#COPY module-video/build.gradle /app/
-#COPY settings.gradle /app/
-#COPY module-video/src /app/src
-
 COPY gradlew /app/
 COPY gradle /app/gradle/
 COPY settings.gradle /app/
@@ -26,10 +20,10 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper --gradle-version 8.8
 
 # Build the application
-RUN ./gradlew build -x test --stacktrace
+RUN ./gradlew :module-video:build -x test --stacktrace
 
-# Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
+# Copy the built JAR file using the exact name
+COPY module-video/build/libs/adjustment.module-video.jar app.jar
 
 # Expose port
 EXPOSE 8080
