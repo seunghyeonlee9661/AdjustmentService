@@ -33,31 +33,31 @@ services:
       - mysql
       - redis
 
-  video-service:
-    build:
-      context: ./  # Root context for the build
-      dockerfile: module-video/Dockerfile
-    container_name: video_service
-    ports:
-      - "8082:8080"
-    env_file:
-      - .env
-    depends_on:
-      - mysql
-      - redis
-
-  adjust-service:
-    build:
-      context: ./  # Root context for the build
-      dockerfile: module-adjust/Dockerfile
-    container_name: adjust_service
-    ports:
-      - "8083:8080"
-    env_file:
-      - .env
-    depends_on:
-      - mysql
-      - redis
+#  video-service:
+#    build:
+#      context: ./  # Root context for the build
+#      dockerfile: module-video/Dockerfile
+#    container_name: video_service
+#    ports:
+#      - "8082:8080"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - mysql
+#      - redis
+#
+#  adjust-service:
+#    build:
+#      context: ./  # Root context for the build
+#      dockerfile: module-adjust/Dockerfile
+#    container_name: adjust_service
+#    ports:
+#      - "8083:8080"
+#    env_file:
+#      - .env
+#    depends_on:
+#      - mysql
+#      - redis
 
 volumes:
   mysql_data:
