@@ -20,13 +20,13 @@ COPY module-user/settings.gradle /app/
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build -x test --stacktrace
+RUN --no-cache ./gradlew build -x test --stacktrace
 
 # Check the build output directory
-RUN ls -l module-user/build/libs/
+RUN --no-cache ls -l module-user/build/libs/
 
 # Copy the built JAR file to /app.jar
-COPY module-user/build/libs/module-user-0.0.1-SNAPSHOT.jar app.jar
+COPY --no-cache module-user/build/libs/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
