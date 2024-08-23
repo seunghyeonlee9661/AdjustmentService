@@ -28,7 +28,7 @@ RUN ./gradlew build -x test --stacktrace
 RUN ls -l module-adjust/build/libs/
 
 # Copy the built JAR file to /app.jar
-RUN cp module-adjust/build/libs/module-adjust-0.0.1-SNAPSHOT.jar /app.jar
+RUN cp module-adjust/build/libs/module-adjust.jar /app.jar
 
 # Expose port
 EXPOSE 8080

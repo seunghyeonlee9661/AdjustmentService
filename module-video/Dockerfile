@@ -28,7 +28,7 @@ RUN ./gradlew build -x test --stacktrace
 RUN ls -l module-video/build/libs/
 
 # Copy the built JAR file to /app.jar
-RUN cp module-video/build/libs/module-video-0.0.1-SNAPSHOT.jar /app.jar
+RUN cp module-video/build/libs/module-video.jar /app.jar
 
 # Expose port
 EXPOSE 8080
