@@ -5,19 +5,16 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy Gradle files from the root context to the service context
-#COPY gradlew /app/
-#COPY gradle /app/gradle/
-#COPY module-user/build.gradle /app/
-#COPY settings.gradle /app/
-#COPY module-user/src /app/src
-
+# 루트 경로의 파일
 COPY gradlew /app/
 COPY gradle /app/gradle/
 COPY settings.gradle /app/
 COPY build.gradle /app/
+# 공통 모듈의 파일
 COPY module-common/build.gradle /app/module-common/
-COPY module-user/build.gradle /app/module-user/
 COPY module-common/src /app/module-common/src
+# 모듈 내부 파일
+COPY module-user/build.gradle /app/module-user/
 COPY module-user/src /app/module-user/src
 
 # Ensure gradlew is executable
@@ -26,6 +23,7 @@ RUN chmod +x gradlew
 RUN ./gradlew wrapper --gradle-version 8.8
 
 # Build the application
+# 해당 모듈에 의존성을 가진 정보만 빌드하도록 설정
 RUN ./gradlew :module-user:build -x test --stacktrace
 
 # Copy the built JAR file using the exact name

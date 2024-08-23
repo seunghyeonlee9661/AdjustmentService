@@ -9,9 +9,11 @@ COPY gradlew /app/
 COPY gradle /app/gradle/
 COPY settings.gradle /app/
 COPY build.gradle /app/
+
 COPY module-common/build.gradle /app/module-common/
-COPY module-video/build.gradle /app/module-video/
 COPY module-common/src /app/module-common/src
+
+COPY module-video/build.gradle /app/module-video/
 COPY module-video/src /app/module-video/src
 
 # Ensure gradlew is executable
