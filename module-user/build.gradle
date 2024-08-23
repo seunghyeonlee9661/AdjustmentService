@@ -6,6 +6,17 @@ springBoot{
     mainClass.set('com.sparta.UserApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
 
+jar {
+    archiveBaseName.set('adjustment')  // JAR 파일의 이름
+    archiveVersion.set(version)         // 버전
+    archiveFileName.set("adjustment-${version}.jar") // 최종 JAR 파일 이름
+    manifest {
+        attributes(
+                'Main-Class': 'com.sparta.UserApplication'  // 여기에 메인 클래스의 패키지와 클래스 이름을 입력하세요
+        )
+    }
+}
+
 bootJar {
-    archiveFileName = 'app.jar'
+    archiveFileName.set('adjustment.module-user.jar')  // 원하는 JAR 파일 이름 설정
 }
