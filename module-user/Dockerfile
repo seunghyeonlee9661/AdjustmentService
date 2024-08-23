@@ -23,7 +23,7 @@ RUN chmod +x gradlew
 RUN ./gradlew build -x test --stacktrace
 
 # Copy the built JAR file
-COPY build/libs/adjustment-*.jar app.jar
+COPY module-user/build/libs/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
