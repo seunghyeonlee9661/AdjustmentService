@@ -5,7 +5,3 @@ dependencies {
 springBoot{
     mainClass.set('com.sparta.UserApplication') // 여기에 실제 메인 클래스의 경로를 지정
 }
-
-jar {
-    archiveFileName.set("adjustment.module-user.jar")
-}

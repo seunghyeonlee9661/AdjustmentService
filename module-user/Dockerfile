@@ -25,8 +25,8 @@ RUN ./gradlew build -x test --stacktrace
 # Check the build output directory
 RUN ls -l module-user/build/libs/
 
-# Copy the built JAR file
-COPY module-user/build/libs/*.jar app.jar
+# Copy the built JAR file to /app.jar
+RUN cp module-user/build/libs/*.jar app.jar
 
 # Expose port
 EXPOSE 8080
