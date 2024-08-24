@@ -130,7 +130,6 @@ public class KakaoLoginService {
         ResponseEntity<String> response = restTemplate.exchange(requestEntity,String.class);
 
         JsonNode jsonNode = new ObjectMapper().readTree(response.getBody());
-
         Long id = jsonNode.get("id").asLong();
         // nickname 처리
         JsonNode propertiesNode = jsonNode.get("properties");
