@@ -43,45 +43,24 @@ jobs:
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env        
           
-          # Print current Git log and status
-          echo "Current Git log:"
-          git log -1
-          
-          echo "Current Git status:"
-          git status
-          
-          echo "Detecting changes..."
+          # Detect changes
           if git rev-parse HEAD~1 >/dev/null 2>&1; then
             changed_modules=$(git diff --name-only HEAD~1 HEAD)
           else
-            echo "No previous commit, assuming first commit."
             changed_modules="all"
           fi
-          
-          # Log the changed modules
-          echo "Changed modules:"
-          echo "$changed_modules"
 
           # Build only if specific modules have changed or if it's the first commit
           if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-user/'; then
-            echo "Building module-user..."
-            docker-compose build module-user
-          else
-            echo "No changes in module-user"
+            docker-compose build user-service
           fi
 
           if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-video/'; then
-            echo "Building module-video..."
-            docker-compose build module-video
-          else
-            echo "No changes in module-video"
+            docker-compose build video-service
           fi
 
           if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-adjust/'; then
-            echo "Building module-adjust..."
-            docker-compose build module-adjust
-          else
-            echo "No changes in module-adjust"
+            docker-compose build adjust-service
           fi
           
           docker-compose up -d
