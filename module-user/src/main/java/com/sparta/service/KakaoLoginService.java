@@ -75,7 +75,6 @@ public class KakaoLoginService {
             } else {
                 String password = UUID.randomUUID().toString();
                 String encodedPassword = passwordEncoder.encode(password);
-
                 // email: kakao email
                 String email = kakaoUserInfo.getEmail();
                 kakaoUser = new User(email,encodedPassword,kakaoId);
