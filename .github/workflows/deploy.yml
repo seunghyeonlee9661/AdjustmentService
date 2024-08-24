@@ -51,28 +51,33 @@ jobs:
           git status
           
           echo "Detecting changes..."
-          changed_modules=$(git diff --name-only HEAD~1 HEAD)
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            changed_modules=$(git diff --name-only HEAD~1 HEAD)
+          else
+            echo "No previous commit, assuming first commit."
+            changed_modules="all"
+          fi
           
           # Log the changed modules
           echo "Changed modules:"
           echo "$changed_modules"
 
-          # Build only if specific modules have changed
-          if echo "$changed_modules" | grep -q '^module-user/'; then
+          # Build only if specific modules have changed or if it's the first commit
+          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-user/'; then
             echo "Building module-user..."
             docker-compose build module-user
           else
             echo "No changes in module-user"
           fi
 
-          if echo "$changed_modules" | grep -q '^module-video/'; then
+          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-video/'; then
             echo "Building module-video..."
             docker-compose build module-video
           else
             echo "No changes in module-video"
           fi
 
-          if echo "$changed_modules" | grep -q '^module-adjust/'; then
+          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-adjust/'; then
             echo "Building module-adjust..."
             docker-compose build module-adjust
           else
