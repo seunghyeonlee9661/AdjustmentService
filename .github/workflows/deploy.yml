@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Print Git information
+        run: |
+          git log -1
+          git status
+          git diff --name-only HEAD~1 HEAD
+
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.7.0
         with:
