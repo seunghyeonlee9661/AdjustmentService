@@ -23,7 +23,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-
     /* 회원가입 */
     @Transactional
     public ResponseEntity<String> createUser(UserCreateRequestDTO userCreateRequestDTO){
