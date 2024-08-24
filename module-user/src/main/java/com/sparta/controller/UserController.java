@@ -40,18 +40,6 @@ public class UserController {
         return userService.removeUser(userDetails,res);
     }
 
-    /* 업로더 전환 요청 */
-    @PostMapping("/uploader")
-    public ResponseEntity<String> requestUploader(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.requestUploader(userDetails);
-    }
-
-    /* 업로더 전환 */
-    @GetMapping("/uploader")
-    public ResponseEntity<String> updateUploader(@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestParam(value="code") String code) {
-        return userService.updateUploader(userDetails,code);
-    }
-
     /* 사용자 정보 추가 */
     @PostMapping("/kakao/callback")
     public ResponseEntity<String> KakaoLogin(@RequestParam String code, HttpServletResponse response)  throws JsonProcessingException {

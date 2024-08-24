@@ -33,7 +33,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
           cd /home/leesh/Sparta/AdjustmentService
-          
+                    
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
@@ -41,22 +41,42 @@ jobs:
           echo "SPRING_REDIS_HOST=${{ secrets.SPRING_REDIS_HOST }}" >> .env
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env          
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
-          echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env         
+          echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env        
           
-          # Detect which modules changed
+          # Print current Git log and status
+          echo "Current Git log:"
+          git log -1
+          
+          echo "Current Git status:"
+          git status
+          
+          echo "Detecting changes..."
           changed_modules=$(git diff --name-only HEAD~1 HEAD)
           
+          # Log the changed modules
+          echo "Changed modules:"
+          echo "$changed_modules"
+
           # Build only if specific modules have changed
           if echo "$changed_modules" | grep -q '^module-user/'; then
+            echo "Building module-user..."
             docker-compose build module-user
+          else
+            echo "No changes in module-user"
           fi
 
           if echo "$changed_modules" | grep -q '^module-video/'; then
+            echo "Building module-video..."
             docker-compose build module-video
+          else
+            echo "No changes in module-video"
           fi
 
           if echo "$changed_modules" | grep -q '^module-adjust/'; then
+            echo "Building module-adjust..."
             docker-compose build module-adjust
+          else
+            echo "No changes in module-adjust"
           fi
           
           docker-compose up -d
