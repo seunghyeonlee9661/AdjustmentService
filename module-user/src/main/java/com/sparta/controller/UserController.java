@@ -39,6 +39,7 @@ public class UserController {
     public ResponseEntity<String> removeUser(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) throws IOException {
         return userService.removeUser(userDetails,res);
     }
+
     /* 사용자 정보 추가 */
     @PostMapping("/kakao/callback")
     public ResponseEntity<String> KakaoLogin(@RequestParam String code, HttpServletResponse response)  throws JsonProcessingException {

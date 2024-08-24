@@ -49,15 +49,19 @@ jobs:
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env        
           
+          # Get the current commit and previous commit
+          current_commit=$(git rev-parse HEAD)
+          previous_commit=$(git rev-parse HEAD^ 2>/dev/null) || true
+          
           # Detect changes
-           if git rev-parse HEAD^ >/dev/null 2>&1; then
-            changed_modules=$(git diff --name-only HEAD^ HEAD)
+          if [ -n "$previous_commit" ]; then
+            changed_modules=$(git diff --name-only "$previous_commit" "$current_commit")
           else
             echo "No previous commit, assuming first commit."
-            changed_modules="all"
+            changed_modules=$(git ls-files)
           fi
-
-          # Log the changed modules
+          
+           # Log the changed modules
           echo "Changed modules:"
           echo "$changed_modules"
 
