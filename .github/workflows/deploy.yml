@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2  # 이전 커밋을 포함하여 커밋 이력을 가져옵니다
+          fetch-depth: 2  # 변경 감지를 위한 이전 파일 확인
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.7.0
@@ -35,7 +35,8 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
           cd /home/leesh/Sparta/AdjustmentService
-                    
+          
+          # 환경 변수 저장
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
@@ -45,32 +46,22 @@ jobs:
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env        
           
-          # Get the current commit and previous commit
-          current_commit=$(git rev-parse HEAD)
-          previous_commit=$(git rev-parse HEAD^ 2>/dev/null) || true
-          
-          # Detect changes
-          if [ -n "$previous_commit" ]; then
-            changed_modules=$(git diff --name-only "$previous_commit" "$current_commit")
-          else
-            echo "No previous commit, assuming first commit."
-            changed_modules=$(git ls-files)
-          fi
-          
-           # Log the changed modules
-          echo "Changed modules:"
-          echo "$changed_modules"
+          # Detect which modules changed
+          changed_modules=$(git diff --name-only HEAD^ HEAD)
 
-          # Build only if specific modules have changed or if it's the first commit
+          # Build only if specific directories have changed
           if echo "$changed_modules" | grep -q '^module-user/'; then
+            echo "Changes detected in user-service"
             docker-compose build user-service
           fi
 
-          if echo "$changed_modules" | grep -q '^module-video/'; then          
+          if echo "$changed_modules" | grep -q '^module-video/'; then
+            echo "Changes detected in video-service"
             docker-compose build video-service
           fi
 
           if echo "$changed_modules" | grep -q '^module-adjust/'; then
+            echo "Changes detected in adjust-service"
             docker-compose build adjust-service
           fi
           
