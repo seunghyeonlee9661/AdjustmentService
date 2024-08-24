@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # 이전 커밋을 포함하여 커밋 이력을 가져옵니다
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.7.0

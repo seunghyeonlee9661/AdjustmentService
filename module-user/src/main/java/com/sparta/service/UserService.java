@@ -31,7 +31,6 @@ public class UserService {
         return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
     }
 
-
     /* 회원 탈퇴*/
     @Transactional
     public ResponseEntity<String> removeUser(UserDetailsImpl userDetails, HttpServletResponse res) throws IOException {
