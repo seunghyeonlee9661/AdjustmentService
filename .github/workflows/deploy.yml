@@ -44,7 +44,7 @@ jobs:
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env         
           
           # Detect which modules changed
-          changed_modules=$(git diff --name-only HEAD^ HEAD)
+          changed_modules=$(git diff --name-only HEAD~1 HEAD)
           
           # Build only if specific modules have changed
           if echo "$changed_modules" | grep -q '^module-user/'; then
