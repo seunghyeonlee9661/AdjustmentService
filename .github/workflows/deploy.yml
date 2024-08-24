@@ -56,15 +56,15 @@ jobs:
           echo "$changed_modules"
 
           # Build only if specific modules have changed or if it's the first commit
-          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-user/'; then
+          if echo "$changed_modules" | grep -q '^module-user/'; then
             docker-compose build user-service
           fi
 
-          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-video/'; then
+          if echo "$changed_modules" | grep -q '^module-video/'; then          
             docker-compose build video-service
           fi
 
-          if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-adjust/'; then
+          if echo "$changed_modules" | grep -q '^module-adjust/'; then
             docker-compose build adjust-service
           fi
           
