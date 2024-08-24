@@ -17,25 +17,25 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class UserController {
     private final UserService userService;
     private final KakaoLoginService kakaoLoginService;
 
     /* 사용자 정보 반환 */
-    @GetMapping("/users")
+    @GetMapping("")
     public ResponseEntity<UserResponseDTO> findUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return ResponseEntity.ok(new UserResponseDTO(userDetails.getUser()));
     }
 
     /* 사용자 회원가입 */
-    @PostMapping("/users")
+    @PostMapping("")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserCreateRequestDTO requestDTO) {
         return userService.createUser(requestDTO);
     }
 
     /* 사용자 회원탈퇴 */
-    @DeleteMapping("/users")
+    @DeleteMapping("")
     public ResponseEntity<String> removeUser(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) throws IOException {
         return userService.removeUser(userDetails,res);
     }

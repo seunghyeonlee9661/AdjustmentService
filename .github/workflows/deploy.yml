@@ -43,6 +43,21 @@ jobs:
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env         
           
-          docker-compose down
-          docker-compose up -d --build
+          # Detect which modules changed
+          changed_modules=$(git diff --name-only HEAD^ HEAD)
+          
+          # Build only if specific modules have changed
+          if echo "$changed_modules" | grep -q '^module-user/'; then
+            docker-compose build module-user
+          fi
+
+          if echo "$changed_modules" | grep -q '^module-video/'; then
+            docker-compose build module-video
+          fi
+
+          if echo "$changed_modules" | grep -q '^module-adjust/'; then
+            docker-compose build module-adjust
+          fi
+          
+          docker-compose up -d
           EOF
