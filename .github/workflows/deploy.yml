@@ -44,11 +44,16 @@ jobs:
           echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env        
           
           # Detect changes
-          if git rev-parse HEAD~1 >/dev/null 2>&1; then
-            changed_modules=$(git diff --name-only HEAD~1 HEAD)
+           if git rev-parse HEAD^ >/dev/null 2>&1; then
+            changed_modules=$(git diff --name-only HEAD^ HEAD)
           else
+            echo "No previous commit, assuming first commit."
             changed_modules="all"
           fi
+
+          # Log the changed modules
+          echo "Changed modules:"
+          echo "$changed_modules"
 
           # Build only if specific modules have changed or if it's the first commit
           if [ "$changed_modules" = "all" ] || echo "$changed_modules" | grep -q '^module-user/'; then
