@@ -84,7 +84,6 @@ public class KakaoLoginService {
         return kakaoUser;
     }
 
-
     // 카카오 토큰 처리
     private String getToken(String code) throws JsonProcessingException {
         // 요청 URL 만들기
