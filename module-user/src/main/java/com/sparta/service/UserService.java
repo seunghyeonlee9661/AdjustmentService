@@ -22,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RedisService redisService;
     private final JwtUtil jwtUtil;
 
     /* 회원가입 */

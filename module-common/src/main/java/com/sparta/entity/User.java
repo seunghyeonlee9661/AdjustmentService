@@ -3,8 +3,6 @@ package com.sparta.entity;
 import com.sparta.dto.UserCreateRequestDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
