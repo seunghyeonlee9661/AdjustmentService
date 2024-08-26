@@ -5,7 +5,6 @@ on:
     branches:
       - main
       - develop
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # 변경 감지를 위한 이전 파일 확인
 
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.7.0
@@ -35,15 +36,33 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
           cd /home/leesh/Sparta/AdjustmentService
           
+          # 환경 변수 저장
           echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env
           echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
           echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
           echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
-          echo "SPRING_REDIS_HOST=${{ secrets.SPRING_REDIS_HOST }}" >> .env
-          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env          
-          echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
-          echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env         
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env               
           
-          docker-compose down
-          docker-compose up -d --build
+          # Detect which modules changed
+          changed_modules=$(git diff --name-only HEAD^ HEAD)
+
+          # Build only if specific directories have changed
+          if echo "$changed_modules" | grep -q '^module-user/'; then
+            echo "Changes detected in user-service"
+            docker-compose build user-service
+          fi
+
+          if echo "$changed_modules" | grep -q '^module-video/'; then
+            echo "Changes detected in video-service"
+            docker-compose build video-service
+          fi
+
+          if echo "$changed_modules" | grep -q '^module-adjust/'; then
+            echo "Changes detected in adjust-service"
+            docker-compose build adjust-service
+          fi
+          
+          docker-compose up -d
           EOF

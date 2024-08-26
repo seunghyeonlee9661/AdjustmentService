@@ -10,22 +10,49 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3306:3306"
+      - "3307:3306"  # 호스트의 3307 포트를 컨테이너의 3306 포트에 매핑
     volumes:
       - mysql_data:/var/lib/mysql
 
   redis:
     image: redis:latest
-    container_name: ${SPRING_REDIS_HOST}
+    container_name: redis
     ports:
-      - "6379:6379"
+      - "6380:6379"  # 호스트의 6380 포트를 컨테이너의 6379 포트에 매핑
 
-  app:
+  user-service:
     build:
-      context: .
-    container_name: spring_app
+      context: ./  # Root context for the build
+      dockerfile: module-user/Dockerfile
+    container_name: user_service
     ports:
-      - "8081:8080"
+      - "8082:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  video-service:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-video/Dockerfile
+    container_name: video_service
+    ports:
+      - "8083:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  adjust-service:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-adjust/Dockerfile
+    container_name: adjust_service
+    ports:
+      - "8084:8080"
     env_file:
       - .env
     depends_on:

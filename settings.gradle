@@ -1,1 +1,6 @@
 rootProject.name = 'adjustment'
+include 'module-user'
+include 'module-video'
+include 'module-common'
+include 'module-adjust'
+
