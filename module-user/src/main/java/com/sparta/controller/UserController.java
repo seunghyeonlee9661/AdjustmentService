@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.dto.UserCreateRequestDTO;
 import com.sparta.dto.UserResponseDTO;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.KakaoLoginService;
 import com.sparta.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,7 +19,6 @@ import java.io.IOException;
 @RequestMapping("")
 public class UserController {
     private final UserService userService;
-    private final KakaoLoginService kakaoLoginService;
 
     /* 사용자 정보 반환 */
     @GetMapping("")
@@ -38,11 +36,5 @@ public class UserController {
     @DeleteMapping("")
     public ResponseEntity<String> removeUser(@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletResponse res) throws IOException {
         return userService.removeUser(userDetails,res);
-    }
-
-    /* 사용자 정보 추가 */
-    @PostMapping("/kakao/callback")
-    public ResponseEntity<String> KakaoLogin(@RequestParam String code, HttpServletResponse response)  throws JsonProcessingException {
-        return kakaoLoginService.kakaoLogin(code,response);
     }
 }
