@@ -22,7 +22,7 @@ COPY module-user/settings.gradle /app/
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew build -x test --stacktrace
+RUN ./gradlew clean build -x test
 
 # Copy the built JAR file to /app.jar
 RUN cp module-user/build/libs/module-user.jar /app.jar
