@@ -14,9 +14,6 @@ public class User {
     private Long id;
 
     @Column(nullable = true)
-    private Long kakaoId;
-
-    @Column(nullable = true)
     private String username;
 
     @Column(nullable = false)
@@ -39,13 +36,6 @@ public class User {
         this.username = requestDTO.getUsername();
         this.password = password;
         this.role = Role.ROLE_USER;
-    }
-
-    /* 카카오 유저 생성*/
-    public User(String email,String password, Long kakaoId){
-        this.kakaoId = kakaoId;
-        this.username = email;
-        this.password = password;
     }
 
     public void updateRole(){
