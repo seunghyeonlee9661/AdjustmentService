@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/videos")
+@RequestMapping("/api")
 public class VideoController {
-
     private final VideoService videoService;
+
+    @GetMapping("/test")
+    public String hello() {
+        return "Hello, this is Video Controller";
+    }
 
     /* 비디오 목록 페이지 불러오기 */
     @GetMapping("")
