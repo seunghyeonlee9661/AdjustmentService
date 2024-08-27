@@ -13,11 +13,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String password;
+
+    // 카카오 아이디
+    @Column(name = "kakao_id", nullable = true)
+    private Long kakaoId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -36,6 +40,20 @@ public class User {
         this.username = requestDTO.getUsername();
         this.password = password;
         this.role = Role.ROLE_USER;
+    }
+
+    /* 카카오 유저 생성*/
+    public User(String password, Long kakaoId,String username){
+        this.username = username;
+        this.kakaoId = kakaoId;
+        this.password = password;
+        this.role = Role.ROLE_USER;
+    }
+
+    /* 카카오 아이디 업데이트 */
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
     public void updateRole(){

@@ -20,6 +20,11 @@ import java.io.IOException;
 public class UserController {
     private final UserService userService;
 
+    @GetMapping("/test")
+    public String hello() {
+        return "Hello, this is User Controller";
+    }
+
     /* 사용자 정보 반환 */
     @GetMapping("")
     public ResponseEntity<UserResponseDTO> findUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
