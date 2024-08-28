@@ -61,7 +61,7 @@ public class AdService {
     public ResponseEntity<String> uploadAdInfo(AdCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         adRepository.save(new Ad(requestDTO,user));
-        return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Ad created successfully");
     }
 
     @Transactional
@@ -70,7 +70,7 @@ public class AdService {
         if(!userDetails.getUser().getId().equals(ad.getUser().getId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
         fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,ad.getUrl());
         adRepository.delete(ad);
-        return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Ad delete successfully");
     }
 
 }

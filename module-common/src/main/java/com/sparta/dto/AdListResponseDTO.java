@@ -11,8 +11,6 @@ public class AdListResponseDTO {
     private UserResponseDTO user;
     private String title;
     private Long viewCount;
-    private Timestamp registrationDate;
-    private Long duration;
 
     public AdListResponseDTO(Ad ad){
         this.id = ad.getId();

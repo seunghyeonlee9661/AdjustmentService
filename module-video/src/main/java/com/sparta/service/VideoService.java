@@ -105,7 +105,7 @@ public class VideoService {
         fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,video.getUrl());
         fileService.deleteFileByUrl(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR,video.getThumbnail());
         videoRepository.delete(video);
-        return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("video delete successfully");
     }
 
 
