@@ -22,7 +22,8 @@ COPY module-adjust/settings.gradle /app/
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew clean build -x test
+RUN ./gradlew clean
+RUN ./gradlew build -x test
 
 # Copy the built JAR file to /app.jar
 RUN cp module-adjust/build/libs/module-adjust.jar /app.jar
