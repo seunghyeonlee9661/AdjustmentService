@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -23,6 +24,14 @@ public class FileService {
     public String uploadFile(String upload_dr,String url_dir, File file) throws IOException {
         String key = generateUniqueFileName(upload_dr,file.getName());
         File destinationFile = new File(upload_dr + key);
+
+        System.out.println("Source file path: " + file.getAbsolutePath());
+        System.out.println("Destination file path: " + destinationFile.getAbsolutePath());
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("Source file does not exist: " + file.getAbsolutePath());
+        }
+
         try {
             Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
