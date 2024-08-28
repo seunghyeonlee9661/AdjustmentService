@@ -22,8 +22,7 @@ COPY module-video/settings.gradle /app/
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew clean
-RUN ./gradlew build -x test
+RUN ./gradlew clean build -x test
 
 # Copy the built JAR file to /app.jar
 RUN cp module-video/build/libs/module-video.jar /app.jar
