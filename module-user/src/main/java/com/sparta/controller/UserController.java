@@ -53,7 +53,7 @@ public class UserController {
     }
 
     /* 사용자 회원탈퇴 */
-    @DeleteMapping("ads")
+    @GetMapping("ads")
     public ResponseEntity<Page<AdListResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userAds(userDetails,page);
     }

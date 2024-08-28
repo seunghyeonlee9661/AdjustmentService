@@ -8,6 +8,7 @@ import org.jcodec.api.JCodecException;
 import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class JCodecService {
     private static final String EXTENSION = "png";
