@@ -1,8 +1,10 @@
 package com.sparta.entity;
+import com.sparta.dto.VideoCreateRequestDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -15,6 +17,9 @@ public class Video {
 
     @Column(nullable = false)
     private String url;
+
+    @Column(nullable = false)
+    private String thumbnail;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -37,6 +42,16 @@ public class Video {
 
     @OneToMany(mappedBy = "video")
     private List<History> histories;
+
+    public Video (VideoCreateRequestDTO requestDTO,User user){
+        this.url = requestDTO.getUrl();
+        this.thumbnail = requestDTO.getThumbnail();
+        this.title = requestDTO.getTitle();
+        this.viewCount = 0L;
+        this.registrationDate = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간으로 설정
+        this.duration = requestDTO.getDuration();
+        this.user = user;
+    }
 
     public void updateViews(){
         this.viewCount++;

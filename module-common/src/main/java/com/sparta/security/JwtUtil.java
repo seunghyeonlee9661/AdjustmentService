@@ -81,21 +81,6 @@ public class JwtUtil {
                         .compact();
     }
 
-//    // JWT Cookie에 AccessToken 저장
-//    public void addTokenToCookie(String accessToken, HttpServletResponse res) {
-//        try {
-//            Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, "utf-8").replaceAll("\\+", "%20")); // Name-Value
-//            accessTokenCookie.setPath("/");
-//            accessTokenCookie.setHttpOnly(true);
-//            accessTokenCookie.setSecure(true); // HTTPS에서만 전송
-//            accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
-//            accessTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
-//            res.addCookie(accessTokenCookie);
-//        } catch (UnsupportedEncodingException e) {
-//            logger.error(e.getMessage());
-//        }
-//    }
-
     // JWT Cookie에 AccessToken 저장
     public void addTokenToCookie(String accessToken, HttpServletResponse res) {
         try {
@@ -118,25 +103,14 @@ public class JwtUtil {
         redisService.save(RedisService.REFRESH_TOKEN_PREFIX,strippedAccessToken, refreshToken, RedisService.REFRESH_TOKEN_VALIDITY);
     }
 
-//    // JWT Cookie 삭제
-//    public void removeJwtCookie(HttpServletResponse res) {
-//        Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, null);
-//        accessTokenCookie.setPath("/");
-//        accessTokenCookie.setHttpOnly(true);
-//        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
-//        accessTokenCookie.setMaxAge(0); // 쿠키 삭제
-//        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
-//        res.addCookie(accessTokenCookie);
-//    }
-
     // JWT Cookie 삭제
     public void removeJwtCookie(HttpServletResponse res) {
         Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, null);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setHttpOnly(true);
 //        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
-        accessTokenCookie.setMaxAge(0); // 쿠키 삭제
 //        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
+        accessTokenCookie.setMaxAge(0); // 쿠키 삭제
         res.addCookie(accessTokenCookie);
     }
 
