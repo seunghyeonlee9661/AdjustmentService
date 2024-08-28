@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.UUID;
 
 
 @Service
@@ -56,8 +57,15 @@ public class VideoService {
 
     @Transactional
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
-        File tempFile = File.createTempFile("temp", ".tmp");
+        String originalFileName = file.getOriginalFilename();
+        // 원본 파일 이름을 사용하여 /tmp 디렉토리에 파일 생성
+        File tempFile = new File("/tmp/" + originalFileName);
         file.transferTo(tempFile);
+
+        // 파일이 성공적으로 저장되었는지 확인
+        if (!tempFile.exists()) {
+            throw new IOException("Failed to save the file.");
+        }
 
         // 파일 포맷 확인
         if (!isVideoFile(tempFile)) {
