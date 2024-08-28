@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class FileService {
     public static final String VIDEO_UPLOAD_DIR = "/var/www/uploads/adjustment/video/";
     public static final String VIDEO_URL_DIR = "http://dltmdgus9661.iptime.org/uploads/adjustment/video/";
-    public static final String THUMBNAIL_UPLOAD_DIR = "/var/www/uploads/adjustment/thumbnail";
+    public static final String THUMBNAIL_UPLOAD_DIR = "/var/www/uploads/adjustment/thumbnail/";
     public static final String THUMBNAIL_URL_DIR = "http://dltmdgus9661.iptime.org/uploads/adjustment/video/";
 
     /* 파일 업로드 */
