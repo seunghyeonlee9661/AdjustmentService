@@ -56,7 +56,7 @@ public class VideoService {
 
     @Transactional
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
-        File tempFile = File.createTempFile("temp", file.getOriginalFilename()); // MultipartFile을 File로 변환
+        File tempFile = File.createTempFile("temp", ".tmp");
         file.transferTo(tempFile);
 
         // 파일 포맷 확인
