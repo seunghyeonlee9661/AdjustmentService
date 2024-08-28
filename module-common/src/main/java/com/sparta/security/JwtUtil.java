@@ -102,16 +102,28 @@ public class JwtUtil {
         redisService.save(RedisService.REFRESH_TOKEN_PREFIX,strippedAccessToken, refreshToken, RedisService.REFRESH_TOKEN_VALIDITY);
     }
 
+//    // JWT Cookie 삭제
+//    public void removeJwtCookie(HttpServletResponse res) {
+//        Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, null);
+//        accessTokenCookie.setPath("/");
+//        accessTokenCookie.setHttpOnly(true);
+//        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
+//        accessTokenCookie.setMaxAge(0); // 쿠키 삭제
+//        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
+//        res.addCookie(accessTokenCookie);
+//    }
+
     // JWT Cookie 삭제
     public void removeJwtCookie(HttpServletResponse res) {
         Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, null);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
+//        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
         accessTokenCookie.setMaxAge(0); // 쿠키 삭제
-        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
+//        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
         res.addCookie(accessTokenCookie);
     }
+
 
     // JWT 토큰 substring : BEARER 제거해주는 코드
     public String substringToken(String tokenValue) {
