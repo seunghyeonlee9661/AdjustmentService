@@ -23,7 +23,12 @@ public class FileService {
     public String uploadFile(String upload_dr,String url_dir, File file) throws IOException {
         String key = generateUniqueFileName(upload_dr,file.getName());
         File destinationFile = new File(upload_dr + key);
-        Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        try {
+            Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace(); // 또는 로깅 프레임워크를 사용하여 로그를 기록
+            throw e; // 예외를 다시 던지거나 적절히 처리
+        }
         return String.format(url_dir + "%s", key);
     }
 
