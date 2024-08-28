@@ -2,10 +2,12 @@ package com.sparta.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "ad_List")
+@NoArgsConstructor
 public class AdList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

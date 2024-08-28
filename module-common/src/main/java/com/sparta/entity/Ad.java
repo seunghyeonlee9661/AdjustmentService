@@ -1,12 +1,14 @@
 package com.sparta.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "ad")
+@NoArgsConstructor
 public class Ad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

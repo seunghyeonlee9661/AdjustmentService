@@ -44,8 +44,7 @@ public class VideoService {
     }
 
     @Transactional
-    public ResponseEntity<VideoDetailResponseDTO> playVideo(long id, UserDetailsImpl userDetails, HttpServletRequest request){
-//        User user = userDetails != null ? userDetails.getUser() : null;
+    public ResponseEntity<VideoDetailResponseDTO> playVideo(long id, HttpServletRequest request){
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
 
         // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
@@ -58,38 +57,27 @@ public class VideoService {
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
         String originalFileName = file.getOriginalFilename();
 
-        // 파일 이름 검증
-        if (originalFileName == null || originalFileName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid file name.");
-        }
-
         // /tmp 디렉토리에 파일 생성
         File tempFile = new File("/tmp/" + originalFileName);
         file.transferTo(tempFile);
         System.out.println("Temporary file path: " + tempFile.getAbsolutePath());
 
         // 파일이 성공적으로 저장되었는지 확인
-        if (!tempFile.exists()) {
-            throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
-        }
+        if (!tempFile.exists()) throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
 
         // 파일 포맷 확인
         if (!isVideoFile(tempFile)) {
             tempFile.delete();
             throw new IllegalArgumentException("Invalid video file format.");
         }
-
         // FileService를 통해 파일을 업로드하고 URL을 받음
         String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
-
         //썸네일 추출
         String thumbnailUrl = jCodecService.getThumbnail(tempFile);
-
         //영상길이 추출
         long duration = JCodecService.getDuration(tempFile);
         // 변환된 임시 파일 삭제
         tempFile.delete();
-
         return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
     }
 
@@ -98,8 +86,19 @@ public class VideoService {
 
         User user = userDetails.getUser();
         videoRepository.save(new Video(requestDTO,user));
-        return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
     }
+
+    @Transactional
+    public ResponseEntity<String> deleteVideo(Long id, UserDetailsImpl userDetails) {
+        Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
+        if(!userDetails.getUser().equals(video.getUser())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
+        fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,video.getUrl());
+        fileService.deleteFileByUrl(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR,video.getThumbnail());
+        videoRepository.delete(video);
+        return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
+    }
+
 
     // 사용자 IP 확인하는 기능
     private String getClientIp(HttpServletRequest request) {
