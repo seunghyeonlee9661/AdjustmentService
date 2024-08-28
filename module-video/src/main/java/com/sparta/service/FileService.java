@@ -18,15 +18,24 @@ public class FileService {
     public static final String VIDEO_UPLOAD_DIR = "/var/www/uploads/adjustment/video/";
     public static final String VIDEO_URL_DIR = "http://dltmdgus9661.iptime.org/uploads/adjustment/video/";
     public static final String THUMBNAIL_UPLOAD_DIR = "/var/www/uploads/adjustment/thumbnail/";
-    public static final String THUMBNAIL_URL_DIR = "http://dltmdgus9661.iptime.org/uploads/adjustment/video/";
+    public static final String THUMBNAIL_URL_DIR = "http://dltmdgus9661.iptime.org/uploads/adjustment/thumbnail/";
 
     /* 파일 업로드 */
     public String uploadFile(String upload_dr,String url_dir, File file) throws IOException {
         String key = generateUniqueFileName(upload_dr,file.getName());
         File destinationFile = new File(upload_dr + key);
 
+        // 파일 경로 확인
         System.out.println("Source file path: " + file.getAbsolutePath());
         System.out.println("Destination file path: " + destinationFile.getAbsolutePath());
+
+        // 목적지 디렉토리 존재 여부 확인 및 생성
+        File destinationDir = destinationFile.getParentFile();
+        if (!destinationDir.exists()) {
+            if (!destinationDir.mkdirs()) {
+                throw new IOException("Failed to create directory: " + destinationDir.getAbsolutePath());
+            }
+        }
 
         if (!file.exists()) {
             throw new FileNotFoundException("Source file does not exist: " + file.getAbsolutePath());

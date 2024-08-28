@@ -45,6 +45,8 @@ services:
     depends_on:
       - mysql
       - redis
+    volumes:
+      - /var/www/uploads/adjustment:/var/www/uploads/adjustment
 
   adjust-service:
     build:

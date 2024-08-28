@@ -79,13 +79,17 @@ public class VideoService {
             throw new IllegalArgumentException("Invalid video file format.");
         }
 
-        String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile); // FileService를 통해 파일을 업로드하고 URL을 받음
+        // FileService를 통해 파일을 업로드하고 URL을 받음
+        String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
 
-        String thumbnailUrl = jCodecService.getThumbnail(tempFile); //썸네일 추출
+        //썸네일 추출
+        String thumbnailUrl = jCodecService.getThumbnail(tempFile);
 
-        long duration = JCodecService.getDuration(tempFile); //영상길이 추출
+        //영상길이 추출
+        long duration = JCodecService.getDuration(tempFile);
+        // 변환된 임시 파일 삭제
+        tempFile.delete();
 
-        tempFile.delete(); // 변환된 임시 파일 삭제
         return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
     }
 
