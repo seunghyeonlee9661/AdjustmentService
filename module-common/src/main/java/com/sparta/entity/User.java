@@ -3,10 +3,13 @@ package com.sparta.entity;
 import com.sparta.dto.UserCreateRequestDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(name = "user")
 public class User {
     @Id
