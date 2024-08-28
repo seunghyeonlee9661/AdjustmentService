@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "user")
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
