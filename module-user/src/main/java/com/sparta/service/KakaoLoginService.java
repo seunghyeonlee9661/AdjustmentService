@@ -9,7 +9,6 @@ import com.sparta.repository.UserRepository;
 import com.sparta.security.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
@@ -28,7 +27,6 @@ import java.util.UUID;
 작성자 : 이승현
 카카오 로그인 서비스 처리 기능
 */
-@Slf4j(topic = "KAKAO Login")
 @Service
 @RequiredArgsConstructor
 public class KakaoLoginService {
