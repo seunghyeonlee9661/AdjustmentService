@@ -101,7 +101,7 @@ public class VideoService {
     @Transactional
     public ResponseEntity<String> deleteVideo(Long id, UserDetailsImpl userDetails) {
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
-        if(!userDetails.getUser().equals(video.getUser())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
+        if(!userDetails.getUser().getId().equals(video.getUser().getId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
         fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,video.getUrl());
         fileService.deleteFileByUrl(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR,video.getThumbnail());
         videoRepository.delete(video);
