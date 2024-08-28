@@ -55,16 +55,22 @@ public class VideoService {
         return ResponseEntity.ok(new VideoDetailResponseDTO(video));
     }
 
-    @Transactional
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
         String originalFileName = file.getOriginalFilename();
-        // 원본 파일 이름을 사용하여 /tmp 디렉토리에 파일 생성
+
+        // 파일 이름 검증
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid file name.");
+        }
+
+        // /tmp 디렉토리에 파일 생성
         File tempFile = new File("/tmp/" + originalFileName);
         file.transferTo(tempFile);
+        System.out.println("Temporary file path: " + tempFile.getAbsolutePath());
 
         // 파일이 성공적으로 저장되었는지 확인
         if (!tempFile.exists()) {
-            throw new IOException("Failed to save the file.");
+            throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
         }
 
         // 파일 포맷 확인
