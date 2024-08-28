@@ -48,12 +48,12 @@ public class VideoController {
 
     /* 비디오 재생 */
     @GetMapping("/{id}")
-    public ResponseEntity<VideoDetailResponseDTO> playVideo(@PathVariable("id") long id, HttpServletRequest request){
-        return videoService.playVideo(id,request);
+    public ResponseEntity<VideoDetailResponseDTO> playVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
+        return videoService.playVideo(id,userDetails,request);
     }
 
     /* 비디오 정보 업로드 */
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable("id") long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return videoService.deleteVideo(id,userDetails);
     }

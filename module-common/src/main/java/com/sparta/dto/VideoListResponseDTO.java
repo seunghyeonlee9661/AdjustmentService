@@ -9,6 +9,7 @@ public class VideoListResponseDTO {
     private Long id;
     private UserResponseDTO user;
     private String title;
+    private String thumbnail;
     private Long viewCount;
     private Timestamp registrationDate;
     private Long duration;
@@ -16,6 +17,7 @@ public class VideoListResponseDTO {
     public VideoListResponseDTO(Video video){
         this.id = video.getId();
         this.user = new UserResponseDTO(video.getUser());
+        this.thumbnail = video.getThumbnail();
         this.title = video.getTitle();
         this.viewCount = video.getViewCount();
         this.registrationDate = video.getRegistrationDate();

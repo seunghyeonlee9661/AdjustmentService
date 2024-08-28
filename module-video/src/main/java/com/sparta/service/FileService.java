@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
@@ -78,6 +79,17 @@ public class FileService {
             file.delete();
         } else {
             throw new IllegalArgumentException("File not found: " + fileUrl);
+        }
+    }
+
+    // 파일이 영상 파일인지 확인하는 메서드
+    public boolean isVideoFile(File file) {
+        // MIME 타입 확인
+        try (InputStream is = Files.newInputStream(file.toPath())) {
+            String mimeType = Files.probeContentType(file.toPath());
+            return mimeType != null && mimeType.startsWith("video");
+        } catch (IOException e) {
+            return false;
         }
     }
 

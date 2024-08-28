@@ -27,6 +27,4 @@ public class History {
 
     @Column(nullable = false)
     private Timestamp watchedDate;
-
-    // Getters and Setters
 }

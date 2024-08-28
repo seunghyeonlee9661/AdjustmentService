@@ -3,8 +3,10 @@ import com.sparta.dto.VideoCreateRequestDTO;
 import com.sparta.dto.VideoCreateResponseDTO;
 import com.sparta.dto.VideoDetailResponseDTO;
 import com.sparta.dto.VideoListResponseDTO;
+import com.sparta.entity.History;
 import com.sparta.entity.User;
 import com.sparta.entity.Video;
+import com.sparta.repository.HistoryRepository;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -31,10 +34,10 @@ import java.util.UUID;
 public class VideoService {
 
     private final VideoRepository videoRepository;
+    private final HistoryRepository historyRepository;
     private final RedisService redisService;
     private final FileService fileService;
     private final JCodecService jCodecService;
-
 
     @Transactional
     public ResponseEntity<Page<VideoListResponseDTO>> getVideoList(int page){
@@ -44,14 +47,21 @@ public class VideoService {
     }
 
     @Transactional
-    public ResponseEntity<VideoDetailResponseDTO> playVideo(long id, HttpServletRequest request){
+    public ResponseEntity<VideoDetailResponseDTO> playVideo(long id, UserDetailsImpl userDetails, HttpServletRequest request){
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
+        User user = userDetails != null ? userDetails.getUser() : null;
 
-        // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
-        if (redisService.incrementViewCount(getClientIp(request),Long.toString(id))) { // 사용자 IP를 Redis에서 검색
-            video.updateViews(); // Board 엔티티의 조회수 증가 메서드 호출
+        Long watchedDuration = 0L;
+        // 사용자가 있는 경우 History를 조회
+        if (userDetails != null) {
+            // History를 Optional로 조회하고 watchedDuration을 설정
+            watchedDuration = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).map(History::getWatchedDuration).orElse(0L);
         }
-        return ResponseEntity.ok(new VideoDetailResponseDTO(video));
+        // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
+        if (redisService.incrementViewCount(getClientIp(request),Long.toString(id))) {
+            video.updateViews();
+        }
+        return ResponseEntity.ok(new VideoDetailResponseDTO(video,watchedDuration));
     }
 
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
@@ -66,7 +76,7 @@ public class VideoService {
         if (!tempFile.exists()) throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
 
         // 파일 포맷 확인
-        if (!isVideoFile(tempFile)) {
+        if (!fileService.isVideoFile(tempFile)) {
             tempFile.delete();
             throw new IllegalArgumentException("Invalid video file format.");
         }
@@ -83,7 +93,6 @@ public class VideoService {
 
     @Transactional
     public ResponseEntity<String> uploadVideoInfo(VideoCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
-
         User user = userDetails.getUser();
         videoRepository.save(new Video(requestDTO,user));
         return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
@@ -109,14 +118,4 @@ public class VideoService {
         return ip;
     }
 
-    // 파일이 영상 파일인지 확인하는 메서드
-    private boolean isVideoFile(File file) {
-        // MIME 타입 확인
-        try (InputStream is = Files.newInputStream(file.toPath())) {
-            String mimeType = Files.probeContentType(file.toPath());
-            return mimeType != null && mimeType.startsWith("video");
-        } catch (IOException e) {
-            return false;
-        }
-    }
 }

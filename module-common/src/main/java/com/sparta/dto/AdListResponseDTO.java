@@ -1,7 +1,6 @@
 package com.sparta.dto;
 
 import com.sparta.entity.Ad;
-import com.sparta.entity.Video;
 import lombok.Getter;
 
 import java.sql.Timestamp;
