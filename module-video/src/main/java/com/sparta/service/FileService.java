@@ -33,7 +33,9 @@ public class FileService {
         }
 
         try {
+            System.out.println(" 파일 복사 시도 " + destinationFile.getAbsolutePath());
             Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println(" 파일 복사 성공 " + destinationFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace(); // 또는 로깅 프레임워크를 사용하여 로그를 기록
             throw e; // 예외를 다시 던지거나 적절히 처리
