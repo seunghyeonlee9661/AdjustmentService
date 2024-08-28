@@ -7,14 +7,9 @@ import com.sparta.entity.User;
 import com.sparta.entity.Video;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.UserDetailsImpl;
-import com.sparta.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.jcodec.api.FrameGrab;
 import org.jcodec.api.JCodecException;
-import org.jcodec.common.io.NIOUtils;
-import org.jcodec.common.io.SeekableByteChannel;
-import org.jcodec.common.model.Rational;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +31,7 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final RedisService redisService;
-    private final FileService fileService; // FileService 주입
+    private final FileService fileService;
     private final JCodecService jCodecService;
 
 

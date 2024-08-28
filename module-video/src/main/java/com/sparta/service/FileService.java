@@ -1,5 +1,8 @@
 package com.sparta.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +11,8 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
+@RequiredArgsConstructor
 public class FileService {
     public static final String VIDEO_UPLOAD_DIR = "/var/www/uploads/adjustment/video/";
     public static final String VIDEO_URL_DIR = "/http://dltmdgus9661.iptime.org/uploads/adjustment/video/";
