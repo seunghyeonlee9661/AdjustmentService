@@ -47,7 +47,7 @@ public class AdController {
 
     /* 비디오 광고 재생 */
     @GetMapping("/{video_id}/{ad_id}")
-    public ResponseEntity<String> playAd(@PathVariable("video_id") long video_id,@PathVariable("ad_id") long ad_id,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
-        return adService.playAd(video_id,ad_id,userDetails);
+    public ResponseEntity<String> playAd(@PathVariable("video_id") long video_id,@PathVariable("ad_id") long ad_id) throws IllegalAccessException {
+        return adService.playAd(video_id,ad_id);
     }
 }
