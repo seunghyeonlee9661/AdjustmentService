@@ -1,9 +1,7 @@
 package com.sparta.service;
 import com.sparta.dto.*;
-import com.sparta.entity.Ad;
-import com.sparta.entity.History;
-import com.sparta.entity.User;
-import com.sparta.entity.Video;
+import com.sparta.entity.*;
+import com.sparta.repository.AdListRepository;
 import com.sparta.repository.AdRepository;
 import com.sparta.repository.HistoryRepository;
 import com.sparta.repository.VideoRepository;
@@ -24,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +35,7 @@ public class VideoService {
     private final VideoRepository videoRepository;
     private final HistoryRepository historyRepository;
     private final AdRepository adRepository;
+    private final AdListRepository adListRepository;
     private final RedisService redisService;
     private final FileService fileService;
     private final JCodecService jCodecService;
@@ -119,16 +119,10 @@ public class VideoService {
     @Transactional
     public ResponseEntity<String> uploadVideoInfo(VideoCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        log.info("광고 id 목록" +requestDTO.getAdIds().toString());
+        // 비디오 등록
+        Video video = videoRepository.save(new Video(requestDTO,user));
         List<Ad> ads = adRepository.findAllById(requestDTO.getAdIds()); // 광고 아이템 목록을 가져옴
-
-        // 광고 목록을 반복문으로 로그에 기록
-        log.info("조회된 광고 목록:");
-        for (Ad ad : ads) {
-            log.info("Ad{id={}, url={}, title={}}", ad.getId(), ad.getUrl(), ad.getTitle());
-        }
-
-        videoRepository.save(new Video(requestDTO,user,ads));
+        for (Ad ad : ads) adListRepository.save(new AdList(video,ad));
         return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
     }
 

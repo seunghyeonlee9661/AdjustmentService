@@ -45,7 +45,7 @@ public class Video {
     @OneToMany(mappedBy = "video")
     private List<History> histories;
 
-    public Video (VideoCreateRequestDTO requestDTO,User user,List<Ad> ads){
+    public Video (VideoCreateRequestDTO requestDTO,User user){
         this.url = requestDTO.getUrl();
         this.thumbnail = requestDTO.getThumbnail();
         this.title = requestDTO.getTitle();
@@ -53,7 +53,6 @@ public class Video {
         this.registrationDate = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간으로 설정
         this.duration = requestDTO.getDuration();
         this.user = user;
-        this.adLists = ads.stream().map(ad -> new AdList(this, ad)).toList(); // 광고 아이템 목록 설정
     }
 
     public void updateViews(){
