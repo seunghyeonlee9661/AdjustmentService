@@ -71,6 +71,14 @@ public class AdService {
     }
 
     @Transactional
+    public ResponseEntity<String> cancelAdFile(String url) {
+        fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,url);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Ad create canceled successfully");
+    }
+
+
+
+    @Transactional
     public ResponseEntity<String> deleteAd(Long id, UserDetailsImpl userDetails) {
         Ad ad = adRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Ad Found"));
         if(!userDetails.getUser().getId().equals(ad.getUser().getId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");

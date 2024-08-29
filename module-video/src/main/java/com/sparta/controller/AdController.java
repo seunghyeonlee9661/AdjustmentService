@@ -33,6 +33,12 @@ public class AdController {
         return adService.uploadAdFile(file);
     }
 
+    /* 비디오 업로드 취소 */
+    @DeleteMapping("/upload")
+    public ResponseEntity<String> deleteAdFile(@RequestParam String url){
+        return adService.cancelAdFile(url);
+    }
+
     /* 광고 정보 업로드 */
     @PostMapping("")
     public ResponseEntity<String> uploadAdInfo(@Valid @RequestBody AdCreateRequestDTO requestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails){

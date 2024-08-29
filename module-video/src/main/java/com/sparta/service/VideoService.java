@@ -107,6 +107,12 @@ public class VideoService {
         return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
     }
 
+    public ResponseEntity<String> cancelVideoFile(VideoCancelCreateRequestDTO requestDTO) throws IOException, JCodecException {
+        fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,requestDTO.getUrl());
+        fileService.deleteFileByUrl(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR,requestDTO.getThumbnail());
+        return ResponseEntity.status(HttpStatus.CREATED).body("video create canceled successfully");
+    }
+
     @Transactional
     public ResponseEntity<String> uploadVideoInfo(VideoCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
         User user = userDetails.getUser();

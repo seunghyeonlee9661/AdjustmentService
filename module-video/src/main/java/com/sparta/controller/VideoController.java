@@ -1,8 +1,5 @@
 package com.sparta.controller;
-import com.sparta.dto.VideoCreateRequestDTO;
-import com.sparta.dto.VideoCreateResponseDTO;
-import com.sparta.dto.VideoDetailResponseDTO;
-import com.sparta.dto.VideoListResponseDTO;
+import com.sparta.dto.*;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.VideoService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +35,12 @@ public class VideoController {
     @PostMapping("/upload")
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(@RequestPart(value = "file") MultipartFile file) throws JCodecException, IOException {
         return videoService.uploadVideoFile(file);
+    }
+
+    /* 비디오 업로드 취소 */
+    @DeleteMapping("/upload")
+    public ResponseEntity<String> deleteVideoFile(@Valid @RequestBody VideoCancelCreateRequestDTO requestDTO) throws JCodecException, IOException {
+        return videoService.cancelVideoFile(requestDTO);
     }
 
     /* 비디오 정보 업로드 */
