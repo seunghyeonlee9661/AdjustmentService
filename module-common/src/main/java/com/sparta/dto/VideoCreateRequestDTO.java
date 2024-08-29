@@ -27,4 +27,6 @@ public class VideoCreateRequestDTO {
 
     @NotNull
     private Long duration;
+
+    private List<Long> adIds; // 광고 아이템 목록을 위한 필드 추가
 }

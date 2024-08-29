@@ -1,8 +1,10 @@
 package com.sparta.service;
 import com.sparta.dto.*;
+import com.sparta.entity.Ad;
 import com.sparta.entity.History;
 import com.sparta.entity.User;
 import com.sparta.entity.Video;
+import com.sparta.repository.AdRepository;
 import com.sparta.repository.HistoryRepository;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.UserDetailsImpl;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -29,6 +32,7 @@ public class VideoService {
 
     private final VideoRepository videoRepository;
     private final HistoryRepository historyRepository;
+    private final AdRepository adRepository;
     private final RedisService redisService;
     private final FileService fileService;
     private final JCodecService jCodecService;
@@ -106,7 +110,8 @@ public class VideoService {
     @Transactional
     public ResponseEntity<String> uploadVideoInfo(VideoCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        videoRepository.save(new Video(requestDTO,user));
+        List<Ad> ads = adRepository.findAllById(requestDTO.getAdIds()); // 광고 아이템 목록을 가져옴
+        videoRepository.save(new Video(requestDTO,user,ads));
         return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
     }
 
