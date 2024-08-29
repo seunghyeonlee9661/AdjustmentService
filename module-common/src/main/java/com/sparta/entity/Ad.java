@@ -28,16 +28,12 @@ public class Ad {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private Long viewCount;
-
     @OneToMany(mappedBy = "ad")
     private List<AdList> adLists;
 
     public Ad (AdCreateRequestDTO requestDTO, User user){
         this.url = requestDTO.getUrl();
         this.title = requestDTO.getTitle();
-        this.viewCount = 0L;
         this.user = user;
     }
 

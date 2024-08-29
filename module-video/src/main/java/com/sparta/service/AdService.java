@@ -1,16 +1,18 @@
 package com.sparta.service;
 
 import com.sparta.dto.AdCreateRequestDTO;
+import com.sparta.dto.AdResponseDTO;
 import com.sparta.dto.VideoCreateRequestDTO;
 import com.sparta.dto.VideoCreateResponseDTO;
 import com.sparta.entity.Ad;
+import com.sparta.entity.AdList;
 import com.sparta.entity.User;
 import com.sparta.entity.Video;
+import com.sparta.repository.AdListRepository;
 import com.sparta.repository.AdRepository;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.jcodec.api.JCodecException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,18 +21,23 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 
 @Service
 @RequiredArgsConstructor
 public class AdService {
 
     private final AdRepository adRepository;
+    private final AdListRepository adListRepository;
+    private final VideoRepository videoRepository;
     private final FileService fileService;
 
+    public ResponseEntity<AdResponseDTO> findAd (long id, UserDetailsImpl userDetails) throws IllegalAccessException {
+        Ad ad = adRepository.findById(id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
+        if(!ad.getUser().equals(userDetails.getUser())) throw new IllegalAccessException("Failed to save the file: ");
+        return ResponseEntity.ok(new AdResponseDTO(ad));
+    }
 
-    public ResponseEntity<String> uploadAdFile(MultipartFile file) throws IOException, JCodecException {
+    public ResponseEntity<String> uploadAdFile(MultipartFile file) throws IOException {
         String originalFileName = file.getOriginalFilename();
 
         // /tmp 디렉토리에 파일 생성
@@ -53,7 +60,6 @@ public class AdService {
         
         // 변환된 임시 파일 삭제
         tempFile.delete();
-
         return ResponseEntity.ok(fileUrl);
     }
 
@@ -73,4 +79,12 @@ public class AdService {
         return ResponseEntity.status(HttpStatus.CREATED).body("Ad delete successfully");
     }
 
+    @Transactional
+    public ResponseEntity<String> playAd (long video_id,long ad_id) throws IllegalAccessException {
+        Video video = videoRepository.findById(video_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
+        Ad ad = adRepository.findById(ad_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
+        AdList adList = adListRepository.findByAdIdAndVideoId(ad.getId(),video.getId()).orElseThrow(()-> new IllegalAccessException("Ad Connection Not Found"));
+        adList.update();
+        return ResponseEntity.ok("조회수 : " + adList.getViewCount());
+    }
 }

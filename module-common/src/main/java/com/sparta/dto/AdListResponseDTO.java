@@ -1,21 +1,17 @@
 package com.sparta.dto;
 
-import com.sparta.entity.Ad;
+import com.sparta.entity.AdList;
 import lombok.Getter;
-
-import java.sql.Timestamp;
 
 @Getter
 public class AdListResponseDTO {
     private Long id;
-    private UserResponseDTO user;
-    private String title;
+    private AdResponseDTO ad;
     private Long viewCount;
 
-    public AdListResponseDTO(Ad ad){
-        this.id = ad.getId();
-        this.user = new UserResponseDTO(ad.getUser());
-        this.title = ad.getTitle();
-        this.viewCount = ad.getViewCount();
+    public AdListResponseDTO(AdList adList) {
+        this.id = adList.getId();
+        this.ad = new AdResponseDTO(adList.getAd());  // 광고 정보 포함
+        this.viewCount = adList.getViewCount();
     }
 }

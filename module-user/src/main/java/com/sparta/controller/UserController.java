@@ -1,6 +1,6 @@
 package com.sparta.controller;
 
-import com.sparta.dto.AdListResponseDTO;
+import com.sparta.dto.AdResponseDTO;
 import com.sparta.dto.UserCreateRequestDTO;
 import com.sparta.dto.UserResponseDTO;
 import com.sparta.dto.VideoListResponseDTO;
@@ -15,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -54,7 +53,7 @@ public class UserController {
 
     /* 사용자 회원탈퇴 */
     @GetMapping("ads")
-    public ResponseEntity<Page<AdListResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
+    public ResponseEntity<Page<AdResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userAds(userDetails,page);
     }
 }

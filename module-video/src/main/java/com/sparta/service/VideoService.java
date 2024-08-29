@@ -1,8 +1,5 @@
 package com.sparta.service;
-import com.sparta.dto.VideoCreateRequestDTO;
-import com.sparta.dto.VideoCreateResponseDTO;
-import com.sparta.dto.VideoDetailResponseDTO;
-import com.sparta.dto.VideoListResponseDTO;
+import com.sparta.dto.*;
 import com.sparta.entity.History;
 import com.sparta.entity.User;
 import com.sparta.entity.Video;
@@ -23,10 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Service
@@ -50,18 +44,36 @@ public class VideoService {
     public ResponseEntity<VideoDetailResponseDTO> playVideo(long id, UserDetailsImpl userDetails, HttpServletRequest request){
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
         User user = userDetails != null ? userDetails.getUser() : null;
-
         Long watchedDuration = 0L;
         // 사용자가 있는 경우 History를 조회
         if (userDetails != null) {
             // History를 Optional로 조회하고 watchedDuration을 설정
-            watchedDuration = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).map(History::getWatchedDuration).orElse(0L);
+            Optional<History> historyOptional = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId());
+            if(historyOptional.isPresent()){
+                watchedDuration = historyOptional.get().getWatchedDuration();
+            }else{
+                historyRepository.save(new History(user,video));
+                watchedDuration = 0L;
+            }
         }
         // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
         if (redisService.incrementViewCount(getClientIp(request),Long.toString(id))) {
             video.updateViews();
         }
         return ResponseEntity.ok(new VideoDetailResponseDTO(video,watchedDuration));
+    }
+
+
+    @Transactional
+    public ResponseEntity<String> pauseVideo(long id, UserDetailsImpl userDetails, Long watchedDuration){
+        Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
+        if(userDetails != null){
+            History history = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).orElseThrow(()-> new IllegalArgumentException("History Found"));
+            history.update(watchedDuration);
+            return ResponseEntity.ok(watchedDuration + "에서 시청 멈춤");
+        }else{
+            return ResponseEntity.ok("비로그인 사용자");
+        }
     }
 
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
@@ -101,7 +113,7 @@ public class VideoService {
     @Transactional
     public ResponseEntity<String> deleteVideo(Long id, UserDetailsImpl userDetails) {
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
-        if(!userDetails.getUser().getId().equals(video.getUser().getId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
+        if(!userDetails.getUser().equals(video.getUser())) return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not owner of this video");
         fileService.deleteFileByUrl(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,video.getUrl());
         fileService.deleteFileByUrl(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR,video.getThumbnail());
         videoRepository.delete(video);
@@ -117,5 +129,4 @@ public class VideoService {
         }
         return ip;
     }
-
 }

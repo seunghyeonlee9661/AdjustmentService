@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -38,6 +39,14 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<History> histories;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
 
     public User(UserCreateRequestDTO requestDTO, String password){
         this.username = requestDTO.getUsername();

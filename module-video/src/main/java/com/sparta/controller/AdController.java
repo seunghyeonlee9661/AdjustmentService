@@ -21,9 +21,15 @@ import java.io.IOException;
 public class AdController {
     private final AdService adService;
 
+    /* 광고 정보 확인 */
+    @GetMapping("/{id}")
+    public ResponseEntity<AdResponseDTO> uploadAdFile(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
+        return adService.findAd(id,userDetails);
+    }
+
     /* 광고 파일 업로드 */
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadAdFile(@RequestPart(value = "file") MultipartFile file) throws JCodecException, IOException {
+    public ResponseEntity<String> uploadAdFile(@RequestPart(value = "file") MultipartFile file) throws IOException {
         return adService.uploadAdFile(file);
     }
 
@@ -37,5 +43,11 @@ public class AdController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAd(@PathVariable("id") long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return adService.deleteAd(id,userDetails);
+    }
+
+    /* 비디오 광고 재생 */
+    @GetMapping("/{video_id}/{ad_id}")
+    public ResponseEntity<String> playAd(@PathVariable("video_id") long video_id,@PathVariable("ad_id") long ad_id,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
+        return adService.playAd(video_id,ad_id,userDetails);
     }
 }

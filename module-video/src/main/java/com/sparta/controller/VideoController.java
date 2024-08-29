@@ -47,12 +47,18 @@ public class VideoController {
     }
 
     /* 비디오 재생 */
-    @GetMapping("/{id}")
+    @GetMapping("/{id}/play")
     public ResponseEntity<VideoDetailResponseDTO> playVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
         return videoService.playVideo(id,userDetails,request);
     }
 
-    /* 비디오 정보 업로드 */
+    /* 비디오 중지 */
+    @GetMapping("/{id}/pause")
+    public ResponseEntity<String> pauseVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestParam(required = false) Long watchedDuration){
+        return videoService.pauseVideo(id,userDetails,watchedDuration);
+    }
+
+    /* 비디오 삭제 */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable("id") long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return videoService.deleteVideo(id,userDetails);

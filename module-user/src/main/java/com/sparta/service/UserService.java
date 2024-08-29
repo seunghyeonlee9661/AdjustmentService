@@ -1,6 +1,6 @@
 package com.sparta.service;
 
-import com.sparta.dto.AdListResponseDTO;
+import com.sparta.dto.AdResponseDTO;
 import com.sparta.dto.UserCreateRequestDTO;
 import com.sparta.dto.VideoListResponseDTO;
 import com.sparta.entity.Ad;
@@ -63,11 +63,11 @@ public class UserService {
     }
 
     /* 회원 탈퇴*/
-    public ResponseEntity<Page<AdListResponseDTO>> userAds(UserDetailsImpl userDetails, int page) throws IOException {
+    public ResponseEntity<Page<AdResponseDTO>> userAds(UserDetailsImpl userDetails, int page) throws IOException {
         User user = userDetails.getUser();
         Pageable pageable = PageRequest.of(page, 8);
         Page<Ad> AdPages = adRepository.findByUserId(user.getId(),pageable);
-        return ResponseEntity.ok().body(AdPages.map(AdListResponseDTO::new));
+        return ResponseEntity.ok().body(AdPages.map(AdResponseDTO::new));
     }
 
 

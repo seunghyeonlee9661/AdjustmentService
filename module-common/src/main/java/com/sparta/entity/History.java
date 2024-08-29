@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,4 +28,16 @@ public class History {
 
     @Column(nullable = false)
     private Timestamp watchedDate;
+
+    public History(User user, Video video){
+        this.user = user;
+        this.video = video;
+        watchedDuration = 0L;
+        this.watchedDate = Timestamp.valueOf(LocalDateTime.now()); // 현재 시간으로 설정
+    }
+
+    public void update(Long watchedDuration){
+        this.watchedDate = Timestamp.valueOf(LocalDateTime.now());
+        this.watchedDuration = watchedDuration;
+    }
 }
