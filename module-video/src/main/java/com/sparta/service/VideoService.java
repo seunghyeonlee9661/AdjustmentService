@@ -136,7 +136,6 @@ public class VideoService {
         return ResponseEntity.status(HttpStatus.CREATED).body("video delete successfully");
     }
 
-
     // 사용자 IP 확인하는 기능
     private String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
