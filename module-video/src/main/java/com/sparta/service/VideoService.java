@@ -11,6 +11,8 @@ import com.sparta.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jcodec.api.JCodecException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class VideoService {
 
+    private static final Logger log = LoggerFactory.getLogger(VideoService.class);
     private final VideoRepository videoRepository;
     private final HistoryRepository historyRepository;
     private final AdRepository adRepository;
@@ -116,7 +119,15 @@ public class VideoService {
     @Transactional
     public ResponseEntity<String> uploadVideoInfo(VideoCreateRequestDTO requestDTO, UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
+        log.info("광고 id 목록" +requestDTO.getAdIds().toString());
         List<Ad> ads = adRepository.findAllById(requestDTO.getAdIds()); // 광고 아이템 목록을 가져옴
+
+        // 광고 목록을 반복문으로 로그에 기록
+        log.info("조회된 광고 목록:");
+        for (Ad ad : ads) {
+            log.info("Ad{id={}, url={}, title={}}", ad.getId(), ad.getUrl(), ad.getTitle());
+        }
+
         videoRepository.save(new Video(requestDTO,user,ads));
         return ResponseEntity.status(HttpStatus.CREATED).body("video created successfully");
     }
