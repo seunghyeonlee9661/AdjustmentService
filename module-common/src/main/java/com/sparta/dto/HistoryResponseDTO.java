@@ -1,10 +1,5 @@
 package com.sparta.dto;
-
-import com.sparta.entity.Ad;
 import com.sparta.entity.History;
-import com.sparta.entity.User;
-import com.sparta.entity.Video;
-import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
