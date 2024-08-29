@@ -1,9 +1,6 @@
 package com.sparta.controller;
 
-import com.sparta.dto.AdResponseDTO;
-import com.sparta.dto.UserCreateRequestDTO;
-import com.sparta.dto.UserResponseDTO;
-import com.sparta.dto.VideoListResponseDTO;
+import com.sparta.dto.*;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -55,5 +52,11 @@ public class UserController {
     @GetMapping("ads")
     public ResponseEntity<Page<AdResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userAds(userDetails,page);
+    }
+
+    /* 사용자 회원탈퇴 */
+    @GetMapping("histories")
+    public ResponseEntity<Page<HistoryResponseDTO>> userHistories(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
+        return userService.userHistories(userDetails,page);
     }
 }

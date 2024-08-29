@@ -1,10 +1,12 @@
 package com.sparta.dto;
 import com.sparta.entity.Video;
+import lombok.Getter;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class VideoDetailResponseDTO {
     private Long id;
     private UserResponseDTO user;

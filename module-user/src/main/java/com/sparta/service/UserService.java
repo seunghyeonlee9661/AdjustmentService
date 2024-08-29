@@ -1,12 +1,15 @@
 package com.sparta.service;
 
 import com.sparta.dto.AdResponseDTO;
+import com.sparta.dto.HistoryResponseDTO;
 import com.sparta.dto.UserCreateRequestDTO;
 import com.sparta.dto.VideoListResponseDTO;
 import com.sparta.entity.Ad;
+import com.sparta.entity.History;
 import com.sparta.entity.User;
 import com.sparta.entity.Video;
 import com.sparta.repository.AdRepository;
+import com.sparta.repository.HistoryRepository;
 import com.sparta.repository.UserRepository;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.JwtUtil;
@@ -28,6 +31,8 @@ import java.io.IOException;
 public class UserService {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
+    private final HistoryRepository historyRepository;
+
     private final AdRepository adRepository;
 
 
@@ -69,6 +74,16 @@ public class UserService {
         Page<Ad> AdPages = adRepository.findByUserId(user.getId(),pageable);
         return ResponseEntity.ok().body(AdPages.map(AdResponseDTO::new));
     }
+
+    /* 회원 탈퇴*/
+    public ResponseEntity<Page<HistoryResponseDTO>> userHistories(UserDetailsImpl userDetails, int page) throws IOException {
+        User user = userDetails.getUser();
+        Pageable pageable = PageRequest.of(page, 8);
+        Page<History> historyPage = historyRepository.findByUserId(user.getId(),pageable);
+        return ResponseEntity.ok().body(historyPage.map(HistoryResponseDTO::new));
+    }
+
+
 
 
 
