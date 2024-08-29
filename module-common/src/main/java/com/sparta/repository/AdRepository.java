@@ -10,5 +10,5 @@ import java.util.List;
 public interface AdRepository extends JpaRepository<Ad, Long> {
     Page<Ad> findAll(Pageable pageable);
     Page<Ad> findByUserId(Long userId,Pageable pageable);
-    List<Ad> findAllById(List<Long> ids);
+    List<Ad> findAllById (Iterable<Long> ids);
 }
