@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan(basePackages = "com.common.entity")  // 엔티티 패키지 경로 지정
-@ComponentScan(basePackages = {"com.sparta.adjust", "com.common"})  // 두 모듈의 컴포넌트 스캔
-@EnableJpaRepositories(basePackages = "com.common.repository")  // 리포지토리 스캔
+@EntityScan(basePackages = {"com.common.entity", "com.sparta.entity"})
+@ComponentScan(basePackages = {"com.sparta", "com.common"})
+@EnableJpaRepositories(basePackages = {"com.common.repository", "com.sparta.repository"})
 @EnableJpaAuditing
 public class AdjustApplication {
     public static void main(String[] args) {

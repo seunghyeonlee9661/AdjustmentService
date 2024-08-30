@@ -2,11 +2,17 @@ package com.sparta;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.TimeZone;
 
 @EnableJpaAuditing
+@EntityScan(basePackages = {"com.common.entity", "com.sparta.entity"})
+@ComponentScan(basePackages = {"com.sparta", "com.common"})
+@EnableJpaRepositories(basePackages = {"com.common.repository", "com.sparta.repository"})
 @SpringBootApplication
 public class UserApplication {
 

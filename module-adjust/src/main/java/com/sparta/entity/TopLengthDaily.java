@@ -1,6 +1,5 @@
 package com.sparta.entity;
 
-import com.sparta.dto.TopLengthRequestDTO;
 import com.sparta.entity.base.TopLengthBase;
 import jakarta.persistence.Entity;
 import lombok.NoArgsConstructor;

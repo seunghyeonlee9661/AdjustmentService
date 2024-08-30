@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 
 @Getter
+@Entity
 @NoArgsConstructor
 public class DailyRecord {
     @Id
