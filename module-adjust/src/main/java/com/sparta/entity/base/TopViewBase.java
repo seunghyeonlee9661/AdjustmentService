@@ -1,9 +1,7 @@
 package com.sparta.entity.base;
 
-import com.sparta.dto.TopViewRequestDTO;
 import com.sparta.entity.Video;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
