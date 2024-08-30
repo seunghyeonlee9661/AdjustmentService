@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 
 @Getter
 @NoArgsConstructor
-@Entity
 public class TopViewBase extends TopBase {
 
     @Column(nullable = false)
