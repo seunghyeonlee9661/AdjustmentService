@@ -9,14 +9,14 @@ public class TopLengthResponseDTO {
     private Long id;
     private String date;
     private SimpleVideoResponseDTO video;
-    private int rank;
+    private int ranking;
     private Long length;
 
     public TopLengthResponseDTO(TopLengthBase topLength){
         this.id = topLength.getId();
         this.date = topLength.getDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 변경된 부분
         this.video = new SimpleVideoResponseDTO(topLength.getVideo());
-        this.rank = topLength.getRank();
+        this.ranking = topLength.getRanking();
         this.length = topLength.getLength();
 
     }

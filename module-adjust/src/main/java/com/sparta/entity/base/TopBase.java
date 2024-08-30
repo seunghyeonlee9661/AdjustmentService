@@ -21,7 +21,7 @@ public abstract class TopBase {
     private Timestamp date;
 
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ranking") // 수정된 필드명
     private int ranking;
 
     @ManyToOne

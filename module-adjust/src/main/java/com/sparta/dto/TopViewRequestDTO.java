@@ -16,7 +16,7 @@ public class TopViewRequestDTO {
     private Video video;
 
     @NotNull
-    private int rank;
+    private int ranking;
 
     @NotNull
     private Long views;

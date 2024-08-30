@@ -14,7 +14,7 @@ public class TopLengthRequestDTO {
     private Long video_id;
 
     @NotNull
-    private int rank;
+    private int ranking;
 
     @NotNull
     private Long length;
