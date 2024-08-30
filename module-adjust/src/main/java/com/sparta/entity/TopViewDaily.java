@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
-@Getter
 @Entity
 @NoArgsConstructor  // JPA는 기본 생성자가 필요합니다.
 public class TopViewDaily extends TopViewBase {
