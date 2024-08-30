@@ -70,7 +70,7 @@ public class AdjustService {
 
         int rank = 1;
         for (TopViewDaily topViewDaily : topViewDailies) {
-            topViewDaily.setRank(rank++);
+            topViewDaily.setRanking(rank++);
             topViewDailyRepository.save(topViewDaily);
         }
 
@@ -88,7 +88,7 @@ public class AdjustService {
 
         rank = 1;
         for (TopLengthDaily topLengthDaily : topLengthDailies) {
-            topLengthDaily.setRank(rank++);
+            topLengthDaily.setRanking(rank++);
             topLengthDailyRepository.save(topLengthDaily);
         }
 

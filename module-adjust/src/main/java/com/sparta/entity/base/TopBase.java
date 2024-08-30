@@ -22,7 +22,7 @@ public abstract class TopBase {
 
     @Setter
     @Column(nullable = false)
-    private int rank;
+    private int ranking;
 
     @ManyToOne
     @JoinColumn(name = "video_id", nullable = false)
