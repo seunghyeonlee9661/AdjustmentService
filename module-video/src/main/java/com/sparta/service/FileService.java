@@ -77,8 +77,6 @@ public class FileService {
         File file = new File(upload_dr + key);
         if (file.exists()) {
             file.delete();
-        } else {
-            throw new IllegalArgumentException("File not found: " + fileUrl);
         }
     }
 

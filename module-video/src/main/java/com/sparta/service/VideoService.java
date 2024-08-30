@@ -70,14 +70,13 @@ public class VideoService {
         return ResponseEntity.ok(new VideoDetailResponseDTO(video,watchedDuration));
     }
 
-
     @Transactional
-    public ResponseEntity<String> pauseVideo(long id, UserDetailsImpl userDetails, Long watchedDuration){
+    public ResponseEntity<String> pauseVideo(long id, UserDetailsImpl userDetails, VideoPauseRequestDTO requestDTO){
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
         if(userDetails != null){
             History history = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).orElseThrow(()-> new IllegalArgumentException("History Found"));
-            history.update(watchedDuration);
-            return ResponseEntity.ok(watchedDuration + "에서 시청 멈춤");
+            history.update(requestDTO.getWatchedDuration(), requestDTO.getWatchedLength());
+            return ResponseEntity.ok(requestDTO.getWatchedDuration() + "에서 시청 멈춤 | 전체 시청 시간 : " + requestDTO.getWatchedLength());
         }else{
             return ResponseEntity.ok("비로그인 사용자");
         }
