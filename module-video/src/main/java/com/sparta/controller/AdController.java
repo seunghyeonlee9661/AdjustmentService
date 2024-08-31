@@ -33,7 +33,7 @@ public class AdController {
         return adService.uploadAdFile(file);
     }
 
-    /* 비디오 업로드 취소 */
+    /* 광고 업로드 취소 */
     @DeleteMapping("/upload")
     public ResponseEntity<String> deleteAdFile(@RequestParam String url){
         return adService.cancelAdFile(url);
@@ -51,9 +51,9 @@ public class AdController {
         return adService.deleteAd(id,userDetails);
     }
 
-    /* 비디오 광고 재생 */
+    /* 비디오의 광고 재생 */
     @GetMapping("/{video_id}/{ad_id}")
-    public ResponseEntity<String> playAd(@PathVariable("video_id") long video_id,@PathVariable("ad_id") long ad_id) throws IllegalAccessException {
+    public ResponseEntity<SimpleAdResponseDTO> playAd(@PathVariable("video_id") long video_id,@PathVariable("ad_id") long ad_id) throws IllegalAccessException {
         return adService.playAd(video_id,ad_id);
     }
 }

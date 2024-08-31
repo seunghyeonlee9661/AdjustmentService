@@ -2,7 +2,6 @@ package com.sparta.service;
 
 import com.sparta.dto.DailyRecordResponseDTO;
 import com.sparta.dto.TopLengthResponseDTO;
-import com.sparta.dto.TopViewRequestDTO;
 import com.sparta.dto.TopViewResponseDTO;
 import com.sparta.entity.*;
 import com.sparta.repository.*;

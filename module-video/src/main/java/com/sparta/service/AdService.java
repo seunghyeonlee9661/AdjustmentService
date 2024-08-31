@@ -1,9 +1,6 @@
 package com.sparta.service;
 
-import com.sparta.dto.AdCreateRequestDTO;
-import com.sparta.dto.AdResponseDTO;
-import com.sparta.dto.VideoCreateRequestDTO;
-import com.sparta.dto.VideoCreateResponseDTO;
+import com.sparta.dto.*;
 import com.sparta.entity.Ad;
 import com.sparta.entity.AdList;
 import com.sparta.entity.User;
@@ -88,11 +85,11 @@ public class AdService {
     }
 
     @Transactional
-    public ResponseEntity<String> playAd (long video_id,long ad_id) throws IllegalAccessException {
+    public ResponseEntity<SimpleAdResponseDTO> playAd (long video_id,long ad_id) throws IllegalAccessException {
         Video video = videoRepository.findById(video_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
         Ad ad = adRepository.findById(ad_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
         AdList adList = adListRepository.findByAdIdAndVideoId(ad.getId(),video.getId()).orElseThrow(()-> new IllegalAccessException("Ad Connection Not Found"));
         adList.update();
-        return ResponseEntity.ok("조회수 : " + adList.getViewCount());
+        return ResponseEntity.ok(new SimpleAdResponseDTO(ad));
     }
 }
