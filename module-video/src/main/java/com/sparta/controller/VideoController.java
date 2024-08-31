@@ -56,7 +56,7 @@ public class VideoController {
     }
 
     /* 비디오 중지 */
-    @GetMapping("/{id}/pause")
+    @PostMapping("/{id}/pause")
     public ResponseEntity<String> pauseVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails,@Valid @RequestBody VideoPauseRequestDTO requestDTO){
         return videoService.pauseVideo(id,userDetails,requestDTO);
     }
