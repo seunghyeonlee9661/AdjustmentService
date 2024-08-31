@@ -39,7 +39,7 @@ public class Video {
     @Column(nullable = false)
     private Long duration;
 
-    @OneToMany(mappedBy = "video")
+    @OneToMany(mappedBy = "video", cascade = CascadeType.ALL)
     private List<AdList> adLists;
 
     @OneToMany(mappedBy = "video")
