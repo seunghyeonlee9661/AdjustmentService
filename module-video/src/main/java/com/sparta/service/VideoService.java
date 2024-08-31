@@ -90,28 +90,23 @@ public class VideoService {
         file.transferTo(tempFile);
         System.out.println("Temporary file path: " + tempFile.getAbsolutePath());
 
-        try {
-            // 파일이 성공적으로 저장되었는지 확인
-            if (!tempFile.exists()) throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
+        // 파일이 성공적으로 저장되었는지 확인
+        if (!tempFile.exists()) throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
 
-            // 파일 포맷 확인
-            if (!fileService.isVideoFile(tempFile)) {
-                tempFile.delete();
-                throw new IllegalArgumentException("Invalid video file format.");
-            }
-            //썸네일 추출
-            String thumbnailUrl = jCodecService.getThumbnail(tempFile);
-            //영상길이 추출
-            long duration = JCodecService.getDuration(tempFile);
-            // FileService를 통해 파일을 업로드하고 URL을 받음
-            String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
-            // 변환된 임시 파일 삭제
+        // 파일 포맷 확인
+        if (!fileService.isVideoFile(tempFile)) {
             tempFile.delete();
-            return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
-        } catch (Exception e) {
-            tempFile.delete();
-            throw e;
+            throw new IllegalArgumentException("Invalid video file format.");
         }
+        //썸네일 추출
+        String thumbnailUrl = jCodecService.getThumbnail(tempFile);
+        //영상길이 추출
+        long duration = JCodecService.getDuration(tempFile);
+        // FileService를 통해 파일을 업로드하고 URL을 받음
+        String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
+        // 변환된 임시 파일 삭제
+        tempFile.delete();
+        return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
     }
 
     public ResponseEntity<String> cancelVideoFile(VideoCancelCreateRequestDTO requestDTO) throws IOException, JCodecException {

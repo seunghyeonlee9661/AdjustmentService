@@ -25,7 +25,7 @@ public class JCodecService {
     private static final String EXTENSION = "png";
     private final FileService fileService; // FileService 주입
 
-    public String getThumbnail(File source) throws IOException, JCodecException {
+    public String getThumbnail(File source) throws IOException {
         File tempThumbnail = File.createTempFile("thumbnail_", "." + EXTENSION);
         try {
             FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
@@ -34,6 +34,11 @@ public class JCodecService {
             BufferedImage bi = AWTUtil.toBufferedImage(picture);
             ImageIO.write(bi, EXTENSION, tempThumbnail);
             return fileService.uploadFile(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR, tempThumbnail);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // ArrayIndexOutOfBoundsException 처리
+            logger.error("ArrayIndexOutOfBoundsException: Invalid video file format for file {}: {}", source.getAbsolutePath(), e.getMessage());
+            if (tempThumbnail.exists()) tempThumbnail.delete();
+            return null;
         } catch (Exception e) {
             logger.error("Error while generating thumbnail: {}", e.getMessage(), e);
             if (tempThumbnail.exists()) tempThumbnail.delete();
