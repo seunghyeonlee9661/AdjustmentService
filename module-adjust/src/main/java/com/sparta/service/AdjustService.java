@@ -1,6 +1,9 @@
 package com.sparta.service;
 
+import com.sparta.dto.DailyRecordResponseDTO;
+import com.sparta.dto.TopLengthResponseDTO;
 import com.sparta.dto.TopViewRequestDTO;
+import com.sparta.dto.TopViewResponseDTO;
 import com.sparta.entity.*;
 import com.sparta.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,10 @@ public class AdjustService {
     private final TopLengthDailyRepository topLengthDailyRepository;
     private final TopLengthWeeklyRepository topLengthWeeklyRepository;
     private final TopLengthMonthlyRepository topLengthMonthlyRepository;
+
+    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(){
+        return ResponseEntity.ok(dailyRecordRepository.findAll().stream().map(DailyRecordResponseDTO::new).collect(Collectors.toList()));
+    }
 
     public ResponseEntity<String> setDailyRecord(){
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
@@ -73,7 +80,6 @@ public class AdjustService {
             topViewDaily.setRanking(rank++);
             topViewDailyRepository.save(topViewDaily);
         }
-
         // 오늘 기록별로 차이 계산 후 TopLengthDaily에 설정함
         List<TopLengthDaily> topLengthDailies = todayRecords.stream()
                 .map(record -> {
@@ -91,8 +97,6 @@ public class AdjustService {
             topLengthDaily.setRanking(rank++);
             topLengthDailyRepository.save(topLengthDaily);
         }
-
-
         return ResponseEntity.ok("일별 TOP5 기록 완료");
     }
 
@@ -101,5 +105,23 @@ public class AdjustService {
     }
     public ResponseEntity<String> setMonthlyTop(){
         return ResponseEntity.ok("설정완료");
+    }
+
+    public ResponseEntity<List<TopViewResponseDTO>> getTopView(String option){
+        List<TopViewResponseDTO> list = switch (option) {
+            case "weekly" -> topViewWeeklyRepository.findAll().stream().map(TopViewResponseDTO::new).toList();
+            case "monthly" -> topViewMonthlyRepository.findAll().stream().map(TopViewResponseDTO::new).toList();
+            default -> topViewDailyRepository.findAll().stream().map(TopViewResponseDTO::new).toList();
+        };
+        return ResponseEntity.ok(list);
+    }
+
+    public ResponseEntity<List<TopLengthResponseDTO>> getTopLength(String option){
+        List<TopLengthResponseDTO> list = switch (option) {
+            case "weekly" -> topLengthDailyRepository.findAll().stream().map(TopLengthResponseDTO::new).toList();
+            case "monthly" -> topLengthWeeklyRepository.findAll().stream().map(TopLengthResponseDTO::new).toList();
+            default -> topLengthMonthlyRepository.findAll().stream().map(TopLengthResponseDTO::new).toList();
+        };
+        return ResponseEntity.ok(list);
     }
 }
