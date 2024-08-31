@@ -27,31 +27,20 @@ public class JCodecService {
     private static final String EXTENSION = "png";
     private final FileService fileService; // FileService 주입
 
-    public String getThumbnail(File source) throws IOException {
+    public String getThumbnail(File source) throws IOException, JCodecException {
         File tempThumbnail = File.createTempFile("thumbnail_", "." + EXTENSION);
-        try{
-            FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
-            frameGrab.seekToSecondPrecise(0);
-            Picture picture = frameGrab.getNativeFrame();
-            BufferedImage bi = AWTUtil.toBufferedImage(picture);
-            ImageIO.write(bi, EXTENSION, tempThumbnail);
-            return fileService.uploadFile(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR, tempThumbnail);
-        }
-        catch (JCodecException e) {
-             tempThumbnail.delete();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 유형입니다.", e);
-        }
+        FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
+        frameGrab.seekToSecondPrecise(0);
+        Picture picture = frameGrab.getNativeFrame();
+        BufferedImage bi = AWTUtil.toBufferedImage(picture);
+        ImageIO.write(bi, EXTENSION, tempThumbnail);
+        return fileService.uploadFile(FileService.THUMBNAIL_UPLOAD_DIR,FileService.THUMBNAIL_URL_DIR, tempThumbnail);
     }
 
-    public static Long getDuration(File source) throws IOException {
-        try{
-            FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
-            double durationInSeconds = frameGrab.getVideoTrack().getMeta().getTotalDuration();
-            log.info("Video length: {} seconds", durationInSeconds);
-            return (long) durationInSeconds;
-        }
-        catch (JCodecException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 유형입니다.", e);
-        }
+    public static Long getDuration(File source) throws IOException, JCodecException {
+        FrameGrab frameGrab = FrameGrab.createFrameGrab(NIOUtils.readableChannel(source));
+        double durationInSeconds = frameGrab.getVideoTrack().getMeta().getTotalDuration();
+        log.info("Video length: {} seconds", durationInSeconds);
+        return (long) durationInSeconds;
     }
 }

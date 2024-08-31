@@ -77,7 +77,7 @@ public class VideoService {
         if(userDetails != null){
             History history = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).orElseThrow(()-> new IllegalArgumentException("History Not Found"));
             history.update(requestDTO.getWatchedDuration(), requestDTO.getWatchedLength());
-            return ResponseEntity.ok(requestDTO.getWatchedDuration() + "에서 시청 멈춤 | 전체 시청 시간 : " + history.getWatchedDuration());
+            return ResponseEntity.ok(requestDTO.getWatchedDuration() + "에서 시청 멈춤 | 전체 시청 시간 : " + history.getWatchedLength());
         }else{
             return ResponseEntity.ok("비로그인 사용자");
         }
@@ -87,26 +87,40 @@ public class VideoService {
         String originalFileName = file.getOriginalFilename();
         // /tmp 디렉토리에 파일 생성
         File tempFile = new File("/tmp/" + originalFileName);
-        file.transferTo(tempFile);
-        System.out.println("Temporary file path: " + tempFile.getAbsolutePath());
+        try {
+            file.transferTo(tempFile);
+            System.out.println("Temporary file path: " + tempFile.getAbsolutePath());
 
-        // 파일이 성공적으로 저장되었는지 확인
-        if (!tempFile.exists()) throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
+            // 파일이 성공적으로 저장되었는지 확인
+            if (!tempFile.exists()) {
+                throw new IOException("Failed to save the file: " + tempFile.getAbsolutePath());
+            }
 
-        // 파일 포맷 확인
-        if (!fileService.isVideoFile(tempFile)) {
+            // 파일 포맷 확인
+            if (!fileService.isVideoFile(tempFile)) {
+                tempFile.delete();
+                throw new IllegalArgumentException("Invalid video file format.");
+            }
+
+            // 썸네일 추출 및 영상 길이 추출
+            String thumbnailUrl = jCodecService.getThumbnail(tempFile);
+            long duration = JCodecService.getDuration(tempFile);
+
+            // FileService를 통해 파일을 업로드하고 URL을 받음
+            String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR, FileService.VIDEO_URL_DIR, tempFile);
+
+            // 변환된 임시 파일 삭제
             tempFile.delete();
-            throw new IllegalArgumentException("Invalid video file format.");
-        }
 
-        // 썸네일 추출 및 영상 길이 추출
-        String thumbnailUrl = jCodecService.getThumbnail(tempFile);
-        long duration = JCodecService.getDuration(tempFile);
-        // FileService를 통해 파일을 업로드하고 URL을 받음
-        String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
-        // 변환된 임시 파일 삭제
-        tempFile.delete();
-        return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl,thumbnailUrl,duration));
+            return ResponseEntity.ok(new VideoCreateResponseDTO(fileUrl, thumbnailUrl, duration));
+        }  catch (JCodecException e) {
+            log.error("JCodecException occurred while processing the file: {}", e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 포맷입니다.", e);
+        } finally {
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
     }
 
     public ResponseEntity<String> cancelVideoFile(VideoCancelCreateRequestDTO requestDTO) throws IOException, JCodecException {
