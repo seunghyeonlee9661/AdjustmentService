@@ -6,6 +6,7 @@ import com.sparta.dto.TopViewRequestDTO;
 import com.sparta.dto.TopViewResponseDTO;
 import com.sparta.entity.*;
 import com.sparta.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +38,7 @@ public class AdjustService {
         return ResponseEntity.ok(dailyRecordRepository.findAll().stream().map(DailyRecordResponseDTO::new).collect(Collectors.toList()));
     }
 
+    @Transactional
     public ResponseEntity<String> setDailyRecord(){
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         List<Video> videos = videoRepository.findAll();
@@ -44,9 +47,16 @@ public class AdjustService {
             Long todayViews = video.getViewCount();
             // 현재 시청 시간 합계
             Long watchedLength = historyRepository.sumWatchedLengthByVideo(video);
-            // DailyView 엔티티 생성 및 저장
-            DailyRecord dailyRecord = new DailyRecord(Timestamp.valueOf(todayStart), video, todayViews,watchedLength);
-            dailyRecordRepository.save(dailyRecord);
+
+            Optional<DailyRecord> existingRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
+            if (existingRecord.isPresent()) {
+                // 존재하는 경우 업데이트
+                existingRecord.get().update(todayViews,watchedLength);
+            } else {
+                // 존재하지 않는 경우 새로 생성
+                DailyRecord dailyRecord = new DailyRecord(Timestamp.valueOf(todayStart), video, todayViews, watchedLength);
+                dailyRecordRepository.save(dailyRecord);
+            }
         }
         return ResponseEntity.ok("설정완료");
     }

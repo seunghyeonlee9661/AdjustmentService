@@ -33,4 +33,9 @@ public class DailyRecord {
         this.views = views;
         this.length = length;
     }
+
+    public void update(Long views,Long length){
+        this.views = views;
+        this.length = length;
+    }
 }

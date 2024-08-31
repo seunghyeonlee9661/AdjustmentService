@@ -15,17 +15,14 @@ public class RedisService {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-    public static final String REFRESH_TOKEN_PREFIX = "refreshToken:";    // 24시간 조회수 제한을 위한 상수
+    public static final String REFRESH_TOKEN_PREFIX = "refreshToken:";    // Refresh Token 상수
     public static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // Refresh Token 만료시간 : 7일
 
     public static final String VIEW_LIMIT_PREFIX = "viewCount:";    // 24시간 조회수 제한을 위한 상수
-    public static final long VIEW_LIMIT_DURATION = 24 * 60 * 60 * 1000; // 24시간을 밀리초로 표현
+    public static final long VIEW_LIMIT_DURATION = 30 * 1000; // 24시간을 밀리초로 표현
 
     public static final String UPLOADER_REQUEST_PREFIX = "resetCode:"; // Redis에 저장될 비밀번호 재설정 코드의 접두사
     public static final long UPLOADER_REQUEST_DURATION = 5 * 60 * 1000; // 5분
-
-    public static final String NAVER_SHOPPING_API_PREFIX = "resetCode:"; // Redis에 저장될 비밀번호 재설정 코드의 접두사
-    public static final long NAVER_SHOPPING_API_DURATION = 60 * 60 * 1000; // 5분
 
     // redis 저장
     public void save(String prefix,String key, String value, long duration) {
