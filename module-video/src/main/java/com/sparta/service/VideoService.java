@@ -75,9 +75,9 @@ public class VideoService {
     public ResponseEntity<String> pauseVideo(long id, UserDetailsImpl userDetails, VideoPauseRequestDTO requestDTO){
         Video video = videoRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("No Video Found"));
         if(userDetails != null){
-            History history = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).orElseThrow(()-> new IllegalArgumentException("History Found"));
+            History history = historyRepository.findByUserIdAndVideoId(userDetails.getUser().getId(), video.getId()).orElseThrow(()-> new IllegalArgumentException("History Not Found"));
             history.update(requestDTO.getWatchedDuration(), requestDTO.getWatchedLength());
-            return ResponseEntity.ok(requestDTO.getWatchedDuration() + "에서 시청 멈춤 | 전체 시청 시간 : " + requestDTO.getWatchedLength());
+            return ResponseEntity.ok(requestDTO.getWatchedDuration() + "에서 시청 멈춤 | 전체 시청 시간 : " + history.getWatchedDuration());
         }else{
             return ResponseEntity.ok("비로그인 사용자");
         }
@@ -100,15 +100,8 @@ public class VideoService {
         }
 
         // 썸네일 추출 및 영상 길이 추출
-        String thumbnailUrl;
-        long duration;
-        try {
-            thumbnailUrl = jCodecService.getThumbnail(tempFile);
-            duration = JCodecService.getDuration(tempFile);
-        } catch (JCodecException e) {
-            tempFile.delete();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 유형입니다.", e);
-        }
+        String thumbnailUrl = jCodecService.getThumbnail(tempFile);
+        long duration = JCodecService.getDuration(tempFile);
         // FileService를 통해 파일을 업로드하고 URL을 받음
         String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
         // 변환된 임시 파일 삭제
