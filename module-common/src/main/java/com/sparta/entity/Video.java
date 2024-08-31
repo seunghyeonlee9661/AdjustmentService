@@ -20,7 +20,7 @@ public class Video {
     @Column(nullable = false)
     private String url;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String thumbnail;
 
     @ManyToOne

@@ -100,6 +100,7 @@ public class VideoService {
         }
         //썸네일 추출
         String thumbnailUrl = jCodecService.getThumbnail(tempFile);
+        System.out.println("thumbnailUrl : " + thumbnailUrl);
         //영상길이 추출
         long duration = JCodecService.getDuration(tempFile);
         // FileService를 통해 파일을 업로드하고 URL을 받음
