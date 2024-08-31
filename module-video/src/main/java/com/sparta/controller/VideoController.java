@@ -33,7 +33,7 @@ public class VideoController {
 
     /* 비디오 파일 업로드 */
     @PostMapping("/upload")
-    public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(@RequestPart(value = "file") MultipartFile file) throws JCodecException, IOException {
+    public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(@RequestPart(value = "file") MultipartFile file) throws IOException {
         return videoService.uploadVideoFile(file);
     }
 

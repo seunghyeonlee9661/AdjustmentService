@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,9 +83,8 @@ public class VideoService {
         }
     }
 
-    public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException, JCodecException {
+    public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(MultipartFile file) throws IOException {
         String originalFileName = file.getOriginalFilename();
-
         // /tmp 디렉토리에 파일 생성
         File tempFile = new File("/tmp/" + originalFileName);
         file.transferTo(tempFile);
@@ -98,11 +98,17 @@ public class VideoService {
             tempFile.delete();
             throw new IllegalArgumentException("Invalid video file format.");
         }
-        //썸네일 추출
-        String thumbnailUrl = jCodecService.getThumbnail(tempFile);
-        System.out.println("thumbnailUrl : " + thumbnailUrl);
-        //영상길이 추출
-        long duration = JCodecService.getDuration(tempFile);
+
+        // 썸네일 추출 및 영상 길이 추출
+        String thumbnailUrl;
+        long duration;
+        try {
+            thumbnailUrl = jCodecService.getThumbnail(tempFile);
+            duration = JCodecService.getDuration(tempFile);
+        } catch (JCodecException e) {
+            tempFile.delete();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 파일 유형입니다.", e);
+        }
         // FileService를 통해 파일을 업로드하고 URL을 받음
         String fileUrl = fileService.uploadFile(FileService.VIDEO_UPLOAD_DIR,FileService.VIDEO_URL_DIR,tempFile);
         // 변환된 임시 파일 삭제
