@@ -43,7 +43,7 @@ public class VideoService {
 
     @Transactional
     public ResponseEntity<Page<VideoListResponseDTO>> getVideoList(int page){
-        Pageable pageable = PageRequest.of(page, 8);
+        Pageable pageable = PageRequest.of(page, 100);
         Page<Video> videoPage = videoRepository.findAll(pageable);
         return ResponseEntity.ok(videoPage.map(VideoListResponseDTO::new));
     }
