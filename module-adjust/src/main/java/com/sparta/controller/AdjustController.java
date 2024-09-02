@@ -18,12 +18,6 @@ import java.util.List;
 class AdjustController {
     private final AdjustService adjustService;
 
-
-    @GetMapping("/test")
-    public String hello() {
-        return "Hello, this is Adjustment Controller";
-    }
-
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
     @GetMapping("/record")
     public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(){

@@ -27,6 +27,7 @@ public class AdjustService {
     private final VideoRepository videoRepository;
     private final DailyRecordRepository dailyRecordRepository;
     private final HistoryRepository historyRepository;
+    private final AdListRepository adListRepository;
     private final TopViewDailyRepository topViewDailyRepository;
     private final TopViewWeeklyRepository topViewWeeklyRepository;
     private final TopViewMonthlyRepository topViewMonthlyRepository;
@@ -47,14 +48,18 @@ public class AdjustService {
             Long todayViews = video.getViewCount();
             // 현재 시청 시간 합계
             Long watchedLength = historyRepository.sumWatchedLengthByVideo(video);
+            // 영상 수익
+            Long profit_video = video.getProfit();
+            // 광고 수익
+            Long profit_ad = adListRepository.findByVideo(video).stream().mapToLong(AdList::getProfit).sum();
 
             Optional<DailyRecord> existingRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
             if (existingRecord.isPresent()) {
                 // 존재하는 경우 업데이트
-                existingRecord.get().update(todayViews,watchedLength);
+                existingRecord.get().update(todayViews,watchedLength,profit_video,profit_ad);
             } else {
                 // 존재하지 않는 경우 새로 생성
-                DailyRecord dailyRecord = new DailyRecord(Timestamp.valueOf(todayStart), video, todayViews, watchedLength);
+                DailyRecord dailyRecord = new DailyRecord(Timestamp.valueOf(todayStart), video, todayViews, watchedLength,profit_video,profit_ad);
                 dailyRecordRepository.save(dailyRecord);
             }
         }

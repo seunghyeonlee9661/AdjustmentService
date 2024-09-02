@@ -27,15 +27,25 @@ public class DailyRecord {
     @Column(nullable = false)
     private Long length;
 
-    public DailyRecord(Timestamp date, Video video, Long views,Long length){
+    @Column(nullable = false)
+    private Long profit_video;
+
+    @Column(nullable = false)
+    private Long profit_ad;
+
+    public DailyRecord(Timestamp date, Video video, Long views,Long length, Long profit_video,Long profit_ad){
         this.date = date;
         this.video = video;
         this.views = views;
         this.length = length;
+        this.profit_video = profit_video;
+        this.profit_ad = profit_ad;
     }
 
-    public void update(Long views,Long length){
+    public void update(Long views,Long length, Long profit_video,Long profit_ad){
         this.views = views;
         this.length = length;
+        this.profit_video = profit_video;
+        this.profit_ad = profit_ad;
     }
 }
