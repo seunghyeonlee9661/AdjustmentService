@@ -61,6 +61,7 @@ public class AdjustService {
         return ResponseEntity.ok("설정완료");
     }
 
+    @Transactional
     public ResponseEntity<String> setDailyTop(){
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  //오늘
         List<DailyRecord> startRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart)); // 오늘 기록
@@ -102,6 +103,7 @@ public class AdjustService {
         return ResponseEntity.ok("일별 TOP5 기록 완료");
     }
 
+    @Transactional
     public ResponseEntity<String> setWeeklyTop(){
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  //오늘
         LocalDateTime startOfWeek = LocalDate.now().with(ChronoField.DAY_OF_WEEK, 1).atStartOfDay(); // 월요일
@@ -112,30 +114,30 @@ public class AdjustService {
         Map<Long, Long> endViewsMap = endRecord.stream().collect(Collectors.toMap(record -> record.getVideo().getId(), DailyRecord::getViews));
         Map<Long, Long> endLengthMap = endRecord.stream().collect(Collectors.toMap(record -> record.getVideo().getId(), DailyRecord::getLength));
 
-        // 오늘 기록별로 차이 계산 후 TopViewDaily에 설정함
+        boolean isStartOfWeek = todayStart.isEqual(startOfWeek);
+
+        // 오늘이 주의 첫 번째 날인 경우 차이 계산 없이 데이터 추가
         List<TopViewWeekly> topViewDailies = startRecord.stream().map(record -> {
-            Long yesterdayViews = endViewsMap.getOrDefault(record.getVideo().getId(), 0L);
-            Long viewDifference = record.getViews() - yesterdayViews;
-            Video video = record.getVideo();
-            return new TopViewWeekly(Timestamp.valueOf(todayStart),viewDifference,video);
+            Long viewDifference = isStartOfWeek ? record.getViews() : record.getViews() - endViewsMap.getOrDefault(record.getVideo().getId(), 0L);
+            return new TopViewWeekly(Timestamp.valueOf(todayStart), viewDifference, record.getVideo());
         }).sorted(Comparator.comparingLong(TopViewWeekly::getViews).reversed()).limit(5).toList();
 
+        // 오늘이 주의 첫 번째 날인 경우 차이 계산 없이 데이터 추가
+        List<TopLengthWeekly> topLengthDailies = startRecord.stream().map(record -> {
+            Long lengthDifference = isStartOfWeek ? record.getLength() : record.getLength() - endLengthMap.getOrDefault(record.getVideo().getId(), 0L);
+            return new TopLengthWeekly(Timestamp.valueOf(todayStart),lengthDifference,record.getVideo());
+        }).sorted(Comparator.comparingLong(TopLengthWeekly::getLength).reversed()).limit(5).toList();
+
         topViewWeeklyRepository.deleteByDate(Timestamp.valueOf(todayStart));
+        topLengthWeeklyRepository.deleteByDate(Timestamp.valueOf(todayStart));
+
+        // 순위 설정 및 저장
         int rank = 1;
         for (TopViewWeekly topViewWeekly : topViewDailies) {
             topViewWeekly.setRanking(rank++);
             topViewWeeklyRepository.save(topViewWeekly);
         }
 
-        // 오늘 기록별로 차이 계산 후 TopLengthDaily에 설정함
-        List<TopLengthWeekly> topLengthDailies = startRecord.stream().map(record -> {
-            Long yesterdayLength = endLengthMap.getOrDefault(record.getVideo().getId(), 0L);
-            Long lengthDifference = record.getLength() - yesterdayLength;
-            Video video = record.getVideo();
-            return new TopLengthWeekly(Timestamp.valueOf(todayStart),lengthDifference,video);
-        }).sorted(Comparator.comparingLong(TopLengthWeekly::getLength).reversed()).limit(5).toList();
-
-        topLengthWeeklyRepository.deleteByDate(Timestamp.valueOf(todayStart));
         rank = 1;
         for (TopLengthWeekly topLengthWeekly : topLengthDailies) {
             topLengthWeekly.setRanking(rank++);
@@ -144,45 +146,48 @@ public class AdjustService {
         return ResponseEntity.ok("주간 TOP5 기록 완료");
     }
 
-    public ResponseEntity<String> setMonthlyTop(){
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  //오늘
-        LocalDateTime startOfMonth =LocalDate.now().withDayOfMonth(1).atStartOfDay(); // 월요일
+    @Transactional
+    public ResponseEntity<String> setMonthlyTop() {
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘
+        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay(); // 월의 첫 날
         List<DailyRecord> startRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart)); // 오늘 기록
-        List<DailyRecord> endRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(startOfMonth));
+        List<DailyRecord> endRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(startOfMonth)); // 월의 첫 날 기록
 
-        // 어제 기록을 map으로 변환
+        // 월의 첫 날 기록을 map으로 변환
         Map<Long, Long> endViewsMap = endRecord.stream().collect(Collectors.toMap(record -> record.getVideo().getId(), DailyRecord::getViews));
         Map<Long, Long> endLengthMap = endRecord.stream().collect(Collectors.toMap(record -> record.getVideo().getId(), DailyRecord::getLength));
 
-        // 오늘 기록별로 차이 계산 후 TopViewDaily에 설정함
+        boolean isStartOfMonth = todayStart.isEqual(startOfMonth);
+
+        // 오늘이 월의 첫 날인 경우 차이 계산 없이 데이터 추가
         List<TopViewMonthly> topViewDailies = startRecord.stream().map(record -> {
-            Long yesterdayViews = endViewsMap.getOrDefault(record.getVideo().getId(), 0L);
-            Long viewDifference = record.getViews() - yesterdayViews;
-            Video video = record.getVideo();
-            return new TopViewMonthly(Timestamp.valueOf(todayStart),viewDifference,video);
+            Long viewDifference = isStartOfMonth ? record.getViews() : record.getViews() - endViewsMap.getOrDefault(record.getVideo().getId(), 0L);
+            return new TopViewMonthly(Timestamp.valueOf(todayStart), viewDifference, record.getVideo());
         }).sorted(Comparator.comparingLong(TopViewMonthly::getViews).reversed()).limit(5).toList();
 
+        // 오늘이 월의 첫 날인 경우 차이 계산 없이 데이터 추가
+        List<TopLengthMonthly> topLengthDailies = startRecord.stream().map(record -> {
+            Long lengthDifference = isStartOfMonth ? record.getLength() : record.getLength() - endLengthMap.getOrDefault(record.getVideo().getId(), 0L);
+            return new TopLengthMonthly(Timestamp.valueOf(todayStart), lengthDifference, record.getVideo());
+        }).sorted(Comparator.comparingLong(TopLengthMonthly::getLength).reversed()).limit(5).toList();
+
+        // 저장 전 데이터 삭제
         topViewMonthlyRepository.deleteByDate(Timestamp.valueOf(todayStart));
+        topLengthMonthlyRepository.deleteByDate(Timestamp.valueOf(todayStart));
+
+        // 순위 설정 및 저장
         int rank = 1;
         for (TopViewMonthly topViewMonthly : topViewDailies) {
             topViewMonthly.setRanking(rank++);
             topViewMonthlyRepository.save(topViewMonthly);
         }
 
-        // 오늘 기록별로 차이 계산 후 TopLengthDaily에 설정함
-        List<TopLengthMonthly> topLengthDailies = startRecord.stream().map(record -> {
-            Long yesterdayLength = endLengthMap.getOrDefault(record.getVideo().getId(), 0L);
-            Long lengthDifference = record.getLength() - yesterdayLength;
-            Video video = record.getVideo();
-            return new TopLengthMonthly(Timestamp.valueOf(todayStart),lengthDifference,video);
-        }).sorted(Comparator.comparingLong(TopLengthMonthly::getLength).reversed()).limit(5).toList();
-
-        topLengthMonthlyRepository.deleteByDate(Timestamp.valueOf(todayStart));
         rank = 1;
         for (TopLengthMonthly topLengthMonthly : topLengthDailies) {
             topLengthMonthly.setRanking(rank++);
             topLengthMonthlyRepository.save(topLengthMonthly);
         }
+
         return ResponseEntity.ok("월간 TOP5 기록 완료");
     }
 
