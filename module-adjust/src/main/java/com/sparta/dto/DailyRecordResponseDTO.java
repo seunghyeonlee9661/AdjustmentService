@@ -1,11 +1,7 @@
 package com.sparta.dto;
 
 import com.sparta.entity.DailyRecord;
-import com.sparta.entity.Video;
-import jakarta.persistence.*;
 import lombok.Getter;
-
-import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 
 @Getter
@@ -15,6 +11,8 @@ public class DailyRecordResponseDTO {
     private SimpleVideoResponseDTO video;
     private Long views;
     private Long length;
+    private Long profite_video;
+    private Long profite_ad;
 
     public DailyRecordResponseDTO(DailyRecord dailyRecord){
         this.id = dailyRecord.getId();
@@ -22,5 +20,7 @@ public class DailyRecordResponseDTO {
         this.video = new SimpleVideoResponseDTO(dailyRecord.getVideo());
         this.views = dailyRecord.getViews();
         this.length = dailyRecord.getLength();
+        this.profite_video = dailyRecord.getProfit_video();
+        this.profite_ad = dailyRecord.getProfit_ad();
     }
 }
