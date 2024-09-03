@@ -28,11 +28,11 @@ public class BatchScheduler {
         return jobProcessor;
     }
 
-    @Scheduled(cron = "0/10 * * * * *") // 10초마다 실행
+    @Scheduled(cron = "0/30 * * * * *") // 10초마다 실행
     public void runJob() {
         String time = LocalDateTime.now().toString();
         try {
-            Job job = jobRegistry.getJob("testJob"); // job 이름
+            Job job = jobRegistry.getJob("dailyJob"); // job 이름
             JobParametersBuilder jobParam = new JobParametersBuilder().addString("time", time);
             jobLauncher.run(job, jobParam.toJobParameters());
         } catch (NoSuchJobException | JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException | JobParametersInvalidException | JobRestartException e) {
