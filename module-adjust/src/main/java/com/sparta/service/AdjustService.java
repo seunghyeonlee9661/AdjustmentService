@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.Comparator;
 import java.util.List;
@@ -35,8 +36,11 @@ public class AdjustService {
     private final TopLengthWeeklyRepository topLengthWeeklyRepository;
     private final TopLengthMonthlyRepository topLengthMonthlyRepository;
 
-    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(){
-        return ResponseEntity.ok(dailyRecordRepository.findAll().stream().map(DailyRecordResponseDTO::new).collect(Collectors.toList()));
+    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(String date){
+        Timestamp timestamp = null;
+        try { if (date != null) timestamp = Timestamp.valueOf(LocalDate.parse(date).atStartOfDay()); } catch (DateTimeParseException ignored) {}
+        List<DailyRecord> records = (timestamp != null) ? dailyRecordRepository.findByDate(timestamp) : dailyRecordRepository.findAll();
+        return ResponseEntity.ok(records.stream().map(DailyRecordResponseDTO::new).toList());
     }
 
     @Transactional
