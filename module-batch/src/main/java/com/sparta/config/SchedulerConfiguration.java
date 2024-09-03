@@ -18,7 +18,7 @@ public class SchedulerConfiguration {
     @Autowired
     private Job dailyJob;
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "*/10 * * * * *")
     public void runDailyJob() throws Exception {
         jobLauncher.run(dailyJob, new JobParametersBuilder().toJobParameters());
     }

@@ -44,22 +44,21 @@ public class BatchConfiguration {
     @Bean
     public Tasklet dailyTasklet() {
         return (contribution, chunkContext) -> {
-            logger.info("Batch JoB!");
-//            logger.info("Starting daily record process...");
-//            adjustService.setDailyRecord();
-//            logger.info("Completed daily record process.");
-//
-//            logger.info("Starting daily top process...");
-//            adjustService.setDailyTop();
-//            logger.info("Completed daily top process.");
-//
-//            logger.info("Starting weekly top process...");
-//            adjustService.setWeeklyTop();
-//            logger.info("Completed weekly top process.");
-//
-//            logger.info("Starting monthly top process...");
-//            adjustService.setMonthlyTop();
-//            logger.info("Completed monthly top process.");
+            logger.info("Starting daily record process...");
+            adjustService.setDailyRecord();
+            logger.info("Completed daily record process.");
+
+            logger.info("Starting daily top process...");
+            adjustService.setDailyTop();
+            logger.info("Completed daily top process.");
+
+            logger.info("Starting weekly top process...");
+            adjustService.setWeeklyTop();
+            logger.info("Completed weekly top process.");
+
+            logger.info("Starting monthly top process...");
+            adjustService.setMonthlyTop();
+            logger.info("Completed monthly top process.");
 
             return RepeatStatus.FINISHED;
         };
