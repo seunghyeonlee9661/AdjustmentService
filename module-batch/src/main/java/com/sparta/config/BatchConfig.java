@@ -28,12 +28,12 @@ public class BatchConfig extends DefaultBatchConfiguration {
     @Bean
     public Job dailyJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) throws DuplicateJobException {
         return new JobBuilder("dailyJob",jobRepository)
-                .start(dailyRecord(jobRepository,transactionManager))
+                .start(dailyStep(jobRepository,transactionManager))
                 .build();
     }
 
-    public Step dailyRecord(JobRepository jobRepository,PlatformTransactionManager transactionManager){
-        return new StepBuilder("DailyRecord",jobRepository)
+    public Step dailyStep(JobRepository jobRepository,PlatformTransactionManager transactionManager){
+        return new StepBuilder("dailyStep",jobRepository)
                 .tasklet(dailyTasklet(),transactionManager)
                 .build();
     }
