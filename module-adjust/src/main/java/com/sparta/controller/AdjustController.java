@@ -25,30 +25,6 @@ class AdjustController {
     }
 
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
-    @PostMapping("/record")
-    public ResponseEntity<String> setDailyRecord(){
-        return adjustService.setDailyRecord();
-    }
-
-    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
-    @PostMapping("/top/daily")
-    public ResponseEntity<String> setDailyTop(){
-        return adjustService.setDailyTop();
-    }
-
-    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 주간 조회수를 기록함 */
-    @PostMapping("/top/weekly")
-    public ResponseEntity<String> setWeeklyTop(){
-        return adjustService.setWeeklyTop();
-    }
-
-    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 월간 조회수를 기록함 */
-    @PostMapping("/top/monthly")
-    public ResponseEntity<String> setMonthlyTop(){
-        return adjustService.setMonthlyTop();
-    }
-
-    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
     @GetMapping("/top/view")
     public ResponseEntity<List<TopViewResponseDTO>> getTopView(@RequestParam(value = "option", defaultValue = "") String option){
         return adjustService.getTopView(option);
@@ -59,4 +35,29 @@ class AdjustController {
     public ResponseEntity<List<TopLengthResponseDTO>> getTopLength(@RequestParam(value = "option", defaultValue = "") String option){
         return adjustService.getTopLength(option);
     }
+
+
+    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
+//    @PostMapping("/record")
+//    public ResponseEntity<String> setDailyRecord(){
+//        return adjustService.setDailyRecord();
+//    }
+//
+//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
+//    @PostMapping("/top/daily")
+//    public ResponseEntity<String> setDailyTop(){
+//        return adjustService.setDailyTop();
+//    }
+//
+//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 주간 조회수를 기록함 */
+//    @PostMapping("/top/weekly")
+//    public ResponseEntity<String> setWeeklyTop(){
+//        return adjustService.setWeeklyTop();
+//    }
+//
+//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 월간 조회수를 기록함 */
+//    @PostMapping("/top/monthly")
+//    public ResponseEntity<String> setMonthlyTop(){
+//        return adjustService.setMonthlyTop();
+//    }
 }

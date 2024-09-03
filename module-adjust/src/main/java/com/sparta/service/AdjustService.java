@@ -40,7 +40,7 @@ public class AdjustService {
     }
 
     @Transactional
-    public ResponseEntity<String> setDailyRecord(){
+    public void setDailyRecord(){
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         List<Video> videos = videoRepository.findAll();
         for (Video video : videos) {
@@ -63,12 +63,12 @@ public class AdjustService {
                 dailyRecordRepository.save(dailyRecord);
             }
         }
-        return ResponseEntity.ok("설정완료");
+        ResponseEntity.ok("설정완료");
     }
 
     @Transactional
-    public ResponseEntity<String> setDailyTop(){
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  //오늘
+    public void setDailyTop(){
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay().minusDays(1);  //오늘
         List<DailyRecord> startRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart)); // 오늘 기록
         List<DailyRecord> endRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart.minusDays(1))); // 어제 기록
 
@@ -105,13 +105,13 @@ public class AdjustService {
             topLengthDaily.setRanking(rank++);
             topLengthDailyRepository.save(topLengthDaily);
         }
-        return ResponseEntity.ok("일별 TOP5 기록 완료");
+        ResponseEntity.ok("일별 TOP5 기록 완료");
     }
 
     @Transactional
-    public ResponseEntity<String> setWeeklyTop(){
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  //오늘
-        LocalDateTime startOfWeek = LocalDate.now().with(ChronoField.DAY_OF_WEEK, 1).atStartOfDay(); // 월요일
+    public void setWeeklyTop(){
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay().minusDays(1);  //오늘
+        LocalDateTime startOfWeek = todayStart.with(ChronoField.DAY_OF_WEEK, 1); // 월요일
         List<DailyRecord> startRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart)); // 오늘 기록
         List<DailyRecord> endRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(startOfWeek)); // 어제 기록
 
@@ -148,13 +148,12 @@ public class AdjustService {
             topLengthWeekly.setRanking(rank++);
             topLengthWeeklyRepository.save(topLengthWeekly);
         }
-        return ResponseEntity.ok("주간 TOP5 기록 완료");
     }
 
     @Transactional
-    public ResponseEntity<String> setMonthlyTop() {
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘
-        LocalDateTime startOfMonth = LocalDate.now().withDayOfMonth(1).atStartOfDay(); // 월의 첫 날
+    public void setMonthlyTop() {
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay().minusDays(1);  // 오늘
+        LocalDateTime startOfMonth = todayStart.withDayOfMonth(1); // 월의 첫 날
         List<DailyRecord> startRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(todayStart)); // 오늘 기록
         List<DailyRecord> endRecord = dailyRecordRepository.findByDate(Timestamp.valueOf(startOfMonth)); // 월의 첫 날 기록
 
@@ -192,8 +191,6 @@ public class AdjustService {
             topLengthMonthly.setRanking(rank++);
             topLengthMonthlyRepository.save(topLengthMonthly);
         }
-
-        return ResponseEntity.ok("월간 TOP5 기록 완료");
     }
 
     public ResponseEntity<List<TopViewResponseDTO>> getTopView(String option){
