@@ -23,7 +23,6 @@ public class BatchConfig extends DefaultBatchConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(BatchConfig.class);
     private final AdjustService adjustService;
 
-
     @Bean
     public Job dailyJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) throws DuplicateJobException {
         return new JobBuilder("dailyJob",jobRepository)
