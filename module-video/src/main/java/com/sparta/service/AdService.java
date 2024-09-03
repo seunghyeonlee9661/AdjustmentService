@@ -9,6 +9,7 @@ import com.sparta.repository.AdListRepository;
 import com.sparta.repository.AdRepository;
 import com.sparta.repository.VideoRepository;
 import com.sparta.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AdService {
     private final AdListRepository adListRepository;
     private final VideoRepository videoRepository;
     private final FileService fileService;
+    private final RedisService redisService;
 
     public ResponseEntity<AdResponseDTO> findAd (long id, UserDetailsImpl userDetails) throws IllegalAccessException {
         Ad ad = adRepository.findById(id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
@@ -85,10 +87,15 @@ public class AdService {
     }
 
     @Transactional
-    public ResponseEntity<SimpleAdResponseDTO> playAd (long video_id,long ad_id) throws IllegalAccessException {
+    public ResponseEntity<SimpleAdResponseDTO> playAd (long video_id,long ad_id, HttpServletRequest request) throws IllegalAccessException {
         Video video = videoRepository.findById(video_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
         Ad ad = adRepository.findById(ad_id).orElseThrow(()-> new IllegalAccessException("No Video Found"));
         AdList adList = adListRepository.findByAdIdAndVideoId(ad.getId(),video.getId()).orElseThrow(()-> new IllegalAccessException("Ad Connection Not Found"));
+
+        // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
+        if (redisService.incrementViewCount(redisService.getClientIp(request),RedisService.AD_VIEW_LIMIT_PREFIX,RedisService.AD_VIEW_LIMIT_DURATION, String.valueOf(adList.getId()))) {
+            video.updateViews();
+        }
         adList.update();
         return ResponseEntity.ok(new SimpleAdResponseDTO(ad));
     }

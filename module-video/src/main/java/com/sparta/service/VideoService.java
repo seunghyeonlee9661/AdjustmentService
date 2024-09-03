@@ -65,7 +65,7 @@ public class VideoService {
             }
         }
         // Redis 기반, 사용자 IP로 게시물의 조회수를 1일 1회만 증가시킬 수 있도록 지정
-        if (redisService.incrementViewCount(getClientIp(request),Long.toString(id))) {
+        if (redisService.incrementViewCount(redisService.getClientIp(request),RedisService.VIDEO_VIEW_LIMIT_PREFIX,RedisService.VIDEO_VIEW_LIMIT_DURATION, String.valueOf(id))) {
             video.updateViews();
         }
         return ResponseEntity.ok(new VideoDetailResponseDTO(video,watchedDuration));
@@ -149,12 +149,5 @@ public class VideoService {
         return ResponseEntity.status(HttpStatus.CREATED).body("video delete successfully");
     }
 
-    // 사용자 IP 확인하는 기능
-    private String getClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isEmpty()) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
-    }
+
 }

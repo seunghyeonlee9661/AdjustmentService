@@ -1,5 +1,6 @@
 package com.sparta.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,11 @@ public class RedisService {
     public static final String REFRESH_TOKEN_PREFIX = "refreshToken:";    // Refresh Token 상수
     public static final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // Refresh Token 만료시간 : 7일
 
-    public static final String VIEW_LIMIT_PREFIX = "viewCount:";    // 24시간 조회수 제한을 위한 상수
-    public static final long VIEW_LIMIT_DURATION = 30 * 1000; // 24시간을 밀리초로 표현
+    public static final String VIDEO_VIEW_LIMIT_PREFIX = "video-viewCount:";    // 24시간 조회수 제한을 위한 상수
+    public static final long VIDEO_VIEW_LIMIT_DURATION = 30 * 1000; // 30초 밀리초로 표현
 
-    public static final String UPLOADER_REQUEST_PREFIX = "resetCode:"; // Redis에 저장될 비밀번호 재설정 코드의 접두사
-    public static final long UPLOADER_REQUEST_DURATION = 5 * 60 * 1000; // 5분
+    public static final String AD_VIEW_LIMIT_PREFIX = "ad-viewCount:";    // 24시간 조회수 제한을 위한 상수
+    public static final long AD_VIEW_LIMIT_DURATION = 30 * 1000; // 30초 밀리초로 표현
 
     // redis 저장
     public void save(String prefix,String key, String value, long duration) {
@@ -41,9 +42,9 @@ public class RedisService {
     }
 
     // 조회수 증가
-    public boolean incrementViewCount(String userIp, String boardId) {
+    public boolean incrementViewCount(String userIp,String prefix,long duration, String id) {
         // NX 옵션으로 키가 없을 때만 값을 설정하고, EX 옵션으로 만료 시간을 설정
-        Boolean result = redisTemplate.opsForValue().setIfAbsent(VIEW_LIMIT_PREFIX + userIp + ":" + boardId, "viewed", VIEW_LIMIT_DURATION, TimeUnit.MILLISECONDS);
+        Boolean result = redisTemplate.opsForValue().setIfAbsent(prefix + userIp + ":" + id, "viewed", duration, TimeUnit.MILLISECONDS);
         return result != null && result;
     }
 
@@ -51,5 +52,14 @@ public class RedisService {
     public long getExpiration(String prefix, String key) {
         Long expiration = redisTemplate.getExpire(prefix + key, TimeUnit.MILLISECONDS);
         return expiration != null ? expiration : 0L;
+    }
+
+    // 사용자 IP 확인하는 기능
+    public String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty()) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 }
