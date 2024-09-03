@@ -28,7 +28,7 @@ public class BatchConfiguration {
 
     @Bean
     public Job dailyJob() {
-        logger.info("dailyJob");  // 테스트 로그 메시지
+        System.out.println("dailyJob");
         return new JobBuilder("dailyJob", jobRepository)
                 .start(dailyStep())
                 .listener(new JobCompletionNotificationListener())
@@ -37,7 +37,7 @@ public class BatchConfiguration {
 
     @Bean
     public Step dailyStep() {
-        logger.info("dailyStep");  // 테스트 로그 메시지
+        System.out.println("dailyStep");
         return new StepBuilder("dailyStep", jobRepository)
                 .tasklet(dailyTasklet(), transactionManager)
                 .build();
@@ -46,6 +46,7 @@ public class BatchConfiguration {
     @Bean
     public Tasklet dailyTasklet() {
         return (contribution, chunkContext) -> {
+            System.out.println("dailyTasklet");
             logger.info("Starting daily record process...");  // 테스트 로그 메시지
             adjustService.setDailyRecord();
             logger.info("Completed daily record process.");  // 테스트 로그 메시지
