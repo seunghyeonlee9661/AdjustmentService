@@ -24,7 +24,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
     private final AdjustService adjustService;
 
     @Bean
-    public Job dailyJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) throws DuplicateJobException {
+    public Job dailyJob(JobRepository jobRepository,PlatformTransactionManager transactionManager) {
         return new JobBuilder("dailyJob",jobRepository)
                 .start(dailyStep(jobRepository,transactionManager))
                 .build();

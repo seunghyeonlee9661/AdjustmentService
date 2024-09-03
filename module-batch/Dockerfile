@@ -25,7 +25,7 @@ COPY module-batch/settings.gradle /app/
 RUN chmod +x gradlew
 
 # Build the application
-RUN ./gradlew clean build -x test
+RUN ./gradlew build -x test
 
 # Copy the built JAR file to /app.jar
 RUN cp module-batch/build/libs/module-batch.jar /app.jar
