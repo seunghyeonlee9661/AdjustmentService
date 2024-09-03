@@ -28,6 +28,7 @@ public class BatchConfiguration {
 
     @Bean
     public Job dailyJob() {
+        logger.info("dailyJob");  // 테스트 로그 메시지
         return new JobBuilder("dailyJob", jobRepository)
                 .start(dailyStep())
                 .listener(new JobCompletionNotificationListener())
@@ -36,6 +37,7 @@ public class BatchConfiguration {
 
     @Bean
     public Step dailyStep() {
+        logger.info("dailyStep");  // 테스트 로그 메시지
         return new StepBuilder("dailyStep", jobRepository)
                 .tasklet(dailyTasklet(), transactionManager)
                 .build();
@@ -44,21 +46,21 @@ public class BatchConfiguration {
     @Bean
     public Tasklet dailyTasklet() {
         return (contribution, chunkContext) -> {
-            logger.info("Starting daily record process...");
+            logger.info("Starting daily record process...");  // 테스트 로그 메시지
             adjustService.setDailyRecord();
-            logger.info("Completed daily record process.");
+            logger.info("Completed daily record process.");  // 테스트 로그 메시지
 
-            logger.info("Starting daily top process...");
+            logger.info("Starting daily top process...");  // 테스트 로그 메시지
             adjustService.setDailyTop();
-            logger.info("Completed daily top process.");
+            logger.info("Completed daily top process.");  // 테스트 로그 메시지
 
-            logger.info("Starting weekly top process...");
+            logger.info("Starting weekly top process...");  // 테스트 로그 메시지
             adjustService.setWeeklyTop();
-            logger.info("Completed weekly top process.");
+            logger.info("Completed weekly top process.");  // 테스트 로그 메시지
 
-            logger.info("Starting monthly top process...");
+            logger.info("Starting monthly top process...");  // 테스트 로그 메시지
             adjustService.setMonthlyTop();
-            logger.info("Completed monthly top process.");
+            logger.info("Completed monthly top process.");  // 테스트 로그 메시지
             return RepeatStatus.FINISHED;
         };
     }
