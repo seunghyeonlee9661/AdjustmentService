@@ -28,7 +28,7 @@ public class BatchScheduler {
         return jobProcessor;
     }
 
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void runJob() {
         String time = LocalDateTime.now().toString();
         try {
