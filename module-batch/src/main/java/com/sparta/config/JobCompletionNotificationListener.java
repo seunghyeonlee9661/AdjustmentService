@@ -8,6 +8,7 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
     @Override
     public void beforeJob(JobExecution jobExecution) {
         // Job 시작 전에 처리할 로직
+        System.out.println("Batch job started with status: " + jobExecution.getStatus());
     }
 
     @Override
