@@ -59,7 +59,6 @@ public class BatchConfiguration {
             logger.info("Starting monthly top process...");
             adjustService.setMonthlyTop();
             logger.info("Completed monthly top process.");
-
             return RepeatStatus.FINISHED;
         };
     }

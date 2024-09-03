@@ -73,6 +73,11 @@ jobs:
               echo "Changes detected in adjust-service"
               docker-compose build adjust-service
             fi
+          
+            if echo "$changed_modules" | grep -q '^module-batch/'; then
+              echo "Changes detected in batch-service"
+              docker-compose build batch-service
+            fi
           fi
           
           docker-compose up -d
