@@ -61,5 +61,18 @@ services:
       - mysql
       - redis
 
+  batch-service:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-batch/Dockerfile
+    container_name: batch_service
+    ports:
+      - "8085:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
 volumes:
   mysql_data:
