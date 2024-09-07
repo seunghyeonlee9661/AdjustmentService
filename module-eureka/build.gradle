@@ -1,5 +1,6 @@
 dependencies {
-
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 }
 
 springBoot{
@@ -8,4 +9,10 @@ springBoot{
 
 bootJar {
     archiveFileName = 'module-eureka.jar'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.4" // 적절한 Spring Cloud 버전 선택
+    }
 }
