@@ -56,6 +56,8 @@ jobs:
             docker-compose build user-service
             docker-compose build video-service
             docker-compose build adjust-service
+            docker-compose build batch-service
+            docker-compose build eureka-server
             docker-compose build common
           else
             # Build only if specific directories have changed
