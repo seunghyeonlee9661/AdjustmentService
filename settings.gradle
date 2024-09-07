@@ -4,4 +4,5 @@ include 'module-video'
 include 'module-common'
 include 'module-adjust'
 include 'module-batch'
+include 'module-eureka'
 

@@ -74,5 +74,14 @@ services:
       - mysql
       - redis
 
+  eureka-server:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-eureka/Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8086:8080"
+
+
 volumes:
   mysql_data:

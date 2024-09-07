@@ -78,6 +78,11 @@ jobs:
               echo "Changes detected in batch-service"
               docker-compose build batch-service
             fi
+          
+            if echo "$changed_modules" | grep -q '^module-eureka/'; then
+              echo "Changes detected in eureka-service"
+              docker-compose build eureka-server
+            fi
           fi
           
           docker-compose up -d
