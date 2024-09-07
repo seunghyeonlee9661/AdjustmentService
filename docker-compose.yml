@@ -20,6 +20,14 @@ services:
     ports:
       - "6380:6379"  # 호스트의 6380 포트를 컨테이너의 6379 포트에 매핑
 
+  eureka-server:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-eureka/Dockerfile
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
   user-service:
     build:
       context: ./  # Root context for the build
@@ -73,15 +81,6 @@ services:
     depends_on:
       - mysql
       - redis
-
-  eureka-server:
-    build:
-      context: ./  # Root context for the build
-      dockerfile: module-eureka/Dockerfile
-    container_name: eureka-server
-    ports:
-      - "8761:8761"
-
 
 volumes:
   mysql_data:

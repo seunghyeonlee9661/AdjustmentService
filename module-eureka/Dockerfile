@@ -18,6 +18,9 @@ COPY module-eureka/settings.gradle /app/
 # Ensure gradlew is executable
 RUN chmod +x gradlew
 
+# Check dependencies (output will be shown in logs)
+RUN ./gradlew dependencies
+
 # Build the application
 RUN ./gradlew build -x test
 
