@@ -1,2 +1,3 @@
 rootProject.name = 'adjustment'
+include 'module-common'
 include 'module-eureka'

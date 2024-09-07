@@ -12,14 +12,14 @@ COPY build.gradle /app/
 COPY module-eureka/build.gradle /app/module-eureka/
 COPY module-eureka/src /app/module-eureka/src
 
+COPY module-common/build.gradle /app/module-common/
+COPY module-common/src /app/module-common/src
+
 #Copy settings.gradle for module
 COPY module-eureka/settings.gradle /app/
 
 # Ensure gradlew is executable
 RUN chmod +x gradlew
-
-# Check dependencies (output will be shown in logs)
-RUN ./gradlew dependencies
 
 # Build the application
 RUN ./gradlew build -x test
