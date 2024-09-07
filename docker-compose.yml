@@ -29,6 +29,9 @@ services:
       - .env
     ports:
       - "8761:8761"
+    depends_on:
+      - mysql
+      - redis
 
   user-service:
     build:
