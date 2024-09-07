@@ -1,8 +1,8 @@
 package com.sparta.security;
 
-import com.sparta.entity.User;
 import com.sparta.repository.UserRepository;
 import com.sparta.service.RedisService;
+import com.sparta.entity.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -87,14 +87,15 @@ public class JwtUtil {
             Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, "utf-8").replaceAll("\\+", "%20")); // Name-Value
             accessTokenCookie.setPath("/");
             accessTokenCookie.setHttpOnly(true);
-            accessTokenCookie.setSecure(true); // HTTPS에서만 전송
-            accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
+//            accessTokenCookie.setSecure(true); // HTTPS에서만 전송
+//            accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
             accessTokenCookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유효
             res.addCookie(accessTokenCookie);
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
         }
     }
+
 
     // Redis에 AccessToken과 RefreshToken 저장
     public void addTokenToRedis(String accessToken, String refreshToken) {
@@ -107,11 +108,12 @@ public class JwtUtil {
         Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, null);
         accessTokenCookie.setPath("/");
         accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
+//        accessTokenCookie.setSecure(true); // HTTPS 환경에서만 전송
+//        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
         accessTokenCookie.setMaxAge(0); // 쿠키 삭제
-        accessTokenCookie.setAttribute("SameSite", "None"); // 외부 도메인에서도 쿠키를 전송
         res.addCookie(accessTokenCookie);
     }
+
 
     // JWT 토큰 substring : BEARER 제거해주는 코드
     public String substringToken(String tokenValue) {

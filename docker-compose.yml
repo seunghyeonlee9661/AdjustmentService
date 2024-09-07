@@ -45,6 +45,8 @@ services:
     depends_on:
       - mysql
       - redis
+    volumes:
+      - /var/www/uploads/adjustment:/var/www/uploads/adjustment
 
   adjust-service:
     build:
@@ -53,6 +55,19 @@ services:
     container_name: adjust_service
     ports:
       - "8084:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+
+  batch-service:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-batch/Dockerfile
+    container_name: batch_service
+    ports:
+      - "8085:8080"
     env_file:
       - .env
     depends_on:

@@ -1,19 +1,17 @@
 package com.sparta.config;
+import com.sparta.security.JwtUtil;
+import com.sparta.security.UserDetailsServiceImpl;
+import com.sparta.service.RedisService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sparta.filter.JwtAuthenticationFilter;
 import com.sparta.filter.JwtAuthorizationFilter;
 import com.sparta.filter.RequestLoggingFilter;
-import com.sparta.security.JwtUtil;
-import com.sparta.security.UserDetailsServiceImpl;
-import com.sparta.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,9 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfiguration;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -138,11 +136,11 @@ public class SecurityConfig {
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write("Logout successful");
     }
-// 4번 시도
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("https://weatherwearclothing.com", "http://localhost:5173")); // 명시적 출처 설정
+        configuration.setAllowedOrigins(Arrays.asList("http://dltmdgus9661.iptime.org"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 허용된 메소드
         configuration.setAllowedHeaders(Arrays.asList("*")); // 모든 헤더 허용
         configuration.setAllowCredentials(true); // 자격 증명 허용
