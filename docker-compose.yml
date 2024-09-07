@@ -80,7 +80,7 @@ services:
       dockerfile: module-eureka/Dockerfile
     container_name: eureka-server
     ports:
-      - "8086:8080"
+      - "8761:8761"
 
 
 volumes:
