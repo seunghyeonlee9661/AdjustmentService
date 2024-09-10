@@ -24,7 +24,7 @@ services:
     build:
       context: ./  # Root context for the build
       dockerfile: module-eureka/Dockerfile
-    container_name: eureka-server
+    container_name: eureka_server
     env_file:
       - .env
     ports:
