@@ -1,5 +1,6 @@
 dependencies {
-    implementation project(':module-common')
+    // mysql
+    runtimeOnly 'com.mysql:mysql-connector-j'
     // Eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 }

@@ -12,9 +12,6 @@ COPY build.gradle /app/
 COPY module-eureka/build.gradle /app/module-eureka/
 COPY module-eureka/src /app/module-eureka/src
 
-COPY module-common/build.gradle /app/module-common/
-COPY module-common/src /app/module-common/src
-
 #Copy settings.gradle for module
 COPY module-eureka/settings.gradle /app/
 
@@ -31,4 +28,4 @@ RUN cp module-eureka/build/libs/module-eureka.jar /app.jar
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "/app.jar", "--spring.profiles.active=eureka"]
+CMD ["java", "-jar", "/app.jar"]
