@@ -28,4 +28,4 @@ RUN cp module-eureka/build/libs/module-eureka.jar /app.jar
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "/app.jar", "--spring.profiles.active=eureka"]
+CMD ["java", "-jar", "/app.jar"]
