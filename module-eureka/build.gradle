@@ -1,5 +1,6 @@
 dependencies {
-    implementation project(':module-common')
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 }
 
 springBoot{
