@@ -3,6 +3,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -14,6 +15,7 @@ import java.util.TimeZone;
 @ComponentScan(basePackages = {"com.sparta", "com.common"})
 @EnableJpaRepositories(basePackages = {"com.common.repository", "com.sparta.repository"})
 @SpringBootApplication
+@EnableDiscoveryClient
 public class UserApplication {
 
     // 현재 시간 설정
