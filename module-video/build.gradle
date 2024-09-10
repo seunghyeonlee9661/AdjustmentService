@@ -1,10 +1,21 @@
 dependencies {
     implementation project(':module-common')
     implementation 'org.jcodec:jcodec-javase:0.2.5'
+    // Eureka
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    // security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 springBoot{
     mainClass.set('com.sparta.VideoApplication') // 여기에 실제 메인 클래스의 경로를 지정
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.4" // 적절한 Spring Cloud 버전 선택
+    }
 }
 
 bootJar {
