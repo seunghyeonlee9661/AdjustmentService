@@ -1,10 +1,12 @@
 dependencies {
+    implementation project(':module-common')
     implementation 'org.springframework.boot:spring-boot-starter'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     // Eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation project(':module-common')
 }
 
 dependencyManagement {
