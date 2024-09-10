@@ -2,8 +2,6 @@ dependencies {
     implementation project(':module-common')
     // Eureka
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    // JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     // JCodec
     implementation 'org.jcodec:jcodec-javase:0.2.5'
 }

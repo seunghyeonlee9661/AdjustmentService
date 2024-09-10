@@ -1,8 +1,6 @@
 dependencies {
     // boot starter
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    // mysql
-    runtimeOnly 'com.mysql:mysql-connector-j'
     // Eureka
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
 }

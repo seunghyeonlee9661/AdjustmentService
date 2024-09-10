@@ -3,7 +3,6 @@ package com.sparta.controller;
 import com.sparta.dto.DailyRecordResponseDTO;
 import com.sparta.dto.TopLengthResponseDTO;
 import com.sparta.dto.TopViewResponseDTO;
-import com.sparta.dto.VideoCreateRequestDTO;
 import com.sparta.service.AdjustService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
