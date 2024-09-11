@@ -31,4 +31,4 @@ RUN cp module-adjust/build/libs/module-adjust.jar /app.jar
 EXPOSE 8080
 
 # Run the application
-CMD ["java", "-jar", "/app.jar"]
+CMD ["java", "-jar", "/app.jar","--spring.profiles.active=setting"]

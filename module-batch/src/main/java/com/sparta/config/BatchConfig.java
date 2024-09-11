@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.DuplicateJobException;
 import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -38,19 +37,12 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
     public Tasklet dailyTasklet(){
         return ((contribution, chunkContext) -> {
-            logger.info("Starting daily record process...");  // 테스트 로그 메시지
             adjustService.setDailyRecord();
             logger.info("Completed daily record process.");  // 테스트 로그 메시지
-
-            logger.info("Starting daily top process...");  // 테스트 로그 메시지
             adjustService.setDailyTop();
             logger.info("Completed daily top process.");  // 테스트 로그 메시지
-
-            logger.info("Starting weekly top process...");  // 테스트 로그 메시지
             adjustService.setWeeklyTop();
             logger.info("Completed weekly top process.");  // 테스트 로그 메시지
-
-            logger.info("Starting monthly top process...");  // 테스트 로그 메시지
             adjustService.setMonthlyTop();
             logger.info("Completed monthly top process.");  // 테스트 로그 메시지
             // 원하는 비지니스 로직 작성
