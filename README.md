@@ -240,13 +240,6 @@
 </details>
 
 <details>
-<summary><strong></strong></summary>
-   
-   💡 **문제** : <br>
-   ❌ **원인** : <br>
-   ✔️ **해결** :
-</details>
-<details>
 <summary><strong>Eureka Server - Spring Security 인가 요청</strong></summary>
    
    💡 **문제** : Eureka Server 페이지 접근 시 접근이 불가능하며 로그인을 요청함<br>
@@ -259,3 +252,13 @@
    management.endpoints.web.exposure.include=health,info
    ```   
 </details>
+
+<details>
+<summary><strong></strong></summary>
+   
+   💡 **문제** : <br>
+   ❌ **원인** : <br>
+   ✔️ **해결** :
+</details>
+
+## 🎓 질문과 답변
