@@ -82,9 +82,4 @@ public class UserService {
         Page<History> historyPage = historyRepository.findByUserId(user.getId(),pageable);
         return ResponseEntity.ok().body(historyPage.map(HistoryResponseDTO::new));
     }
-
-
-
-
-
 }

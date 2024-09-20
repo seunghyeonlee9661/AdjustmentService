@@ -4,7 +4,6 @@ import com.sparta.dto.DailyRecordResponseDTO;
 import com.sparta.dto.TopLengthResponseDTO;
 import com.sparta.dto.TopViewResponseDTO;
 import com.sparta.service.AdjustService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

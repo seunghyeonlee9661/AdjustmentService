@@ -20,11 +20,6 @@ import java.io.IOException;
 public class VideoController {
     private final VideoService videoService;
 
-    @GetMapping("/test")
-    public String hello() {
-        return "Hello, this is Video Controller";
-    }
-
     /* 비디오 목록 페이지 불러오기 */
     @GetMapping("")
     public ResponseEntity<Page<VideoListResponseDTO>> findVideoList(@RequestParam(value = "page", defaultValue = "0") int page){

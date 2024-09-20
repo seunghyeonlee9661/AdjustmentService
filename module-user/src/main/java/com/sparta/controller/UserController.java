@@ -19,11 +19,6 @@ import java.io.IOException;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping("/test")
-    public String hello() {
-        return "Hello, this is User Controller";
-    }
-
     /* 사용자 정보 반환 */
     @GetMapping("")
     public ResponseEntity<UserResponseDTO> findUser(@AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -42,19 +37,19 @@ public class UserController {
         return userService.removeUser(userDetails,res);
     }
 
-    /* 사용자 회원탈퇴 */
+    /* 사용자 영상 목록 */
     @GetMapping("videos")
     public ResponseEntity<Page<VideoListResponseDTO>> userVideos(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userVideos(userDetails,page);
     }
 
-    /* 사용자 회원탈퇴 */
+    /* 사용자 광고 목록 */
     @GetMapping("ads")
     public ResponseEntity<Page<AdResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userAds(userDetails,page);
     }
 
-    /* 사용자 회원탈퇴 */
+    /* 사용자 시청 기록 */
     @GetMapping("histories")
     public ResponseEntity<Page<HistoryResponseDTO>> userHistories(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userHistories(userDetails,page);
