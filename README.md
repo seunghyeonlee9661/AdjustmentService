@@ -151,3 +151,29 @@
 | **module-eureka** | 각 모듈에 대해 유레카 클라우드의 서버 역할을 수행하는 모듈. |
 | **module-user**   | 사용자 로그인 및 개인 정보를 확인하는 기능 모듈.              |
 | **module-video**  | 영상 및 광고를 업로드하고 이를 재생 및 영상 시청 시점을 기록하는 기능 모듈. |
+
+## 트러블 슈팅
+<details>
+<summary><strong>Docker Container 영상 업로드 기능 구현에 따른 문제 발생</strong></summary>
+   
+💡 문제 : Docker Container에서 영상 업로드 기능 구현을 했지만 **업로드된 파일을 찾을 수 없는 문제 발생**<br>
+❌ 원인 : **Docker Container 내부에 영상 파일이 저장되어 서버 경로에서 해당 파일을 찾지 못함**<br>
+✔️ 해결 :Docker 빌드시 파일의 저장 장소를 도커가 있는 서버에 연결! → (`volumes`)를 Docker Compose 파일에 추가
+<pre>
+  video-service:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-video/Dockerfile
+    container_name: video_service
+    ports:
+      - "8083:8080"
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+    volumes:
+      - /var/www/uploads/adjustment:/var/www/uploads/adjustment   
+</pre>
+Docker에서 파일을 저장하는 해당 경로는 Docker 외부의 **서버의 경로와 연결**되어 **파일이 원하는 장소에 저장**되었으며 필요한 파일을 찾을 수 있게 됨   
+</details>
