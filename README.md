@@ -45,7 +45,6 @@
 | ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)              | 메모리 기반의 고속 데이터 저장소                                      | 세션 관리 및 캐싱 기능을 빠르게 처리하기 위해 사용했습니다. 특히 회원 인증 및 스트리밍 기록 관리에 적합합니다.|
 | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)              | 관계형 데이터베이스 관리 시스템                                        | 사용자, 동영상, 광고 등의 데이터를 안정적으로 저장하고 관리하기 위해 선택한 데이터베이스입니다.           |
 | ![JMeter](https://img.shields.io/badge/JMeter-0A7E32?style=flat&logo=apache&logoColor=white)           | 성능 테스트 및 부하 테스트를 위한 도구                                 | 대량 데이터 주입 및 사용자 테스트를 통해 애플리케이션의 성능과 안정성을 평가하기 위해 JMeter를 사용했습니다.       |
-
 | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)           | 버전 관리 시스템으로 코드와 협업 도구 제공                            | 코드 버전 관리를 위해 사용했으며, 여러 가지 협업 도구를 통해 팀 간의 효율적인 협업을 지원합니다.          |
 | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) | GitHub에서 제공하는 CI/CD 자동화 도구                                | 애플리케이션을 자동으로 빌드하고 배포하는 CI/CD 파이프라인을 구축하기 위해 사용했습니다.                  |
 
