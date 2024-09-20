@@ -22,6 +22,9 @@
 4. **통계 및 정산** 
    - 1일, 1주일, 1달 단위로 조회수와 재생 시간이 높은 Top 5 영상 기록
    - 동영상과 광고 조회수를 기반으로 **정산 금액 산정**
+  
+### Link
+
 
 ## 🗓️ 개발 기간과 환경
 
@@ -243,9 +246,12 @@
 <summary><strong>Eureka Server - Spring Security 인가 요청</strong></summary>
    
    💡 **문제** : Eureka Server 페이지 접근 시 접근이 불가능하며 로그인을 요청함<br>
-   ❌ **원인** : Spring Security가 root 경로의 의존성에 존재해 모든 모듈이 Spring Security의 인가를 처리하도록 되어있어 별도의 Login 처리가 필요함<br>
-   ✔️ **해결** : ~~Eureka Server에 기반 모듈을 연결하고 **Security Config에 대해 접근을 허용함**~~ -> 불필요한 의존성이 생기며 빌드 시간이 오래 걸림<br>
-   Eureka Module의 **application.properties에 Security 보안 설정을 무시**하도록 설정
+   ❌ **원인** :
+   1. Spring Security가 root 경로의 의존성에 존재해 **모든 모듈이 Spring Security의 인가를 처리**하도록 되어있어 Login 페이지를 호출<br>
+   2. Eureka Server에 연결된 client앱이 오류를 발생시킴<br>
+   ✔️ **해결** :
+   1. ~~Eureka Server에 기반 모듈을 연결하고 **Security Config에 대해 접근을 허용함**~~ -> 불필요한 의존성이 생기며 빌드 시간이 오래 걸림<br>
+   2. Eureka Module의 **application.properties에 Security 보안 설정을 무시**하도록 설정
    ```
    # Spring Security Exception
    eureka.security.enable-self-preservation=false
@@ -254,11 +260,113 @@
 </details>
 
 <details>
-<summary><strong></strong></summary>
+<summary><strong>ConflictingBeanDefinitionException</strong> 오류 발생</summary>
    
-   💡 **문제** : <br>
-   ❌ **원인** : <br>
+   💡 **문제** : 프로젝트 빌드 시 **ConflictingBeanDefinitionException** 오류가 나타나며 빌드가 실패함<br>
+   ❌ **원인** : Spring Project에서 파일을 삭제해도 Git Actions에서 기존 파일을 삭제하지 않기 때문에 이전 파일이 남아 오류를 발생 시킴<br>
    ✔️ **해결** :
+   1. ~~deploy.yml에서 모든 파일을 삭제하고 다시 다운로드 하도록 설정~~ -> 프로젝트 규모, 배포 횟수에 따라 전송 시간이 늘어날 수 있고 필요한 파일을 삭제할 가능성이 있음
+   2. `rsync --delete` 옵션을 deploy.yml에 추가해 제거된 파일도 함께 동기화 할 수 있도록 수정함
+   3. 또한 Docker Composer 빌드 시 **변경 감지를 통해 수정 사항만 새로 빌드할 수 있도록 기능을 추가**함
+   ```
+   # deploy.yml
+   name: Deploy to Ubuntu Server
+   
+   on:
+     push:
+       branches:
+         - main
+         - develop
+   
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+   
+       steps:
+         - name: Checkout code
+           uses: actions/checkout@v3
+           with:
+             fetch-depth: 2  # 변경 감지를 위한 이전 파일 확인
+   
+         - name: Set up SSH
+           uses: webfactory/ssh-agent@v0.7.0
+           with:
+             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+   
+         - name: Copy files via SSH with file deletion # 필요한 파일을 Git Repository에서 받아오되 삭제된 파일도 적용할 수 있도록 수정함
+           run: |
+             rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.USER }}@${{ secrets.HOST }}:/home/leesh/Sparta/AdjustmentService
+   
+         - name: Install Docker Compose
+           run: |
+             ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} 'bash -s' << 'EOF'
+             curl -L "https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+             chmod +x /usr/local/bin/docker-compose
+             EOF
+   
+         - name: Deploy with Docker Compose
+           run: |
+             ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.HOST }} << 'EOF'
+             cd /home/leesh/Sparta/AdjustmentService
+             
+             # 환경 변수 저장
+             echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env
+             echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}" >> .env
+             echo "MYSQL_USER=${{ secrets.MYSQL_USER }}" >> .env
+             echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env
+             echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+             echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+             echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> .env
+             echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+             echo "KAKAO_REDIRECT_URI=${{ secrets.KAKAO_REDIRECT_URI }}" >> .env
+             
+             # Detect which modules changed
+             changed_modules=$(git diff --name-only HEAD^ HEAD)
+   
+             # Build all services if module-common changed
+             if echo "$changed_modules" | grep -q '^module-common/'; then
+               echo "Changes detected in common module"
+               docker-compose build user-service
+               docker-compose build video-service
+               docker-compose build adjust-service
+               docker-compose build batch-service
+               docker-compose build eureka-server
+               docker-compose build common
+             else
+               # Build only if specific directories have changed
+               if echo "$changed_modules" | grep -q '^module-user/'; then
+                 echo "Changes detected in user-service"
+                 docker-compose build user-service
+               fi
+   
+               if echo "$changed_modules" | grep -q '^module-video/'; then
+                 echo "Changes detected in video-service"
+                 docker-compose build video-service
+               fi
+   
+               if echo "$changed_modules" | grep -q '^module-adjust/'; then
+                 echo "Changes detected in adjust-service"
+                 docker-compose build adjust-service
+               fi
+             
+               if echo "$changed_modules" | grep -q '^module-batch/'; then
+                 echo "Changes detected in batch-service"
+                 docker-compose build batch-service
+               fi
+             
+               if echo "$changed_modules" | grep -q '^module-eureka/'; then
+                 echo "Changes detected in eureka-service"
+                 docker-compose build eureka-server
+               fi
+             fi
+             
+             docker-compose up -d
+             EOF
+   ```
 </details>
 
 ## 🎓 질문과 답변
+
+<details>
+<summary><strong>MSA에 대한 이해</strong></summary>
+</details>
