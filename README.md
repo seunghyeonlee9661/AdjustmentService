@@ -158,7 +158,7 @@
    
 💡 문제 : Docker Container에서 영상 업로드 기능 구현을 했지만 **업로드된 파일을 찾을 수 없는 문제 발생**<br>
 ❌ 원인 : **Docker Container 내부에 영상 파일이 저장되어 서버 경로에서 해당 파일을 찾지 못함**<br>
-✔️ 해결 :Docker 빌드시 파일의 저장 장소를 도커가 있는 서버에 연결! → (`volumes`)를 Docker Compose 파일에 추가
+✔️ 해결 : Docker 빌드시 파일의 저장 장소를 도커가 있는 서버에 연결! → (`volumes`)를 Docker Compose 파일에 추가
 <pre>
   video-service:
     build:
@@ -176,4 +176,68 @@
       - /var/www/uploads/adjustment:/var/www/uploads/adjustment   
 </pre>
 Docker에서 파일을 저장하는 해당 경로는 Docker 외부의 **서버의 경로와 연결**되어 **파일이 원하는 장소에 저장**되었으며 필요한 파일을 찾을 수 있게 됨   
+</details>
+
+<details>
+<summary>Multi Module 빌드시 <strong>Main class name has not been configured and it could not be resolved from classpath</strong> 오류 </summary>
+
+💡 문제 : 스프링 Multi Module를 빌드 할 경우 나타나는 Main Class를 찾지 못하는 문제가 발생함 [Stackoverflow](https://stackoverflow.com/questions/78903577/main-class-name-has-not-been-configured-and-it-could-not-be-resolved-from-classp)<br>
+❌ 원인 : Docker 빌드 과정에서 root 경로에서 필요한 파일을 가져오는 과정에서 **settings.gradle**을 참조하는데 모든 모듈을 include 하도록 작성되어 있기 때문에 특정 모듈에 필요하지 않은 모듈도 빌드를 시도하면서 나타나는 문제<br>
+```
+//settings.gradle
+rootProject.name = 'adjustment'
+include 'module-user'
+include 'module-video'
+include 'module-common'
+include 'module-adjust'
+```
+
+✔️ 해결 : 빌드 과정에 필요한 모듈의 이름만 포함한 **settings.gradle**을 각 모듈에 배치하여 필요한 파일만 빌드할 수 있도록 구성함 <br>
+```
+//module-user/settings.gradle
+rootProject.name = 'adjustment'
+include 'module-user'
+include 'module-common'
+```
+또한 해당 업로드 과정을 각 모듈의 DockerFile에 적용함<br>
+```
+# Base image
+FROM openjdk:17-jdk-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy Gradle files from the root context to the service context
+COPY gradlew /app/
+COPY gradle /app/gradle/
+COPY build.gradle /app/
+
+COPY module-common/build.gradle /app/module-common/
+COPY module-common/src /app/module-common/src
+
+COPY module-user/build.gradle /app/module-user/
+COPY module-user/src /app/module-user/src
+
+#Copy settings.gradle for module
+COPY module-user/settings.gradle /app/ 
+
+# Ensure gradlew is executable
+RUN chmod +x gradlew
+
+# Build the application
+RUN ./gradlew build -x test --stacktrace
+
+# Check the build output directory
+RUN ls -l module-user/build/libs/
+
+# Copy the built JAR file to /app.jar
+RUN cp module-user/build/libs/module-user-0.0.1-SNAPSHOT.jar /app.jar
+
+# Expose port
+EXPOSE 8080
+
+# Run the application
+CMD ["java", "-jar", "/app.jar"]
+```
+💾 **Multi Module 구성 과정을 상세하게 설명하고 바로 적용, 사용할 수 있도록 별도의 Git Repository를 작성함** : [muti-module](https://github.com/seunghyeonlee9661/muti-module)
 </details>
