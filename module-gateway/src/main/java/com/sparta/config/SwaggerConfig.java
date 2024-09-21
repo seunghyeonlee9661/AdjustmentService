@@ -21,7 +21,7 @@ public class SwaggerConfig {
     private Info apiInfo() {
         return new Info()
                 .title("Swagger")
-                .description("WeatherWear Web Project API")
+                .description("Adjustment Service API")
                 .version("1.0.0");
     }
 }
