@@ -3,6 +3,7 @@ import com.sparta.dto.*;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.AdService;
 import com.sparta.service.VideoService;
+import io.swagger.annotations.Api;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/video/ads")
+@Api(tags = "광고 API")
 public class AdController {
     private final AdService adService;
 
