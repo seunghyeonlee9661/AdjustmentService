@@ -1,10 +1,5 @@
 name: Deploy to Ubuntu Server
 
-on:
-  push:
-    branches:
-      - main
-      - develop
 jobs:
   deploy:
     runs-on: ubuntu-latest
