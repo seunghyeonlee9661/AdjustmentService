@@ -24,7 +24,9 @@
    - 동영상과 광고 조회수를 기반으로 **정산 금액 산정**
   
 ## 💻 Link
-API 명세서 : 
+API 명세서 : [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
+Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
+
 
 ## 🗓️ 개발 기간과 환경
 
