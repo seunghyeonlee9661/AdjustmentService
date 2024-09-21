@@ -58,6 +58,7 @@ jobs:
             docker-compose build adjust-service
             docker-compose build batch-service
             docker-compose build eureka-server
+            docker-compose build gateway
             docker-compose build common
           else
             # Build only if specific directories have changed
@@ -84,6 +85,11 @@ jobs:
             if echo "$changed_modules" | grep -q '^module-eureka/'; then
               echo "Changes detected in eureka-service"
               docker-compose build eureka-server
+            fi
+          
+            if echo "$changed_modules" | grep -q '^module-gateway/'; then
+              echo "Changes detected in gateway"
+              docker-compose build gateway
             fi
           fi
           

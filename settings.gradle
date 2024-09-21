@@ -5,4 +5,5 @@ include 'module-video'
 include 'module-adjust'
 include 'module-batch'
 include 'module-eureka'
+include 'module-gateway'
 

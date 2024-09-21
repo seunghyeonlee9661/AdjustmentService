@@ -87,5 +87,19 @@ services:
       - mysql
       - redis
 
+  gateway:
+    build:
+      context: ./  # Root context for the build
+      dockerfile: module-gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "8086:8080"  # Gateway 서비스는 기본적으로 8080 포트 사용
+    env_file:
+      - .env
+    depends_on:
+      - eureka-server  # Eureka에 의존
+      - user-service
+      - video-service
+      - adjust-service
 volumes:
   mysql_data:
