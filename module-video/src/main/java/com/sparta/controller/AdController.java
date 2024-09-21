@@ -17,7 +17,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/ads")
+@RequestMapping("/video/api/ads")
 public class AdController {
     private final AdService adService;
 
