@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApiGateWayConfig {
-
     @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder routeBuilder) {
         return routeBuilder.routes()
