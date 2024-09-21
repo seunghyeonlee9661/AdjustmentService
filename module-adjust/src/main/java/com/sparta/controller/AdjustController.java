@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/adjust")
 class AdjustController {
     private final AdjustService adjustService;
 
