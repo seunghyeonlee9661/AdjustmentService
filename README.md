@@ -47,11 +47,13 @@ API 명세서 :
 | ![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=flat&logo=spring-security&logoColor=white) | Spring 기반 애플리케이션에 인증과 권한 관리를 제공하는 보안 프레임워크  | 회원 서비스와 스트리밍 서비스에 안전한 인증 및 권한 관리를 구현하기 위해 선택했습니다.                    |
 | ![Spring Batch](https://img.shields.io/badge/Spring%20Batch-6DB33F?style=flat&logo=spring&logoColor=white)    | 대량의 데이터를 효율적으로 처리하기 위한 배치 프로세스 프레임워크         | 정산 과정을 특정한 시간에 자동으로 수행하여 자원을 효율적으로 관리하고, 업무의 자동화를 지원하기 위해 선택했습니다. |
 | ![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white)  | 여러 개의 컨테이너를 한 번에 관리할 수 있는 Docker 도구               | 다양한 서비스 (DB, Redis 등) 환경을 손쉽게 구성하고, 배포 프로세스를 자동화하기 위해 Docker Compose를 사용했습니다.|
+| ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black)         | API 문서화를 위한 도구                                               | 모든 서비스의 API를 한 곳에서 문서화하고, 쉽게 접근할 수 있도록 하기 위해 Swagger를 선택했습니다.        |
 | ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)              | 메모리 기반의 고속 데이터 저장소                                      | 세션 관리 및 캐싱 기능을 빠르게 처리하기 위해 사용했습니다. 특히 회원 인증 및 스트리밍 기록 관리에 적합합니다.|
 | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)              | 관계형 데이터베이스 관리 시스템                                        | 사용자, 동영상, 광고 등의 데이터를 안정적으로 저장하고 관리하기 위해 선택한 데이터베이스입니다.           |
 | ![JMeter](https://img.shields.io/badge/JMeter-0A7E32?style=flat&logo=apache&logoColor=white)           | 성능 테스트 및 부하 테스트를 위한 도구                                 | 대량 데이터 주입 및 사용자 테스트를 통해 애플리케이션의 성능과 안정성을 평가하기 위해 JMeter를 사용했습니다.       |
 | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)           | 버전 관리 시스템으로 코드와 협업 도구 제공                            | 코드 버전 관리를 위해 사용했으며 Readme를 통해 프로젝트의 과정과 결과에 대해 설명합니다.          |
 | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) | GitHub에서 제공하는 CI/CD 자동화 도구                                | 애플리케이션을 자동으로 빌드하고 배포하는 CI/CD 파이프라인을 구축하기 위해 사용했습니다.                  |
+| ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white)             | 고성능 웹 서버 및 리버스 프록시 서버                                   | 서버의 주소로 게이트웨이를 호스팅하고, 외부 요청을 효과적으로 처리하기 위해 Nginx를 사용했습니다.          |
 
 ## 🗂️ 프로젝트 구조
 <details>
