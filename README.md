@@ -370,6 +370,24 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
    ```
 </details>
 
+<details>
+<summary><strong>Eureka static resource - 404 Error</strong></summary>
+   
+   💡 **문제** : Eureka 페이지에서 js와 css와 같은 Static Resource를 찾지 못하는 문제<br>
+   ❌ **원인** : Nginx가 Eureka 서버에 프록시를 적용하는데 **Static Resource가 다른 경로로 연결**되어 있어 정상적으로 페이지가 나타나지 않음<br>
+   ✔️ **해결** : Nginx에 **Static Resource에 대한 추가적인 프록시 설정**을 넣음
+
+   ```
+    location /adjustment/eureka/ {
+        proxy_pass http://localhost:8761/;  # Eureka 프록시
+     }
+
+    location /eureka/ { 
+        proxy_pass http://localhost:8761/eureka/; # # Eureka Resource 프록시
+    }
+   ```
+</details>
+
 ## 🎓 질문과 답변
 
 <details>
