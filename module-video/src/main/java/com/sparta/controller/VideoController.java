@@ -2,7 +2,6 @@ package com.sparta.controller;
 import com.sparta.dto.*;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.VideoService;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/video")
-@Tag(name = "비디오 API")
 public class VideoController {
     private final VideoService videoService;
 
