@@ -13,14 +13,8 @@ public class SwaggerConfig {
     public OpenAPI openAPI() {
         return new OpenAPI()
                 .components(new Components())
-                .addServersItem(new Server().url("/"))
-                .info(apiInfo());
-    }
-
-    private Info apiInfo() {
-        return new Info()
-                .title("Securities service")
-                .description("Stock information service")
-                .version("1.0.0");
+                .info(new Info().title("Adjust Service API")
+                        .description("API documentation Adjustment Service")
+                        .version("1.0.0"));
     }
 }
