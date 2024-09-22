@@ -41,6 +41,8 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
 
 ## 🛠️ 사용 기술과 선정 이유
 
+![image](https://github.com/user-attachments/assets/d52596a9-0b0e-4ce7-9cdc-eb362bcef979)
+
 | 기술                                                                                                  | 설명                                                                 | 선정 이유                                                                                              |
 |-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
 | ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white)    | Java 기반의 애플리케이션을 빠르고 쉽게 개발할 수 있는 프레임워크       | 복잡한 웹 애플리케이션을 간단하게 구축하고, 빠르게 배포할 수 있는 기능을 제공하기 때문에 선택했습니다.    |
@@ -56,6 +58,7 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
 | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)           | 버전 관리 시스템으로 코드와 협업 도구 제공                            | 코드 버전 관리를 위해 사용했으며 Readme를 통해 프로젝트의 과정과 결과에 대해 설명합니다.          |
 | ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) | GitHub에서 제공하는 CI/CD 자동화 도구                                | 애플리케이션을 자동으로 빌드하고 배포하는 CI/CD 파이프라인을 구축하기 위해 사용했습니다.                  |
 | ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white)             | 고성능 웹 서버 및 리버스 프록시 서버                                   | 서버의 주소로 게이트웨이를 호스팅하고, 외부 요청을 효과적으로 처리하기 위해 Nginx를 사용했습니다.          |
+
 
 ## 🗂️ 프로젝트 구조
 <details>
@@ -388,16 +391,19 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
    ```
 </details>
 
-## 🎓 질문과 답변
-
 <details>
-<summary><strong>MSA에 대한 이해</strong></summary>
-</details>
-
-<details>
-<summary><strong>Multi Process와 Spring Cloud Eureka</strong></summary>
-</details>
-
-<details>
-<summary><strong>Spring Batch와 Event Queue</strong></summary>
+<summary><strong>Spring Gateway와 Swagger 연동</strong></summary>
+   
+   💡 **문제** : Swagger 적용에 있어 Gateway에서 각 서버의 Swagger를 찾지 못하는 문제<br>
+   ❌ **원인** : 요청이 Nginx와 Gateway를 지나면서 url요청을 올바르지 않아 정상적으로 페이지가 나타나지 않음을 확인함<br>
+   ✔️ **해결** : **Gateway filters** 기능을 활용해 올바르게 경로 이동이 되도록 설정함 
+   
+   ```
+   # Routing option
+   spring.cloud.gateway.routes[0].id=user-service
+   spring.cloud.gateway.routes[0].uri=http://user-service:8080
+   spring.cloud.gateway.routes[0].predicates[0]=Path=/user/**
+   spring.cloud.gateway.routes[0].filters[0]=RewritePath=/user/(?<path>.*), /$\\{path}
+   # Gateway로 요청을 전달할 때 값을 빼고 전달하여 Swagger의 api-docs의 위치가 올바르게 연결되도록 설정함
+   ```
 </details>
