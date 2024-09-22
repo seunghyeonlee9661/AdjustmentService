@@ -13,6 +13,7 @@ public class VideoDetailResponseDTO {
     private Long id;
     private UserResponseDTO user;
     private String title;
+    private String url;
     private Long viewCount;
     private String registrationDate;
     private Long duration;
@@ -23,6 +24,7 @@ public class VideoDetailResponseDTO {
         this.id = video.getId();
         this.user = new UserResponseDTO(video.getUser());
         this.title = video.getTitle();
+        this.url = video.getUrl();
         this.viewCount = video.getViewCount();
         this.registrationDate = video.getRegistrationDate().toLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 변경된 부분
         this.duration = video.getDuration();

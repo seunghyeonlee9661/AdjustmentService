@@ -3,9 +3,7 @@ package com.sparta.controller;
 import com.sparta.dto.DailyRecordResponseDTO;
 import com.sparta.dto.TopLengthResponseDTO;
 import com.sparta.dto.TopViewResponseDTO;
-import com.sparta.dto.VideoCreateRequestDTO;
 import com.sparta.service.AdjustService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 class AdjustController {
     private final AdjustService adjustService;
 

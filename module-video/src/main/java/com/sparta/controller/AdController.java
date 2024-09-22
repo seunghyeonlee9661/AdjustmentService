@@ -2,12 +2,9 @@ package com.sparta.controller;
 import com.sparta.dto.*;
 import com.sparta.security.UserDetailsImpl;
 import com.sparta.service.AdService;
-import com.sparta.service.VideoService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.jcodec.api.JCodecException;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/ads")
+@RequestMapping("/video/ads")
 public class AdController {
     private final AdService adService;
 

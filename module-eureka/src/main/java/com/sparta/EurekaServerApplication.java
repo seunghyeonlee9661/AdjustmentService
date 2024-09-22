@@ -1,14 +1,15 @@
 package com.sparta;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
 import java.util.TimeZone;
 
 @SpringBootApplication
-@EnableScheduling // 추가
-public class BatchApplication {
+@EnableEurekaServer
+public class EurekaServerApplication {
 
     @PostConstruct
     public void started() {
@@ -16,6 +17,6 @@ public class BatchApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(BatchApplication.class, args);
+        SpringApplication.run(EurekaServerApplication.class, args);
     }
 }

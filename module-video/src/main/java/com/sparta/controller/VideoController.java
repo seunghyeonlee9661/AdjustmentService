@@ -16,14 +16,9 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("")
 public class VideoController {
     private final VideoService videoService;
-
-    @GetMapping("/test")
-    public String hello() {
-        return "Hello, this is Video Controller";
-    }
 
     /* 비디오 목록 페이지 불러오기 */
     @GetMapping("")
