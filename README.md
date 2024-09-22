@@ -59,7 +59,7 @@
 📦adjustment
  ┣ 📂.github
  ┃ ┗ 📂workflows
- ┃ ┃ ┗ 📜deploy.yml
+ ┃ ┃ ┗ 😺deploy.yml
  ┣ 📂module-adjust
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
@@ -70,21 +70,21 @@
  ┃ ┃ ┃ ┣ 📂java.com.sparta.repository
  ┃ ┃ ┃ ┣ 📂java.com.sparta.service
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application-profile.properties
+ ┃ ┃ ┃   ┗ ⚙️application-profile.properties
  ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
- ┃ ┗ 📜Dockerfile
- ┃ ┗ 📜settings.gradle
+ ┃ ┗ 🐘build.gradle
+ ┃ ┗ 🐋Dockerfile
+ ┃ ┗ 🐘settings.gradle
  ┣ 📂module-batch
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
  ┃ ┃ ┃ ┣ 📂java.com.sparta.config
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application-profile.properties
+ ┃ ┃ ┃   ┗ ⚙️application-profile.properties
  ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
- ┃ ┗ 📜Dockerfile
- ┃ ┗ 📜settings.gradle
+ ┃ ┗ 🐘build.gradle
+ ┃ ┗ 🐋Dockerfile
+ ┃ ┗ 🐘settings.gradle
  ┣ 📂module-common
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
@@ -97,60 +97,64 @@
  ┃ ┃ ┃ ┣ 📂java.com.sparta.security
  ┃ ┃ ┃ ┣ 📂java.com.sparta.service
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application.properties
+ ┃ ┃ ┃   ┗ ⚙️application.properties
  ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
+ ┃ ┗ 🐘build.gradle
  ┣ 📂module-eureka
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
  ┃ ┃ ┃ ┗ 📂java.com.sparta
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application.properties
+ ┃ ┃ ┃   ┗ ⚙️application.properties
  ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
- ┃ ┗ 📜Dockerfile
- ┃ ┗ 📜settings.gradle
+ ┃ ┗ 🐘build.gradle
+ ┃ ┗ 🐋Dockerfile
+ ┃ ┗ 🐘settings.gradle
+ ┃ 📂module-gateway
+ ┃ ┣ 📂src
+ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┣ 📂java.com.sparta
+ ┃ ┃ ┃ ┗ 📂resources
+ ┃ ┃ ┃ ┃ ┗ ⚙️application.properties
+ ┃ ┣ 🐘build.gradle
+ ┃ ┣ 🐋Dockerfile
+ ┃ ┗ ⚙️settings.gradle
  ┣ 📂module-user
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
  ┃ ┃ ┃ ┣ 📂java.com.sparta.controller
  ┃ ┃ ┃ ┣ 📂java.com.sparta.service
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application-profile.properties
- ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
- ┃ ┗ 📜Dockerfile
- ┃ ┗ 📜settings.gradle
+ ┃ ┃ ┃   ┗ ⚙️application-profile.properties
+ ┃ ┗ 🐘build.gradle
+ ┃ ┗ 🐋Dockerfile
+ ┃ ┗ 🐘settings.gradle
  ┣ 📂module-video
  ┃ ┣ 📂src
  ┃ ┃ ┣ 📂main
  ┃ ┃ ┃ ┣ 📂java.com.sparta.controller
  ┃ ┃ ┃ ┣ 📂java.com.sparta.service
  ┃ ┃ ┃ ┗ 📂resources
- ┃ ┃ ┃   ┗ 📜application-profile.properties
- ┃ ┃ ┗ 📂test
- ┃ ┗ 📜build.gradle
- ┃ ┗ 📜Dockerfile
- ┃ ┗ 📜settings.gradle
- ┣ 📜.gitignore
- ┣ 📜build.gradle
- ┣ 📜docker-compose.yml
- ┣ 📜gradlew
- ┣ 📜gradlew.bat
- ┣ 📜HELP.md
- ┗ 📜settings.gradle 
+ ┃ ┃ ┃   ┗ ⚙️application-profile.properties
+ ┃ ┗ 🐘build.gradle
+ ┃ ┗ 🐋Dockerfile
+ ┃ ┗ 🐘settings.gradle
+ ┣ 🐘build.gradle
+ ┣ 🐋docker-compose.yml
+ ┗ 🐘settings.gradle 
 </pre>
 </details>
 
 ### 모듈별 설명
 | 모듈 이름        | 설명                                                            |
 |------------------|-----------------------------------------------------------------|
-| **module-adjust** | 정산 과정을 이행하고 이에 대해 결과를 데이터베이스에 저장하고 불러올 수 있는 기능의 모듈. |
-| **module-batch**  | 각 정산 과정을 특정한 시간에 이행할 수 있도록 구현한 batch 모듈. |
-| **module-common** | 모든 모듈에 공통적으로 적용되는 기능(인증, 인가, 레디스, 핸들러)을 관리하는 모듈. |
-| **module-eureka** | 각 모듈에 대해 유레카 클라우드의 서버 역할을 수행하는 모듈. |
-| **module-user**   | 사용자 로그인 및 개인 정보를 확인하는 기능 모듈.              |
-| **module-video**  | 영상 및 광고를 업로드하고 이를 재생 및 영상 시청 시점을 기록하는 기능 모듈. |
+| **adjust** | 정산 과정을 이행하고 이에 대해 결과를 데이터베이스에 저장하고 불러올 수 있는 기능의 모듈. |
+| **batch**  | 각 정산 과정을 특정한 시간에 이행할 수 있도록 구현한 batch 모듈. |
+| **common** | 모든 모듈에 공통적으로 적용되는 기능(인증, 인가, 레디스, 핸들러)을 관리하는 모듈. |
+| **eureka** | 각 모듈에 대해 유레카 클라우드의 서버 역할을 수행하는 모듈. |
+| **gateway**| 모든 모듈 간의 요청을 라우팅하고 API Gateway 기능을 제공하여 클라이언트와 서비스 간의 통신을 효율적으로 관리하는 모듈. |
+| **user**   | 사용자 로그인 및 개인 정보를 확인하는 기능 모듈.              |
+| **video**  | 영상 및 광고를 업로드하고 이를 재생 및 영상 시청 시점을 기록하는 기능 모듈. |
 
 ## 🤔 Troubleshooting
 <details>
