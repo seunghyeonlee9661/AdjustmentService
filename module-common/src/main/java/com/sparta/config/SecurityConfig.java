@@ -93,14 +93,14 @@ public class SecurityConfig {
                 // 로그인 처리 설정
                 .formLogin(formLogin ->
                         formLogin
-                                .loginPage("/login")
-                                .loginProcessingUrl("/user/login")
+                                .loginPage("/login/page")
+                                .loginProcessingUrl("/login")
                                 .permitAll()
                 )
                 // 로그아웃 처리 설정
                 .logout(logout ->
                         logout
-                                .logoutUrl("/user/logout")
+                                .logoutUrl("/logout")
                                 .addLogoutHandler(this::handleLogout)
                                 .logoutSuccessHandler(this::handleLogoutSuccess)
                                 .permitAll()
