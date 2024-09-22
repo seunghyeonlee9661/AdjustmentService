@@ -24,8 +24,8 @@
    - 동영상과 광고 조회수를 기반으로 **정산 금액 산정**
   
 ## 💻 Link
-- Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
-- Swagger : [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
+- [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
+- [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
 
 
 ## 🗓️ Development environment
