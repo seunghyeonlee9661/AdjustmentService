@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration    // 스프링 실행시 설정파일 읽어드리기 위한 어노테이션
 public class SwaggerConfig {
 
-    @Value("openapi.info.title")
+    @Value("${openapi.info.title}")
     private String title;
-    @Value("openapi.info.description")
+    @Value("${openapi.info.description}")
     private String description;
-    @Value("openapi.info.version")
+    @Value("${openapi.info.version}")
     private String version;
 
     @Bean
