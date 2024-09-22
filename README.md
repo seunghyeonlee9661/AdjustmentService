@@ -1,13 +1,13 @@
 # Adjustment Service (정산 시스템)
 
-## 📜 프로젝트 개요
+## 📜 Project Introduction
 >
 >이 프로젝트는 **2024 스파르타 코딩클럽 동북 이노베이션 캠프**에서 진행된 개인 프로젝트입니다.
 >고난이도의 목표를 선정하고 문제 해결 과정을 기록하며 도전적인 과제를 수행했습니다.
 >
 자원이 한정된 환경에서 엔지니어는 효율적으로 시스템을 관리해야 합니다. 이 프로젝트의 핵심은 많은 사용자들을 처리하면서도 **복잡한 로직**을 매일 우선적으로 처리하는 방식으로 시스템을 최적화하는 방법을 연구하는 것입니다. **유튜브**를 모티브로 한 **스트리밍 정산 시스템**을 개발하였으며, 다음과 같은 주요 기능들을 포함합니다:
 
-### ⚙️ 주요 기능
+### ⚙️ Key Features
 1. 📌**회원 서비스**
    - 회원가입 및 계정 구분
    - 로그인 및 로그아웃 기능
@@ -24,11 +24,11 @@
    - 동영상과 광고 조회수를 기반으로 **정산 금액 산정**
   
 ## 💻 Link
-API 명세서 : [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
-Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
+- Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
+- Swagger : [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
 
 
-## 🗓️ 개발 기간과 환경
+## 🗓️ Development environment
 
 - **개발 기간**: 2024년 8월 19일부터 2024년 9월 13일 (4주간)
 
@@ -39,7 +39,7 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
   - **데이터베이스**: MySQL
   - **배포 환경**: Docker
 
-## 🛠️ 사용 기술과 선정 이유
+## 🛠️ Tech Stack
 
 ![image](https://github.com/user-attachments/assets/d52596a9-0b0e-4ce7-9cdc-eb362bcef979)
 
@@ -60,7 +60,7 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
 | ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white)             | 고성능 웹 서버 및 리버스 프록시 서버                                   | 서버의 주소로 게이트웨이를 호스팅하고, 외부 요청을 효과적으로 처리하기 위해 Nginx를 사용했습니다.          |
 
 
-## 🗂️ 프로젝트 구조
+## 🗂️ Project Structure
 <details>
 <summary>File Structure</summary>
 <pre>
@@ -160,7 +160,7 @@ Eureka : [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
 | **module-user**   | 사용자 로그인 및 개인 정보를 확인하는 기능 모듈.              |
 | **module-video**  | 영상 및 광고를 업로드하고 이를 재생 및 영상 시청 시점을 기록하는 기능 모듈. |
 
-## 🤔 트러블 슈팅
+## 🤔 Troubleshooting
 <details>
 <summary><strong>Docker Container 영상 업로드 기능 구현에 따른 문제 발생</strong></summary>
    
