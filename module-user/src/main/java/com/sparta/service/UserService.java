@@ -1,9 +1,6 @@
 package com.sparta.service;
 
-import com.sparta.dto.AdResponseDTO;
-import com.sparta.dto.HistoryResponseDTO;
-import com.sparta.dto.UserCreateRequestDTO;
-import com.sparta.dto.VideoListResponseDTO;
+import com.sparta.dto.*;
 import com.sparta.entity.Ad;
 import com.sparta.entity.History;
 import com.sparta.entity.User;
@@ -21,6 +18,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,13 +33,25 @@ public class UserService {
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final HistoryRepository historyRepository;
-
+    private final AuthenticationManager authenticationManager;
     private final AdRepository adRepository;
-
-
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    /* 회원가입 */
+    @Transactional
+    public ResponseEntity<String> login(UserLoginRequestDTO requestDTO){
+        try {
+            // 인증 요청
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 인증 성공 (JWT 토큰 발행 등 필요 시 추가)
+            return ResponseEntity.ok("Login successful");
+        } catch (Exception e) {
+            // 인증 실패
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        }
+    }
 
     /* 회원가입 */
     @Transactional

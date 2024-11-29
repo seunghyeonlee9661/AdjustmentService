@@ -7,8 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -18,6 +21,11 @@ import java.io.IOException;
 @RequestMapping("/")
 public class UserController {
     private final UserService userService;
+
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody UserLoginRequestDTO requestDTO) {
+//        return userService.login(requestDTO);
+//    }
 
     /* 사용자 정보 반환 */
     @GetMapping("")

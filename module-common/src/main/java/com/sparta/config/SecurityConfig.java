@@ -91,7 +91,6 @@ public class SecurityConfig {
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 // 로그인 처리 설정
-                .securityMatcher("/user/**") // user 모듈 경로에만 적용
                 .formLogin(formLogin ->
                         formLogin
                                 .loginPage("/login/page")
