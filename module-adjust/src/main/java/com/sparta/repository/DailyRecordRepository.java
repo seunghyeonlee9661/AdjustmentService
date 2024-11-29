@@ -11,5 +11,7 @@ import java.util.Optional;
 
 public interface DailyRecordRepository extends JpaRepository<DailyRecord, Long>  {
     Optional<DailyRecord> findByDateAndVideo(Timestamp date, Video video);
-    List<DailyRecord> findByDateOrderByDateDesc(Timestamp date);
+
+    @Query("SELECT dr FROM DailyRecord dr WHERE dr.date = :date ORDER BY dr.date DESC")
+    List<DailyRecord> findByDateOrderByDateDesc(@Param("date") Timestamp date);
 }
