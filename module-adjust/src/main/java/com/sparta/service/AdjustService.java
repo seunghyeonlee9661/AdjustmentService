@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
@@ -267,8 +268,8 @@ public class AdjustService {
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         LocalDateTime oneYearAgo = todayStart.minusYears(1);  // 1년 전 0시 0분 0초
 
-        long totalVideos = videoRepository.count();  // 총 비디오 수
-        long processedVideos = 0;  // 처리된 비디오 수
+        long totalDays = ChronoUnit.DAYS.between(oneYearAgo.toLocalDate(), todayStart.toLocalDate()) + 1;  // 1년간의 일수
+        long processedDays = 0;  // 처리된 날짜 수
 
         // 하루씩 처리
         for (LocalDate currentDate = LocalDate.from(oneYearAgo.toLocalDate()); !currentDate.isAfter(todayStart.toLocalDate()); currentDate = currentDate.plusDays(1)) {
@@ -276,17 +277,19 @@ public class AdjustService {
             processDaySummary(currentDateStartOfDay);  // 하루 처리
 
             // 진행 상태 로그
-            processedVideos++;
-            double progress = (double) processedVideos / totalVideos * 100;
-            System.out.println(String.format("진행 상태: %d%% (처리된 비디오: %d / 전체 비디오: %d)", (int) progress, processedVideos, totalVideos));
+            processedDays++;
+            double progress = (double) processedDays / totalDays * 100;
+            System.out.println(String.format("진행 상태: %d%% (처리된 날짜: %d / 전체 날짜: %d)", (int) progress, processedDays, totalDays));
 
             // 원하는 간격으로 로그 남기기 (예: 10% 단위로)
-            if (processedVideos % (totalVideos / 10) == 0) {
+            if (processedDays % (totalDays / 10) == 0) {
                 System.out.println("현재 진행 상태: " + (int) progress + "% 완료");
             }
         }
+
         return CompletableFuture.completedFuture("전체 처리 완료");
     }
+
 
     @Transactional
     private void processDaySummary(LocalDateTime currentDateStartOfDay) {
