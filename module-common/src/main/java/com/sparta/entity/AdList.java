@@ -36,27 +36,4 @@ public class AdList {
     public void update(){
         this.viewCount++;
     }
-
-    public Long getProfit() {
-        Long views = this.viewCount;  // 조회수 가져오기
-        long profit = 0L;  // 수익 변수 초기화
-
-        // 조회수 구간에 따라 수익 계산
-        if (views > 1000000) {
-            profit += (views - 1000000) * 20;
-            views = 1000000L;
-        }
-        if (views > 500000) {
-            profit += (views - 500000) * 15;
-            views = 500000L;
-        }
-        if (views > 100000) {
-            profit += (views - 100000) * 112;
-            views = 100000L;
-        }
-        profit += views * 10;  // 나머지 조회수에 대한 수익 계산
-
-        // double을 long으로 변환 (절사)
-        return profit;
-    }
 }

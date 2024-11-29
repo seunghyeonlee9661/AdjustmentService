@@ -36,14 +36,20 @@ public class BatchConfig extends DefaultBatchConfiguration {
 
     public Tasklet dailyTasklet(){
         return ((contribution, chunkContext) -> {
+            long recordStartTime = System.currentTimeMillis();
+            logger.info("일간 기록 작업을 시작합니다.");  // 테스트 로그 메시지
             adjustService.setDailyRecord();
-            logger.info("Completed daily record process.");  // 테스트 로그 메시지
-            adjustService.setDailyTop();
-            logger.info("Completed daily top process.");  // 테스트 로그 메시지
-            adjustService.setWeeklyTop();
-            logger.info("Completed weekly top process.");  // 테스트 로그 메시지
-            adjustService.setMonthlyTop();
-            logger.info("Completed monthly top process.");  // 테스트 로그 메시지
+            long recordEndTime = System.currentTimeMillis();
+            logger.info("일간 기록 작업이 완료되었습니다.");  // 테스트 로그 메시지
+            logger.info("일간 기록 작업 소요 시간: {} ms", (recordEndTime - recordStartTime));  // 소요 시간 로그 추가
+
+            // 일간 정산 작업 시작 시간 측정
+            long summaryStartTime = System.currentTimeMillis();
+            logger.info("일간 정산 작업을 시작합니다.");  // 테스트 로그 메시지
+            adjustService.setDailySummary();
+            long summaryEndTime = System.currentTimeMillis();
+            logger.info("일간 정산 작업이 완료되었습니다.");  // 테스트 로그 메시지
+            logger.info("일간 정산 작업 소요 시간: {} ms", (summaryEndTime - summaryStartTime));  // 소요 시간 로그 추가
             // 원하는 비지니스 로직 작성
             return RepeatStatus.FINISHED;
         });
