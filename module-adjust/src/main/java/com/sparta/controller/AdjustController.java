@@ -37,7 +37,7 @@ class AdjustController {
     //____batch 성능 비교를 위한 수동 검색 기능_______________
 
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
-    @GetMapping("record/{date}")
+    @GetMapping("record")
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
             @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime date,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
