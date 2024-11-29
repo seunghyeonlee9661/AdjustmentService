@@ -88,7 +88,6 @@ public class SecurityConfig {
                         authorizeHttpRequests
                                 .anyRequest().permitAll()
                 )
-
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 // 로그인 처리 설정
                 .formLogin(formLogin ->
