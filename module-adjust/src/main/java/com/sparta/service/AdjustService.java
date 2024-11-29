@@ -134,7 +134,9 @@ public class AdjustService {
             // 형식이 잘못된 경우 기본값 (오늘 날짜)
             date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         }
-        List<DailySummary> summaries = dailySummaryRepository.findAllByUserAndDate(userDetails.getUser(),Timestamp.valueOf(date));
+        List<Video> userVideos = userDetails.getUser().getVideos();
+        LocalDateTime finalDate = date;
+        List<DailySummary> summaries = userVideos.stream().flatMap(video -> dailySummaryRepository.findAllByVideoAndDate(video, Timestamp.valueOf(finalDate)).stream()).toList();
         return ResponseEntity.ok(summaries.stream().map(DailySummaryResponseDTO::new).toList());
     }
 

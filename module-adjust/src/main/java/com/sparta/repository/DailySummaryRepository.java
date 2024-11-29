@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface DailySummaryRepository extends JpaRepository<DailySummary, Long> {
     Optional<DailySummary> findByDateAndVideo(Timestamp date, Video video);
     List<DailySummary> findByDate(Timestamp date);
-    List<DailySummary> findAllByUserAndDate(User user, Timestamp date);
+    List<DailySummary> findAllByVideoAndDate(Video video, Timestamp date);
 
 
 }
