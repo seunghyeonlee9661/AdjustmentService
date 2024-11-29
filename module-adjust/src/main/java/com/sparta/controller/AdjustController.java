@@ -38,7 +38,7 @@ class AdjustController {
 
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
     @GetMapping("record")
-    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
+    public ResponseEntity<List<DailySummaryResponseDTO>> getDailyUserSummary(
             @RequestParam(value = "date", required = false) String date,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
         // 서비스에서 날짜 변환 및 기본값 처리
@@ -52,5 +52,14 @@ class AdjustController {
     public ResponseEntity<String> setDailySummary(){
         adjustService.setDailySummary();
         return ResponseEntity.ok("저장 완료");
+    }
+
+    // 만들어진 정산 결과 습득
+    @GetMapping("summary")
+    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
+            @RequestParam(value = "date", required = false) String date,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        // 서비스에서 날짜 변환 및 기본값 처리
+        return adjustService.getDailySummaryByDateFromTable(date, userDetails);
     }
 }

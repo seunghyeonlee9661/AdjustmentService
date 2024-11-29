@@ -118,7 +118,26 @@ public class AdjustService {
         }
         return ResponseEntity.ok(responseDTOList);
     }
-    
+
+    // Batch된 결과 없이 수동으로 데이터 불러오는 작업
+    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummaryByDateFromTable(String dateString, UserDetailsImpl userDetails) {
+        LocalDateTime date;
+        try {
+            // 입력받은 문자열을 LocalDateTime으로 변환 (yyyy-MM-dd 형식)
+            if (dateString != null) {
+                date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
+            } else {
+                // date가 null인 경우 오늘 날짜로 설정
+                date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+            }
+        } catch (DateTimeParseException e) {
+            // 형식이 잘못된 경우 기본값 (오늘 날짜)
+            date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        }
+        List<DailySummary> summaries = dailySummaryRepository.findAllByUserAndDate(userDetails.getUser(),Timestamp.valueOf(date));
+        return ResponseEntity.ok(summaries.stream().map(DailySummaryResponseDTO::new).toList());
+    }
+
     // Batch - 일일 영상과 광고 대상 조회수 총합을 기록하는 작업
     @Transactional
     public void setDailyRecord(){
