@@ -19,6 +19,9 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 @RequiredArgsConstructor
@@ -269,23 +272,31 @@ public class AdjustService {
         LocalDateTime oneYearAgo = todayStart.minusYears(1);  // 1년 전 0시 0분 0초
 
         long totalDays = ChronoUnit.DAYS.between(oneYearAgo.toLocalDate(), todayStart.toLocalDate()) + 1;  // 1년간의 일수
-        long processedDays = 0;  // 처리된 날짜 수
-
+        // 동시성 문제를 해결하기 위해 AtomicLong 사용
+        AtomicLong processedDays = new AtomicLong(0);  // 처리된 날짜 수 (원자적 업데이트)
+        // ExecutorService를 사용하여 비동기 작업을 병렬 처리
+        ExecutorService executorService = Executors.newFixedThreadPool(10);  // 10개 스레드로 병렬 처리
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
         // 하루씩 처리
         for (LocalDate currentDate = LocalDate.from(oneYearAgo.toLocalDate()); !currentDate.isAfter(todayStart.toLocalDate()); currentDate = currentDate.plusDays(1)) {
             LocalDateTime currentDateStartOfDay = currentDate.atStartOfDay();  // 현재 날짜의 0시 0분 0초
-            processDaySummary(currentDateStartOfDay);  // 하루 처리
-
-            // 진행 상태 로그
-            processedDays++;
-            double progress = (double) processedDays / totalDays * 100;
-            System.out.println(String.format("진행 상태: %d%% (처리된 날짜: %d / 전체 날짜: %d)", (int) progress, processedDays, totalDays));
-
-            // 원하는 간격으로 로그 남기기 (예: 10% 단위로)
-            if (processedDays % (totalDays / 10) == 0) {
-                System.out.println("현재 진행 상태: " + (int) progress + "% 완료");
-            }
+            // 비동기 작업 생성
+            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+                processDaySummary(currentDateStartOfDay);  // 하루 처리
+                long currentProcessed = processedDays.incrementAndGet();  // 원자적 업데이트
+                double progress = (double) currentProcessed / totalDays * 100;
+                System.out.println(String.format("진행 상태: %d%% (처리된 날짜: %d / 전체 날짜: %d)", (int) progress, currentProcessed, totalDays));
+                // 원하는 간격으로 로그 남기기 (예: 10% 단위로)
+                if (currentProcessed % (totalDays / 10) == 0) {
+                    System.out.println("현재 진행 상태: " + (int) progress + "% 완료");
+                }
+            }, executorService);  // 스레드 풀에 비동기 작업을 제출
+            futures.add(future);
         }
+        // 모든 작업이 완료될 때까지 기다림
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        // ExecutorService 종료
+        executorService.shutdown();
 
         return CompletableFuture.completedFuture("전체 처리 완료");
     }
