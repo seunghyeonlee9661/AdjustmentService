@@ -1,5 +1,4 @@
 package com.sparta.config;
-
 import com.sparta.service.AdjustService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
