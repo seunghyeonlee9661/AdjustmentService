@@ -62,4 +62,7 @@ class AdjustController {
         adjustService.setMonthlyTop();
         return ResponseEntity.ok("저장 완료");
     }
+
+
+    //____batch 성능 비교를 위한 수동 검색 기능_______________
 }
