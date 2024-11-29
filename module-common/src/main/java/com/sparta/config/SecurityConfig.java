@@ -88,12 +88,14 @@ public class SecurityConfig {
                         authorizeHttpRequests
                                 .anyRequest().permitAll()
                 )
+
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(authenticationEntryPoint))
                 // 로그인 처리 설정
+                .securityMatcher("/user/**") // user 모듈 경로에만 적용
                 .formLogin(formLogin ->
                         formLogin
-                                .loginPage("/user/login/page")
-                                .loginProcessingUrl("/user/login")
+                                .loginPage("/login/page")
+                                .loginProcessingUrl("/login")
                                 .permitAll()
                 )
                 // 로그아웃 처리 설정
