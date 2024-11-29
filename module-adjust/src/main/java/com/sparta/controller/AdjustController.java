@@ -22,7 +22,7 @@ class AdjustController {
     private final AdjustService adjustService;
 
     /* 일간 영상별 영상과 광고 시청수 호출 */
-    @GetMapping("record")
+    @GetMapping("record/all")
     public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(@RequestParam(required = false) String date){
         return adjustService.getDailyRecord(date);
     }
@@ -37,12 +37,19 @@ class AdjustController {
     //____batch 성능 비교를 위한 수동 검색 기능_______________
 
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
-    @GetMapping("{date}")
-    public ResponseEntity<List<DailySummaryResponseDTO>>  getDailySummary(@PathVariable(value = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date,
-                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        // 서비스에서 해당 날짜의 DailySummary 조회
-        return adjustService.getDailySummaryByDate(date,userDetails);
+    @GetMapping("record/{date}")
+    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
+            @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime date,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        // date가 null이면 현재 날짜 기본값 설정
+        if (date == null) {
+            date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0); // 오늘 날짜 00:00:00
+        }
+
+        return adjustService.getDailySummaryByDate(date, userDetails);
     }
+
 
     //____batch 대상 기능을 수동으로 실행_______________
 
