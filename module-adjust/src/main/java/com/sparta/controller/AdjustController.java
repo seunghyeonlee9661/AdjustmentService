@@ -17,18 +17,18 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 class AdjustController {
     private final AdjustService adjustService;
 
     /* 일간 영상별 영상과 광고 시청수 호출 */
-    @GetMapping("record/all")
+    @GetMapping("/record/all")
     public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(@RequestParam(required = false) String date){
         return adjustService.getDailyRecord(date);
     }
 
     /* 일간 영상별 영상과 광고 시청수 저장 */
-    @PostMapping("record")
+    @PostMapping("/record")
     public ResponseEntity<String> setDailyRecord(){
         adjustService.setDailyRecord();
         return ResponseEntity.ok("저장 완료");
@@ -37,7 +37,7 @@ class AdjustController {
     //____batch 성능 비교를 위한 수동 검색 기능_______________
 
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
-    @GetMapping("record")
+    @GetMapping("/record")
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailyUserSummary(
             @RequestParam(value = "date", required = false) String date,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -48,14 +48,14 @@ class AdjustController {
 
     //____batch 대상 기능을 수동으로 실행_______________
 
-    @PostMapping("summary")
+    @PostMapping("/summary")
     public ResponseEntity<String> setDailySummary(){
         adjustService.setDailySummary();
         return ResponseEntity.ok("저장 완료");
     }
 
     // 만들어진 정산 결과 습득
-    @GetMapping("summary")
+    @GetMapping("/summary")
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
             @RequestParam(value = "date", required = false) String date,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {

@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class VideoController {
     private final VideoService videoService;
 
@@ -27,13 +27,13 @@ public class VideoController {
     }
 
     /* 비디오 파일 업로드 */
-    @PostMapping("upload")
+    @PostMapping("/upload")
     public ResponseEntity<VideoCreateResponseDTO> uploadVideoFile(@RequestPart(value = "file") MultipartFile file) throws IOException {
         return videoService.uploadVideoFile(file);
     }
 
     /* 비디오 업로드 취소 */
-    @DeleteMapping("upload")
+    @DeleteMapping("/upload")
     public ResponseEntity<String> deleteVideoFile(@Valid @RequestBody VideoCancelCreateRequestDTO requestDTO) throws JCodecException, IOException {
         return videoService.cancelVideoFile(requestDTO);
     }
@@ -45,19 +45,19 @@ public class VideoController {
     }
 
     /* 비디오 재생 */
-    @GetMapping("{id}/play")
+    @GetMapping("/{id}/play")
     public ResponseEntity<VideoDetailResponseDTO> playVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails, HttpServletRequest request){
         return videoService.playVideo(id,userDetails,request);
     }
 
     /* 비디오 중지 */
-    @PostMapping("{id}/pause")
+    @PostMapping("/{id}/pause")
     public ResponseEntity<String> pauseVideo(@PathVariable("id") long id,@AuthenticationPrincipal UserDetailsImpl userDetails,@Valid @RequestBody VideoPauseRequestDTO requestDTO){
         return videoService.pauseVideo(id,userDetails,requestDTO);
     }
 
     /* 비디오 삭제 */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteVideo(@PathVariable("id") long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return videoService.deleteVideo(id,userDetails);
     }

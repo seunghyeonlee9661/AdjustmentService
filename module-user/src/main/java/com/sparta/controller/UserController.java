@@ -7,25 +7,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class UserController {
     private final UserService userService;
-
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody UserLoginRequestDTO requestDTO) {
-//        return userService.login(requestDTO);
-//    }
 
     /* 사용자 정보 반환 */
     @GetMapping("")
@@ -46,19 +38,19 @@ public class UserController {
     }
 
     /* 사용자 영상 목록 */
-    @GetMapping("videos")
+    @GetMapping("/videos")
     public ResponseEntity<Page<VideoListResponseDTO>> userVideos(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userVideos(userDetails,page);
     }
 
     /* 사용자 광고 목록 */
-    @GetMapping("ads")
+    @GetMapping("/ads")
     public ResponseEntity<Page<AdResponseDTO>> userAds(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userAds(userDetails,page);
     }
 
     /* 사용자 시청 기록 */
-    @GetMapping("histories")
+    @GetMapping("/histories")
     public ResponseEntity<Page<HistoryResponseDTO>> userHistories(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam(value = "page", defaultValue = "0") int page) throws IOException {
         return userService.userHistories(userDetails,page);
     }
