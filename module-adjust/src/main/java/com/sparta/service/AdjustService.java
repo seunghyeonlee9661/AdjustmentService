@@ -25,13 +25,31 @@ public class AdjustService {
     private final DailyRecordRepository dailyRecordRepository;
     private final DailySummaryRepository dailySummaryRepository;
 
-    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(String date){
+    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(String date, Long videoId) {
         Timestamp timestamp = null;
-        try { if (date != null) timestamp = Timestamp.valueOf(LocalDate.parse(date).atStartOfDay()); } catch (DateTimeParseException ignored) {}
-        List<DailyRecord> records = (timestamp != null) ? dailyRecordRepository.findByDateOrderByDateDesc(timestamp) : dailyRecordRepository.findAll();
+        try {
+            // date가 주어지면 Timestamp로 변환
+            if (date != null) timestamp = Timestamp.valueOf(LocalDate.parse(date).atStartOfDay());
+        } catch (DateTimeParseException ignored) {}
+
+        // videoId가 주어졌다면 해당 videoId로 필터링
+        List<DailyRecord> records;
+        if (timestamp != null && videoId != null) {
+            // 날짜와 videoId로 필터링
+            records = dailyRecordRepository.findByDateAndVideoIdOrderByDateDesc(timestamp, videoId);
+        } else if (timestamp != null) {
+            // 날짜로만 필터링
+            records = dailyRecordRepository.findByDateOrderByDateDesc(timestamp);
+        } else if (videoId != null) {
+            // videoId로만 필터링
+            records = dailyRecordRepository.findByVideoId(videoId);
+        } else {
+            // 날짜와 videoId 모두 없으면 모든 레코드 반환
+            records = dailyRecordRepository.findAll();
+        }
+
         return ResponseEntity.ok(records.stream().map(DailyRecordResponseDTO::new).toList());
     }
-
     // Batch된 결과 없이 수동으로 데이터 불러오는 작업
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummaryByDate(String dateString, UserDetailsImpl userDetails) {
         LocalDateTime date;

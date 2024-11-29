@@ -23,8 +23,8 @@ class AdjustController {
 
     /* 일간 영상별 영상과 광고 시청수 호출 */
     @GetMapping("/record/all")
-    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(@RequestParam(required = false) String date){
-        return adjustService.getDailyRecord(date);
+    public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(@RequestParam(required = false) String date,@RequestParam(required = false) Long id){
+        return adjustService.getDailyRecord(date,id);
     }
 
     /* 일간 영상별 영상과 광고 시청수 저장 */
