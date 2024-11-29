@@ -49,19 +49,10 @@ class AdjustController {
     //____batch 대상 기능을 수동으로 실행_______________
 
     @PostMapping("/summary")
-    public ResponseEntity<String> setDailySummary(){
-        adjustService.setDailySummary();
+    public ResponseEntity<String> setDailySummary() {
+        adjustService.setDailySummaryAsync();
         return ResponseEntity.ok("저장 완료");
     }
-
-
-    @PostMapping("/summary/year")
-    public ResponseEntity<String> setYearlySummary(){
-        adjustService.setYearlySummary();
-        return ResponseEntity.ok("저장 완료");
-    }
-
-
 
     // 만들어진 정산 결과 습득
     @GetMapping("/summary")

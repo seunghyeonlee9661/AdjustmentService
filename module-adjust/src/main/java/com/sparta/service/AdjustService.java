@@ -191,8 +191,9 @@ public class AdjustService {
     }
     
     // Batch - 일간, 주간, 월간 영상과 광고의 조회수 변화량과 이에 따른 수익을 정산하여 데이터베이스에 저장하는 기능
+    @Async
     @Transactional
-    public void setDailySummary(){
+    public void setDailySummaryAsync() {
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         LocalDateTime yesterdayStart = todayStart.minusDays(1);  // 어제 0시 0분 0초
         LocalDateTime weekStart = todayStart.minusWeeks(1);  // 1주일 전 (저번주 시작)
@@ -257,93 +258,6 @@ public class AdjustService {
             } else {
                 // 새로운 정산 기록을 추가
                 DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStart), video,
-                        videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
-                        adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
-                dailySummaryRepository.save(newSummary);
-            }
-        }
-        ResponseEntity.ok("설정완료");
-    }
-
-    @Transactional
-    @Async
-    public CompletableFuture<String> setYearlySummary() {
-        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
-        LocalDateTime oneYearAgo = todayStart.minusYears(1);  // 1년 전 0시 0분 0초
-
-        long totalDays = ChronoUnit.DAYS.between(oneYearAgo.toLocalDate(), todayStart.toLocalDate()) + 1;  // 1년간의 일수
-        // 동시성 문제를 해결하기 위해 AtomicLong 사용
-        AtomicLong processedDays = new AtomicLong(0);  // 처리된 날짜 수 (원자적 업데이트)
-        // ExecutorService를 사용하여 비동기 작업을 병렬 처리
-        ExecutorService executorService = Executors.newFixedThreadPool(10);  // 10개 스레드로 병렬 처리
-        List<CompletableFuture<Void>> futures = new ArrayList<>();
-        // 하루씩 처리
-        for (LocalDate currentDate = LocalDate.from(oneYearAgo.toLocalDate()); !currentDate.isAfter(todayStart.toLocalDate()); currentDate = currentDate.plusDays(1)) {
-            LocalDateTime currentDateStartOfDay = currentDate.atStartOfDay();  // 현재 날짜의 0시 0분 0초
-            // 비동기 작업 생성
-            CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                processDaySummary(currentDateStartOfDay);  // 하루 처리
-                long currentProcessed = processedDays.incrementAndGet();  // 원자적 업데이트
-                double progress = (double) currentProcessed / totalDays * 100;
-                System.out.println(String.format("진행 상태: %d%% (처리된 날짜: %d / 전체 날짜: %d)", (int) progress, currentProcessed, totalDays));
-                // 원하는 간격으로 로그 남기기 (예: 10% 단위로)
-                if (currentProcessed % (totalDays / 10) == 0) {
-                    System.out.println("현재 진행 상태: " + (int) progress + "% 완료");
-                }
-            }, executorService);  // 스레드 풀에 비동기 작업을 제출
-            futures.add(future);
-        }
-        // 모든 작업이 완료될 때까지 기다림
-        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
-        // ExecutorService 종료
-        executorService.shutdown();
-
-        return CompletableFuture.completedFuture("전체 처리 완료");
-    }
-
-
-    @Transactional
-    private void processDaySummary(LocalDateTime currentDateStartOfDay) {
-        // 일일 요약을 처리하는 코드 (이전 코드와 동일)
-        LocalDateTime yesterdayStart = currentDateStartOfDay.minusDays(1);  // 어제 0시 0분 0초
-        LocalDateTime weekStart = currentDateStartOfDay.minusWeeks(1);  // 1주일 전
-        LocalDateTime monthStart = currentDateStartOfDay.minusMonths(1);  // 한 달 전
-
-        List<Video> videos = videoRepository.findAll();  // 모든 비디오 대상
-        for (Video video : videos) {
-            long videoDailyViewCount = 0L;
-            long videoWeeklyViewCount = 0L;
-            long videoMonthlyViewCount = 0L;
-            long adDailyViewCount = 0L;
-            long adWeeklyViewCount = 0L;
-            long adMonthlyViewCount = 0L;
-
-            // 하루별 기록을 조회하여 처리
-            Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(currentDateStartOfDay), video);
-            Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
-            if (todayRecordOptional.isPresent()) {
-                DailyRecord todayRecord = todayRecordOptional.get();
-                if (yesterdayRecordOptional.isPresent()) {
-                    DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
-                    videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
-                    adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
-                }
-                // Weekly, Monthly 처리 생략 (위와 동일)
-            }
-
-            // 이미 존재하는 정산이 있으면 업데이트
-            Optional<DailySummary> existingSummary = dailySummaryRepository.findByDateAndVideo(Timestamp.valueOf(currentDateStartOfDay), video);
-            if (existingSummary.isPresent()) {
-                DailySummary summary = existingSummary.get();
-                summary.setVideoDailyViewCount(videoDailyViewCount);
-                summary.setVideoWeeklyViewCount(videoWeeklyViewCount);
-                summary.setVideoMonthlyViewCount(videoMonthlyViewCount);
-                summary.setAdDailyViewCount(adDailyViewCount);
-                summary.setAdWeeklyViewCount(adWeeklyViewCount);
-                summary.setAdMonthlyViewCount(adMonthlyViewCount);
-            } else {
-                // 새로운 정산 기록 추가
-                DailySummary newSummary = new DailySummary(Timestamp.valueOf(currentDateStartOfDay), video,
                         videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
                         adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
                 dailySummaryRepository.save(newSummary);

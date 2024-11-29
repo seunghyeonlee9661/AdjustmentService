@@ -46,7 +46,7 @@ public class BatchConfig extends DefaultBatchConfiguration {
             // 일간 정산 작업 시작 시간 측정
             long summaryStartTime = System.currentTimeMillis();
             logger.info("일간 정산 작업을 시작합니다.");  // 테스트 로그 메시지
-            adjustService.setDailySummary();
+            adjustService.setDailySummaryAsync();
             long summaryEndTime = System.currentTimeMillis();
             logger.info("일간 정산 작업이 완료되었습니다.");  // 테스트 로그 메시지
             logger.info("일간 정산 작업 소요 시간: {} ms", (summaryEndTime - summaryStartTime));  // 소요 시간 로그 추가
