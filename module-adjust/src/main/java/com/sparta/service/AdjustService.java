@@ -28,7 +28,7 @@ public class AdjustService {
     public ResponseEntity<List<DailyRecordResponseDTO>> getDailyRecord(String date){
         Timestamp timestamp = null;
         try { if (date != null) timestamp = Timestamp.valueOf(LocalDate.parse(date).atStartOfDay()); } catch (DateTimeParseException ignored) {}
-        List<DailyRecord> records = (timestamp != null) ? dailyRecordRepository.findByDate(timestamp) : dailyRecordRepository.findAll();
+        List<DailyRecord> records = (timestamp != null) ? dailyRecordRepository.findByDateOrderByDateDesc(timestamp) : dailyRecordRepository.findAll();
         return ResponseEntity.ok(records.stream().map(DailyRecordResponseDTO::new).toList());
     }
 
