@@ -50,7 +50,7 @@ class AdjustController {
 
     @PostMapping("/summary")
     public ResponseEntity<String> setDailySummary() {
-        adjustService.setDailySummaryAsync();
+        adjustService.setDailySummaryWithThreads();
         return ResponseEntity.ok("저장 완료");
     }
 

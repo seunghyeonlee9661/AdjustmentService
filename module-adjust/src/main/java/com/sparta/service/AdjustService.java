@@ -192,12 +192,9 @@ public class AdjustService {
         ResponseEntity.ok("설정완료");
     }
 
-
-
-    @Async
     @Transactional
-    public void setDailySummaryAsync() {
-        logger.info("Async 작업 시작");
+    public void setDailySummaryWithThreads() {
+        logger.info("멀티스레드 작업 시작");
 
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         LocalDateTime yesterdayStart = todayStart.minusDays(1);  // 어제 0시 0분 0초
@@ -212,83 +209,91 @@ public class AdjustService {
         List<Video> videos = videoRepository.findAll();
         logger.info("총 {} 개의 비디오에 대해 정산을 진행합니다.", videos.size());
 
-        // 모든 비디오 대상
+        ExecutorService executorService = Executors.newFixedThreadPool(10);  // 스레드 풀 크기 설정 (여기서는 10개)
+
         for (Video video : videos) {
-            logger.info("비디오 ID: {} 정산 시작", video.getId());
+            executorService.submit(() -> {
+                logger.info("비디오 ID: {} 처리 시작 (스레드 ID: {})", video.getId(), Thread.currentThread().getId());
 
-            long videoDailyViewCount = 0L;
-            long videoWeeklyViewCount = 0L;
-            long videoMonthlyViewCount = 0L;
-            long videoDailyProfit = 0L;
-            long videoWeeklyProfit = 0L;
-            long videoMonthlyProfit = 0L;
-            long adDailyViewCount = 0L;
-            long adWeeklyViewCount = 0L;
-            long adMonthlyViewCount = 0L;
-            long adDailyProfit = 0L;
-            long adWeeklyProfit = 0L;
-            long adMonthlyProfit = 0L;
+                long videoDailyViewCount = 0L;
+                long videoWeeklyViewCount = 0L;
+                long videoMonthlyViewCount = 0L;
+                long videoDailyProfit = 0L;
+                long videoWeeklyProfit = 0L;
+                long videoMonthlyProfit = 0L;
+                long adDailyViewCount = 0L;
+                long adWeeklyViewCount = 0L;
+                long adMonthlyViewCount = 0L;
+                long adDailyProfit = 0L;
+                long adWeeklyProfit = 0L;
+                long adMonthlyProfit = 0L;
 
-            Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
-            Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
+                Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
+                Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
 
-            if (todayRecordOptional.isPresent()) {
-                DailyRecord todayRecord = todayRecordOptional.get();
-                if (yesterdayRecordOptional.isPresent()) {
-                    DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
-                    videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
-                    adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
-                    logger.info("비디오 {}의 일간 조회수 차이: {}", video.getId(), videoDailyViewCount);
-                    logger.info("광고 {}의 일간 조회수 차이: {}", video.getId(), adDailyViewCount);
+                if (todayRecordOptional.isPresent()) {
+                    DailyRecord todayRecord = todayRecordOptional.get();
+                    if (yesterdayRecordOptional.isPresent()) {
+                        DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
+                        videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
+                        adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
+                        logger.info("비디오 {}의 일간 조회수 차이: {}", video.getId(), videoDailyViewCount);
+                        logger.info("광고 {}의 일간 조회수 차이: {}", video.getId(), adDailyViewCount);
+                    }
+
+                    Optional<DailyRecord> prevWeekRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(weekStart), video);
+                    if (prevWeekRecord.isPresent()) {
+                        DailyRecord prevRecord = prevWeekRecord.get();
+                        videoWeeklyViewCount = todayRecord.getTotalVideoViews() - prevRecord.getTotalVideoViews();
+                        adWeeklyViewCount = todayRecord.getTotalAdViews() - prevRecord.getTotalAdViews();
+                        logger.info("비디오 {}의 주간 조회수 차이: {}", video.getId(), videoWeeklyViewCount);
+                        logger.info("광고 {}의 주간 조회수 차이: {}", video.getId(), adWeeklyViewCount);
+                    }
+
+                    Optional<DailyRecord> prevMonthRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(monthStart), video);
+                    if (prevMonthRecord.isPresent()) {
+                        DailyRecord prevMonthRecordValue = prevMonthRecord.get();
+                        videoMonthlyViewCount = todayRecord.getTotalVideoViews() - prevMonthRecordValue.getTotalVideoViews();
+                        adMonthlyViewCount = todayRecord.getTotalAdViews() - prevMonthRecordValue.getTotalAdViews();
+                        logger.info("비디오 {}의 월간 조회수 차이: {}", video.getId(), videoMonthlyViewCount);
+                        logger.info("광고 {}의 월간 조회수 차이: {}", video.getId(), adMonthlyViewCount);
+                    }
                 }
 
-                Optional<DailyRecord> prevWeekRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(weekStart), video);
-                if (prevWeekRecord.isPresent()) {
-                    DailyRecord prevRecord = prevWeekRecord.get();
-                    videoWeeklyViewCount = todayRecord.getTotalVideoViews() - prevRecord.getTotalVideoViews();
-                    adWeeklyViewCount = todayRecord.getTotalAdViews() - prevRecord.getTotalAdViews();
-                    logger.info("비디오 {}의 주간 조회수 차이: {}", video.getId(), videoWeeklyViewCount);
-                    logger.info("광고 {}의 주간 조회수 차이: {}", video.getId(), adWeeklyViewCount);
+                // 이미 존재하는 정산이면 업데이트
+                Optional<DailySummary> existingSummary = dailySummaryRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
+                if (existingSummary.isPresent()) {
+                    DailySummary summary = existingSummary.get();
+                    summary.setVideoDailyViewCount(videoDailyViewCount);
+                    summary.setVideoWeeklyViewCount(videoWeeklyViewCount);
+                    summary.setVideoMonthlyViewCount(videoMonthlyViewCount);
+                    summary.setVideoDailyProfit(videoDailyProfit);
+                    summary.setVideoWeeklyProfit(videoWeeklyProfit);
+                    summary.setVideoMonthlyProfit(videoMonthlyProfit);
+                    summary.setAdDailyViewCount(adDailyViewCount);
+                    summary.setAdWeeklyViewCount(adWeeklyViewCount);
+                    summary.setAdMonthlyViewCount(adMonthlyViewCount);
+                    summary.setAdDailyProfit(adDailyProfit);
+                    summary.setAdWeeklyProfit(adWeeklyProfit);
+                    summary.setAdMonthlyProfit(adMonthlyProfit);
+                    logger.info("비디오 {}의 기존 정산 업데이트", video.getId());
+                } else {
+                    // 새로운 정산 기록을 추가
+                    DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStart), video,
+                            videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
+                            adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
+                    dailySummaryRepository.save(newSummary);
+                    logger.info("비디오 {}의 새로운 정산 기록 추가", video.getId());
                 }
 
-                Optional<DailyRecord> prevMonthRecord  = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(monthStart), video);
-                if (prevMonthRecord.isPresent()) {
-                    DailyRecord prevMonthRecordValue = prevMonthRecord.get();
-                    videoMonthlyViewCount = todayRecord.getTotalVideoViews() - prevMonthRecordValue.getTotalVideoViews();
-                    adMonthlyViewCount = todayRecord.getTotalAdViews() - prevMonthRecordValue.getTotalAdViews();
-                    logger.info("비디오 {}의 월간 조회수 차이: {}", video.getId(), videoMonthlyViewCount);
-                    logger.info("광고 {}의 월간 조회수 차이: {}", video.getId(), adMonthlyViewCount);
-                }
-            }
-
-            // 이미 존재하는 정산이면 업데이트
-            Optional<DailySummary> existingSummary = dailySummaryRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
-            if (existingSummary.isPresent()) {
-                DailySummary summary = existingSummary.get();
-                summary.setVideoDailyViewCount(videoDailyViewCount);
-                summary.setVideoWeeklyViewCount(videoWeeklyViewCount);
-                summary.setVideoMonthlyViewCount(videoMonthlyViewCount);
-                summary.setVideoDailyProfit(videoDailyProfit);
-                summary.setVideoWeeklyProfit(videoWeeklyProfit);
-                summary.setVideoMonthlyProfit(videoMonthlyProfit);
-                summary.setAdDailyViewCount(adDailyViewCount);
-                summary.setAdWeeklyViewCount(adWeeklyViewCount);
-                summary.setAdMonthlyViewCount(adMonthlyViewCount);
-                summary.setAdDailyProfit(adDailyProfit);
-                summary.setAdWeeklyProfit(adWeeklyProfit);
-                summary.setAdMonthlyProfit(adMonthlyProfit);
-                logger.info("비디오 {}의 기존 정산 업데이트", video.getId());
-            } else {
-                // 새로운 정산 기록을 추가
-                DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStart), video,
-                        videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
-                        adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
-                dailySummaryRepository.save(newSummary);
-                logger.info("비디오 {}의 새로운 정산 기록 추가", video.getId());
-            }
+                logger.info("비디오 ID: {} 처리 완료 (스레드 ID: {})", video.getId(), Thread.currentThread().getId());
+            });
         }
-        logger.info("비동기 작업 완료");
+
+        executorService.shutdown();  // 모든 작업이 끝난 후 ExecutorService 종료
+        logger.info("멀티스레드 작업 종료");
     }
+
 
     public Long getVideoProfit(Long viewCount) {
         double profit = 0.0;  // 수익 변수 초기화
