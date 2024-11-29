@@ -54,6 +54,15 @@ class AdjustController {
         return ResponseEntity.ok("저장 완료");
     }
 
+
+    @PostMapping("/summary/year")
+    public ResponseEntity<String> setYearlySummary(){
+        adjustService.setYearlySummary();
+        return ResponseEntity.ok("저장 완료");
+    }
+
+
+
     // 만들어진 정산 결과 습득
     @GetMapping("/summary")
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(

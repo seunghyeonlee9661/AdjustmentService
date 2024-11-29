@@ -259,6 +259,88 @@ public class AdjustService {
         ResponseEntity.ok("설정완료");
     }
 
+    @Transactional
+    public void setYearlySummary() {
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
+        LocalDateTime oneYearAgo = todayStart.minusYears(1);  // 1년 전 0시 0분 0초
+
+        // 1년 전부터 오늘까지 하루씩 반복
+        for (LocalDateTime currentDate = oneYearAgo; currentDate.isBefore(todayStart) || currentDate.isEqual(todayStart); currentDate = currentDate.plusDays(1)) {
+            LocalDateTime todayStartOfDay = currentDate;  // 현재 날짜의 0시 0분 0초
+            LocalDateTime yesterdayStart = todayStartOfDay.minusDays(1);  // 어제 0시 0분 0초
+            LocalDateTime weekStart = todayStartOfDay.minusWeeks(1);  // 1주일 전
+            LocalDateTime monthStart = todayStartOfDay.minusMonths(1);  // 한 달 전
+
+            List<Video> videos = videoRepository.findAll();  // 모든 비디오 대상
+            for (Video video : videos) {
+                long videoDailyViewCount = 0L;
+                long videoWeeklyViewCount = 0L;
+                long videoMonthlyViewCount = 0L;
+                long videoDailyProfit = 0L;
+                long videoWeeklyProfit = 0L;
+                long videoMonthlyProfit = 0L;
+                long adDailyViewCount = 0L;
+                long adWeeklyViewCount = 0L;
+                long adMonthlyViewCount = 0L;
+                long adDailyProfit = 0L;
+                long adWeeklyProfit = 0L;
+                long adMonthlyProfit = 0L;
+
+                // 오늘, 어제, 1주일 전, 한 달 전 기록을 조회
+                Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStartOfDay), video);
+                Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
+
+                if (todayRecordOptional.isPresent()) {
+                    DailyRecord todayRecord = todayRecordOptional.get();
+                    if (yesterdayRecordOptional.isPresent()) {
+                        DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
+                        videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
+                        adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
+                    }
+
+                    Optional<DailyRecord> prevWeekRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(weekStart), video);
+                    if (prevWeekRecord.isPresent()) {
+                        DailyRecord prevRecord = prevWeekRecord.get();
+                        videoWeeklyViewCount = todayRecord.getTotalVideoViews() - prevRecord.getTotalVideoViews();
+                        adWeeklyViewCount = todayRecord.getTotalAdViews() - prevRecord.getTotalAdViews();
+                    }
+
+                    Optional<DailyRecord> prevMonthRecord  = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(monthStart), video);
+                    if (prevMonthRecord.isPresent()) {
+                        DailyRecord prevMonthRecordValue = prevMonthRecord.get();
+                        videoMonthlyViewCount = todayRecord.getTotalVideoViews() - prevMonthRecordValue.getTotalVideoViews();
+                        adMonthlyViewCount = todayRecord.getTotalAdViews() - prevMonthRecordValue.getTotalAdViews();
+                    }
+                }
+
+                // 이미 존재하는 정산이 있으면 업데이트
+                Optional<DailySummary> existingSummary = dailySummaryRepository.findByDateAndVideo(Timestamp.valueOf(todayStartOfDay), video);
+                if (existingSummary.isPresent()) {
+                    DailySummary summary = existingSummary.get();
+                    summary.setVideoDailyViewCount(videoDailyViewCount);
+                    summary.setVideoWeeklyViewCount(videoWeeklyViewCount);
+                    summary.setVideoMonthlyViewCount(videoMonthlyViewCount);
+                    summary.setVideoDailyProfit(videoDailyProfit);
+                    summary.setVideoWeeklyProfit(videoWeeklyProfit);
+                    summary.setVideoMonthlyProfit(videoMonthlyProfit);
+                    summary.setAdDailyViewCount(adDailyViewCount);
+                    summary.setAdWeeklyViewCount(adWeeklyViewCount);
+                    summary.setAdMonthlyViewCount(adMonthlyViewCount);
+                    summary.setAdDailyProfit(adDailyProfit);
+                    summary.setAdWeeklyProfit(adWeeklyProfit);
+                    summary.setAdMonthlyProfit(adMonthlyProfit);
+                } else {
+                    // 새로운 정산 기록 추가
+                    DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStartOfDay), video,
+                            videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
+                            adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
+                    dailySummaryRepository.save(newSummary);
+                }
+            }
+        }
+        ResponseEntity.ok("1년 범위의 정산 완료");
+    }
+
     public Long getVideoProfit(Long viewCount) {
         double profit = 0.0;  // 수익 변수 초기화
         // 조회수 구간에 따라 수익 계산
