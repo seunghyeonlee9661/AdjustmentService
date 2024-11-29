@@ -39,14 +39,9 @@ class AdjustController {
     /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
     @GetMapping("record")
     public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummary(
-            @RequestParam(value = "date", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDateTime date,
+            @RequestParam(value = "date", required = false) String date,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        // date가 null이면 현재 날짜 기본값 설정
-        if (date == null) {
-            date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0); // 오늘 날짜 00:00:00
-        }
-
+        // 서비스에서 날짜 변환 및 기본값 처리
         return adjustService.getDailySummaryByDate(date, userDetails);
     }
 
@@ -58,34 +53,4 @@ class AdjustController {
         adjustService.setDailySummary();
         return ResponseEntity.ok("저장 완료");
     }
-
-//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 호출 */
-//    @GetMapping("top/view")
-//    public ResponseEntity<List<TopViewResponseDTO>> getTopView(@RequestParam(value = "option", defaultValue = "") String option){
-//        return adjustService.getTopView(option);
-//    }
-//
-//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 일간 조회수를 기록함 */
-//    @PostMapping("top/daily")
-//    public ResponseEntity<String> setDailyTop(){
-//        adjustService.setDailyTop();
-//        return ResponseEntity.ok("저장 완료");
-//    }
-//
-//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 주간 조회수를 기록함 */
-//    @PostMapping("top/weekly")
-//    public ResponseEntity<String> setWeeklyTop(){
-//        adjustService.setWeeklyTop();
-//        return ResponseEntity.ok("저장 완료");
-//    }
-//
-//    /* 해당 시간 기준 모든 영상의 조회수와 재생 시간을 기록해 월간 조회수를 기록함 */
-//    @PostMapping("top/monthly")
-//    public ResponseEntity<String> setMonthlyTop(){
-//        adjustService.setMonthlyTop();
-//        return ResponseEntity.ok("저장 완료");
-//    }
-
-
-
 }

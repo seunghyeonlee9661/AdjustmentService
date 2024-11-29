@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
@@ -32,7 +33,21 @@ public class AdjustService {
     }
 
     // Batch된 결과 없이 수동으로 데이터 불러오는 작업
-    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummaryByDate(LocalDateTime date, UserDetailsImpl userDetails) {
+    public ResponseEntity<List<DailySummaryResponseDTO>> getDailySummaryByDate(String dateString, UserDetailsImpl userDetails) {
+        LocalDateTime date;
+        try {
+            // 입력받은 문자열을 LocalDateTime으로 변환 (yyyy-MM-dd 형식)
+            if (dateString != null) {
+                date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
+            } else {
+                // date가 null인 경우 오늘 날짜로 설정
+                date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+            }
+        } catch (DateTimeParseException e) {
+            // 형식이 잘못된 경우 기본값 (오늘 날짜)
+            date = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        }
+
         List<Video> userVideos = userDetails.getUser().getVideos();
         List<DailySummaryResponseDTO> responseDTOList = new ArrayList<>();
 
