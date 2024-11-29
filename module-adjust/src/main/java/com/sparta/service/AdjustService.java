@@ -7,6 +7,8 @@ import com.sparta.repository.*;
 import com.sparta.security.UserDetailsImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -26,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 @RequiredArgsConstructor
 public class AdjustService {
-
+    private static final Logger logger = LoggerFactory.getLogger(AdjustService.class);
     private final VideoRepository videoRepository;
     private final DailyRecordRepository dailyRecordRepository;
     private final DailySummaryRepository dailySummaryRepository;
@@ -189,18 +191,31 @@ public class AdjustService {
         }
         ResponseEntity.ok("설정완료");
     }
-    
-    // Batch - 일간, 주간, 월간 영상과 광고의 조회수 변화량과 이에 따른 수익을 정산하여 데이터베이스에 저장하는 기능
+
+
+
     @Async
     @Transactional
     public void setDailySummaryAsync() {
+        logger.info("Async 작업 시작");
+
         LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
         LocalDateTime yesterdayStart = todayStart.minusDays(1);  // 어제 0시 0분 0초
         LocalDateTime weekStart = todayStart.minusWeeks(1);  // 1주일 전 (저번주 시작)
         LocalDateTime monthStart = todayStart.minusMonths(1);  // 한 달 전 (지난달 시작)
+
+        logger.info("오늘 시작 시간: {}", todayStart);
+        logger.info("어제 시작 시간: {}", yesterdayStart);
+        logger.info("1주일 전 시작 시간: {}", weekStart);
+        logger.info("1달 전 시작 시간: {}", monthStart);
+
         List<Video> videos = videoRepository.findAll();
+        logger.info("총 {} 개의 비디오에 대해 정산을 진행합니다.", videos.size());
+
         // 모든 비디오 대상
         for (Video video : videos) {
+            logger.info("비디오 ID: {} 정산 시작", video.getId());
+
             long videoDailyViewCount = 0L;
             long videoWeeklyViewCount = 0L;
             long videoMonthlyViewCount = 0L;
@@ -216,12 +231,15 @@ public class AdjustService {
 
             Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
             Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
+
             if (todayRecordOptional.isPresent()) {
                 DailyRecord todayRecord = todayRecordOptional.get();
                 if (yesterdayRecordOptional.isPresent()) {
                     DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
                     videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
                     adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
+                    logger.info("비디오 {}의 일간 조회수 차이: {}", video.getId(), videoDailyViewCount);
+                    logger.info("광고 {}의 일간 조회수 차이: {}", video.getId(), adDailyViewCount);
                 }
 
                 Optional<DailyRecord> prevWeekRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(weekStart), video);
@@ -229,6 +247,8 @@ public class AdjustService {
                     DailyRecord prevRecord = prevWeekRecord.get();
                     videoWeeklyViewCount = todayRecord.getTotalVideoViews() - prevRecord.getTotalVideoViews();
                     adWeeklyViewCount = todayRecord.getTotalAdViews() - prevRecord.getTotalAdViews();
+                    logger.info("비디오 {}의 주간 조회수 차이: {}", video.getId(), videoWeeklyViewCount);
+                    logger.info("광고 {}의 주간 조회수 차이: {}", video.getId(), adWeeklyViewCount);
                 }
 
                 Optional<DailyRecord> prevMonthRecord  = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(monthStart), video);
@@ -236,6 +256,8 @@ public class AdjustService {
                     DailyRecord prevMonthRecordValue = prevMonthRecord.get();
                     videoMonthlyViewCount = todayRecord.getTotalVideoViews() - prevMonthRecordValue.getTotalVideoViews();
                     adMonthlyViewCount = todayRecord.getTotalAdViews() - prevMonthRecordValue.getTotalAdViews();
+                    logger.info("비디오 {}의 월간 조회수 차이: {}", video.getId(), videoMonthlyViewCount);
+                    logger.info("광고 {}의 월간 조회수 차이: {}", video.getId(), adMonthlyViewCount);
                 }
             }
 
@@ -255,14 +277,17 @@ public class AdjustService {
                 summary.setAdDailyProfit(adDailyProfit);
                 summary.setAdWeeklyProfit(adWeeklyProfit);
                 summary.setAdMonthlyProfit(adMonthlyProfit);
+                logger.info("비디오 {}의 기존 정산 업데이트", video.getId());
             } else {
                 // 새로운 정산 기록을 추가
                 DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStart), video,
                         videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
                         adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
                 dailySummaryRepository.save(newSummary);
+                logger.info("비디오 {}의 새로운 정산 기록 추가", video.getId());
             }
         }
+        logger.info("비동기 작업 완료");
     }
 
     public Long getVideoProfit(Long viewCount) {
