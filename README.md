@@ -1,58 +1,51 @@
-# Adjustment Service (정산 시스템)
+# 📊 정산 시스템
 
-## 📜 Project Introduction
->
->이 프로젝트는 **2024 스파르타 코딩클럽 동북 이노베이션 캠프**에서 진행된 개인 프로젝트입니다.
->고난이도의 목표를 선정하고 문제 해결 과정을 기록하며 도전적인 과제를 수행했습니다.
->
-자원이 한정된 환경에서 엔지니어는 효율적으로 시스템을 관리해야 합니다. 이 프로젝트의 핵심은 많은 사용자들을 처리하면서도 **복잡한 로직**을 매일 우선적으로 처리하는 방식으로 시스템을 최적화하는 방법을 연구하는 것입니다. **유튜브**를 모티브로 한 **스트리밍 정산 시스템**을 개발하였으며, 다음과 같은 주요 기능들을 포함합니다:
+## 📄 프로젝트 소개
+**AdjustmentService API**는 영상, 광고 업로드 및 조회수 기반 수익 정산 통계를 제공하는 서비스의 API입니다. 해당 프로젝트는 다음과 같은 목표를 달성하고자 합니다
+- **수익 정산 통계 제공**: 영상 및 광고 조회수를 기반으로 수익을 자동 계산하여 통계 데이터를 제공합니다.
+- **마이크로 서비스 구현**: `Spring Boot`, `Docker Compose`, `Eureka`, `Gateway`를 활용해 효율적인 마이크로 서비스 아키텍처를 구축합니다.
+- **대용량 트래픽 처리 및 성능 측정**: `Spring Batch`와 `JMeter`를 활용하여 대용량 트래픽을 처리하고 성능을 측정합니다.
+- **CI/CD 파이프라인 구축**: `Github Actions`를 사용하여 자동화된 빌드 및 배포 프로세스를 구현합니다.
+- **API 자동 문서화**: `Swagger`를 활용하여 API 명세서를 자동으로 생성하고 팀 간 협업을 지원합니다.
 
-| ⚙️ Key Features       | 설명                                                                                     |
-|-----------------------|-----------------------------------------------------------------------------------------|
-| 📌 회원 서비스        | - 회원가입 및 계정 구분<br>- 로그인 및 로그아웃 기능                                 |
-| 📌 스트리밍 서비스    | - 특정 동영상 재생 및 조회수 증가<br>- 동영상 재생 시간 및 재생 시점 기록           |
-| 📌 광고 재생          | - 동영상에 등록된 광고를 재생하고 광고 조회수 증가                                     |
-| 📌 통계 및 정산       | - 1일, 1주일, 1달 단위로 조회수와 재생 시간이 높은 Top 5 영상 기록<br>- 동영상과 광고 조회수를 기반으로 정산 금액 산정 |
+## 🛠️ 기술 의사 결정
+![image](https://github.com/user-attachments/assets/1a3288eb-76ff-4bc2-8683-abeaeaad964f)
+### 주요 기술 스택
+| **기술**                          | **설명**                                                                                                                                           |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Spring Boot**                  | 빠른 개발과 간단한 설정, 다양한 연계 기술 활용 가능                                                                                                          |
+| **Spring Eureka**                | 분산 환경에서 서비스 간의 **자동 등록**과 **탐색**을 제공                                                                                                  |
+| **Spring Gateway**               | 서비스 간 **라우팅, 로드 밸런싱** 등을 처리하는 **API Gateway**로 활용                                                                                           |
+| **Spring Batch**                 | 복잡한 연산을 미리 처리하여 **대용량 트래픽에 대비**                                                                                                          |
+| **Docker Compose**               | 분산된 여러 서비스를 **컨테이너로 관리**하고 **CI/CD와 쉽게 통합**                                                                                             |
+| **Swagger**                      | **API 명세**를 자동으로 생성하고 관리                                                                                                                   |
+| **Github Actions**               | CI/CD를 통한 **빌드와 배포의 자동화**                                                                                                                   |
+| **Nginx**                        | 프로젝트들을 구분하여 관리하는 **리버스 프록시 서버**로 사용                                                                                                  |
+### 1. **Spring Eureka + Spring Gateway**
+- **Eureka**는 서비스의 **자동 탐색과 등록**을, **Gateway**는 외부 요청에 대해 **라우팅**을 관리
+- **Eureka 서버**의 문제가 발생하면 **전체 서비스로 전파** 가능
 
+### 2. **Spring Batch > Apache Camel**
+- **Spring Batch**는 **대규모 배치 처리**와 대량 데이터의 **일괄 처리 작업**에서 뛰어남
+- **Apache Camel**은 실시간 **메시징과 라우팅**에 강점을 가짐
+- **트랜잭션 관리와 대량 배치 처리**를 위해 **Spring Batch** 선택
+
+### 3. **Docker Compose > Kubernetes**
+- 작은 규모의 프로젝트에서 **Docker Compose**를 통해 빠르고 간편하게 개발 가능
+- **Kubernetes**는 **고가용성과 대규모 배포**에 유용하지만 **설정이 복잡하고 프로젝트 규모에 부적합**
+- **Docker Compose**는 리소스 소모가 적어 **배포에 유리**, **컨테이너 수에 따라 성능 저하 가능**
+
+## 🌟 **주요 기능**
+<aside>
   
-## 💻 Link
-- [Eureka](http://dltmdgus9661.iptime.org/adjustment/eureka/)
-- [Swagger](http://dltmdgus9661.iptime.org/adjustment/webjars/swagger-ui/index.html)
+- **🎯 회원 서비스** : 회원가입, 로그인, 로그아웃 기능
+- 📽️ **스트리밍 서비스** : 동영상 재생, 조회수 증가, 재생 시간 및 종료 시점 기록
+- ⏯️ **광고 재생** : 동영상에 등록된 광고 재생, 광고 조회수 증가
+- 📊 **통계 및 정산** : 동영상과 광고 조회수를 기반으로 **일간, 주간, 월간** 정산 금액 산정
 
+</aside>
 
-## 🗓️ Development environment
-
-- **개발 기간**: 2024년 8월 19일부터 2024년 9월 13일 (4주간)
-
-- **개발 환경**:
-  - **운영 체제**: Windows, Ubuntu
-  - **프로그래밍 언어**: Java
-  - **프레임워크**: Spring Boot 3.1.5
-  - **데이터베이스**: MySQL
-  - **배포 환경**: Docker
-
-## 🛠️ Tech Stack
-
-![image](https://github.com/user-attachments/assets/ca78d8f4-b9be-4ce7-895f-aca8d0bc7918)
-
-| 기술                                                                                                  | 설명                                                                 | 선정 이유                                                                                              |
-|-------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=flat&logo=spring-boot&logoColor=white)    | Java 기반의 애플리케이션을 빠르고 쉽게 개발할 수 있는 프레임워크       | 복잡한 웹 애플리케이션을 간단하게 구축하고, 빠르게 배포할 수 있는 기능을 제공하기 때문에 선택했습니다.    |
-| ![Spring Eureka](https://img.shields.io/badge/Spring%20Eureka-6DB33F?style=flat&logo=spring&logoColor=white)     | 마이크로서비스 아키텍처에서 서비스 디스커버리를 위한 솔루션           | 마이크로서비스 환경에서 각 서비스가 서로를 자동으로 찾을 수 있도록 하기 위해 Eureka를 도입했습니다.      |
-| ![Spring Cloud Gateway](https://img.shields.io/badge/Spring%20Cloud%20Gateway-6DB33F?style=flat&logo=spring-cloud&logoColor=white) | Spring 기반의 API Gateway로, 라우팅과 필터링 기능을 제공              | 마이크로서비스 아키텍처에서 각 서비스를 효과적으로 통합하고, 외부 요청을 관리하기 위해 선택했습니다.       |
-| ![Spring Security](https://img.shields.io/badge/Spring%20Security-6DB33F?style=flat&logo=spring-security&logoColor=white) | Spring 기반 애플리케이션에 인증과 권한 관리를 제공하는 보안 프레임워크  | 회원 서비스와 스트리밍 서비스에 안전한 인증 및 권한 관리를 구현하기 위해 선택했습니다.                    |
-| ![Spring Batch](https://img.shields.io/badge/Spring%20Batch-6DB33F?style=flat&logo=spring&logoColor=white)    | 대량의 데이터를 효율적으로 처리하기 위한 배치 프로세스 프레임워크         | 정산 과정을 특정한 시간에 자동으로 수행하여 자원을 효율적으로 관리하고, 업무의 자동화를 지원하기 위해 선택했습니다. |
-| ![Docker Compose](https://img.shields.io/badge/Docker%20Compose-2496ED?style=flat&logo=docker&logoColor=white)  | 여러 개의 컨테이너를 한 번에 관리할 수 있는 Docker 도구               | 다양한 서비스 (DB, Redis 등) 환경을 손쉽게 구성하고, 배포 프로세스를 자동화하기 위해 Docker Compose를 사용했습니다.|
-| ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black)         | API 문서화를 위한 도구                                               | 모든 서비스의 API를 한 곳에서 문서화하고, 쉽게 접근할 수 있도록 하기 위해 Swagger를 선택했습니다.        |
-| ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat&logo=redis&logoColor=white)              | 메모리 기반의 고속 데이터 저장소                                      | 세션 관리 및 캐싱 기능을 빠르게 처리하기 위해 사용했습니다. 특히 회원 인증 및 스트리밍 기록 관리에 적합합니다.|
-| ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)              | 관계형 데이터베이스 관리 시스템                                        | 사용자, 동영상, 광고 등의 데이터를 안정적으로 저장하고 관리하기 위해 선택한 데이터베이스입니다.           |
-| ![JMeter](https://img.shields.io/badge/JMeter-0A7E32?style=flat&logo=apache&logoColor=white)           | 성능 테스트 및 부하 테스트를 위한 도구                                 | 대량 데이터 주입 및 사용자 테스트를 통해 애플리케이션의 성능과 안정성을 평가하기 위해 JMeter를 사용했습니다.       |
-| ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)           | 버전 관리 시스템으로 코드와 협업 도구 제공                            | 코드 버전 관리를 위해 사용했으며 Readme를 통해 프로젝트의 과정과 결과에 대해 설명합니다.          |
-| ![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=flat&logo=github-actions&logoColor=white) | GitHub에서 제공하는 CI/CD 자동화 도구                                | 애플리케이션을 자동으로 빌드하고 배포하는 CI/CD 파이프라인을 구축하기 위해 사용했습니다.                  |
-| ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat&logo=nginx&logoColor=white)             | 고성능 웹 서버 및 리버스 프록시 서버                                   | 서버의 주소로 게이트웨이를 호스팅하고, 외부 요청을 효과적으로 처리하기 위해 Nginx를 사용했습니다.          |
-
-
-## 🗂️ Project Structure
+## 🗂️ 프로젝트 구조
 <details>
 <summary>File Structure</summary>
 <pre>
@@ -388,18 +381,340 @@
 </details>
 
 <details>
-<summary><strong>Spring Gateway와 Swagger 연동</strong></summary>
+<summary><strong>배치 작업 최적화</strong></summary>
    
-   💡 **문제** : Swagger 적용에 있어 Gateway에서 각 서버의 Swagger를 찾지 못하는 문제<br>
-   ❌ **원인** : 요청이 Nginx와 Gateway를 지나면서 url요청을 올바르지 않아 정상적으로 페이지가 나타나지 않음을 확인함<br>
-   ✔️ **해결** : **Gateway filters** 기능을 활용해 올바르게 경로 이동이 되도록 설정함 
+   💡 **문제** : 기존 정산 처리 작업에서 비동기 처리 방식으로 진행했으나, 소요 시간이 약 58분으로 오래 걸림<br>
+   ❌ **원인** : 작업 자체의 복잡함으로 데이터 수가 증가하면서 Batch 작업의 소요시간이 급증함<br>
+   ✔️ **해결** : **멀티 스레드를 적용**해 10개 스레드가 동시 처리하도록 조정 (소요시간 28분)  
    
-   ```
-   # Routing option
-   spring.cloud.gateway.routes[0].id=user-service
-   spring.cloud.gateway.routes[0].uri=http://user-service:8080
-   spring.cloud.gateway.routes[0].predicates[0]=Path=/user/**
-   spring.cloud.gateway.routes[0].filters[0]=RewritePath=/user/(?<path>.*), /$\\{path}
-   # Gateway로 요청을 전달할 때 값을 빼고 전달하여 Swagger의 api-docs의 위치가 올바르게 연결되도록 설정함
+   ```java
+   import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@Transactional
+public void setDailySummaryWithThreads() {
+    logger.info("멀티스레드 작업 시작");
+
+    LocalDateTime todayStart = LocalDate.now().atStartOfDay();  // 오늘 0시 0분 0초
+    LocalDateTime yesterdayStart = todayStart.minusDays(1);  // 어제 0시 0분 0초
+    LocalDateTime weekStart = todayStart.minusWeeks(1);  // 1주일 전 (저번주 시작)
+    LocalDateTime monthStart = todayStart.minusMonths(1);  // 한 달 전 (지난달 시작)
+
+    logger.info("오늘 시작 시간: {}", todayStart);
+    logger.info("어제 시작 시간: {}", yesterdayStart);
+    logger.info("1주일 전 시작 시간: {}", weekStart);
+    logger.info("1달 전 시작 시간: {}", monthStart);
+
+    List<Video> videos = videoRepository.findAll();
+    logger.info("총 {} 개의 비디오에 대해 정산을 진행합니다.", videos.size());
+
+    ExecutorService executorService = Executors.newFixedThreadPool(10);  // 스레드 풀 크기 설정 (여기서는 10개)
+
+    for (Video video : videos) {
+        executorService.submit(() -> {
+            logger.info("비디오 ID: {} 처리 시작 (스레드 ID: {})", video.getId(), Thread.currentThread().getId());
+
+            long videoDailyViewCount = 0L;
+            long videoWeeklyViewCount = 0L;
+            long videoMonthlyViewCount = 0L;
+            long videoDailyProfit = 0L;
+            long videoWeeklyProfit = 0L;
+            long videoMonthlyProfit = 0L;
+            long adDailyViewCount = 0L;
+            long adWeeklyViewCount = 0L;
+            long adMonthlyViewCount = 0L;
+            long adDailyProfit = 0L;
+            long adWeeklyProfit = 0L;
+            long adMonthlyProfit = 0L;
+
+            Optional<DailyRecord> todayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
+            Optional<DailyRecord> yesterdayRecordOptional = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(yesterdayStart), video);
+
+            if (todayRecordOptional.isPresent()) {
+                DailyRecord todayRecord = todayRecordOptional.get();
+                if (yesterdayRecordOptional.isPresent()) {
+                    DailyRecord yesterdayRecord = yesterdayRecordOptional.get();
+                    videoDailyViewCount = todayRecord.getTotalVideoViews() - yesterdayRecord.getTotalVideoViews();
+                    adDailyViewCount = todayRecord.getTotalAdViews() - yesterdayRecord.getTotalAdViews();
+                    logger.info("비디오 {}의 일간 조회수 차이: {}", video.getId(), videoDailyViewCount);
+                    logger.info("광고 {}의 일간 조회수 차이: {}", video.getId(), adDailyViewCount);
+                }
+
+                Optional<DailyRecord> prevWeekRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(weekStart), video);
+                if (prevWeekRecord.isPresent()) {
+                    DailyRecord prevRecord = prevWeekRecord.get();
+                    videoWeeklyViewCount = todayRecord.getTotalVideoViews() - prevRecord.getTotalVideoViews();
+                    adWeeklyViewCount = todayRecord.getTotalAdViews() - prevRecord.getTotalAdViews();
+                    logger.info("비디오 {}의 주간 조회수 차이: {}", video.getId(), videoWeeklyViewCount);
+                    logger.info("광고 {}의 주간 조회수 차이: {}", video.getId(), adWeeklyViewCount);
+                }
+
+                Optional<DailyRecord> prevMonthRecord = dailyRecordRepository.findByDateAndVideo(Timestamp.valueOf(monthStart), video);
+                if (prevMonthRecord.isPresent()) {
+                    DailyRecord prevMonthRecordValue = prevMonthRecord.get();
+                    videoMonthlyViewCount = todayRecord.getTotalVideoViews() - prevMonthRecordValue.getTotalVideoViews();
+                    adMonthlyViewCount = todayRecord.getTotalAdViews() - prevMonthRecordValue.getTotalAdViews();
+                    logger.info("비디오 {}의 월간 조회수 차이: {}", video.getId(), videoMonthlyViewCount);
+                    logger.info("광고 {}의 월간 조회수 차이: {}", video.getId(), adMonthlyViewCount);
+                }
+            }
+
+            // 이미 존재하는 정산이면 업데이트
+            Optional<DailySummary> existingSummary = dailySummaryRepository.findByDateAndVideo(Timestamp.valueOf(todayStart), video);
+            if (existingSummary.isPresent()) {
+                DailySummary summary = existingSummary.get();
+                summary.setVideoDailyViewCount(videoDailyViewCount);
+                summary.setVideoWeeklyViewCount(videoWeeklyViewCount);
+                summary.setVideoMonthlyViewCount(videoMonthlyViewCount);
+                summary.setVideoDailyProfit(videoDailyProfit);
+                summary.setVideoWeeklyProfit(videoWeeklyProfit);
+                summary.setVideoMonthlyProfit(videoMonthlyProfit);
+                summary.setAdDailyViewCount(adDailyViewCount);
+                summary.setAdWeeklyViewCount(adWeeklyViewCount);
+                summary.setAdMonthlyViewCount(adMonthlyViewCount);
+                summary.setAdDailyProfit(adDailyProfit);
+                summary.setAdWeeklyProfit(adWeeklyProfit);
+                summary.setAdMonthlyProfit(adMonthlyProfit);
+                logger.info("비디오 {}의 기존 정산 업데이트", video.getId());
+            } else {
+                // 새로운 정산 기록을 추가
+                DailySummary newSummary = new DailySummary(Timestamp.valueOf(todayStart), video,
+                        videoDailyViewCount, videoWeeklyViewCount, videoMonthlyViewCount,
+                        adDailyViewCount, adWeeklyViewCount, adMonthlyViewCount);
+                dailySummaryRepository.save(newSummary);
+                logger.info("비디오 {}의 새로운 정산 기록 추가", video.getId());
+            }
+
+            logger.info("비디오 ID: {} 처리 완료 (스레드 ID: {})", video.getId(), Thread.currentThread().getId());
+        });
+    }
+
+    executorService.shutdown();  // 모든 작업이 끝난 후 ExecutorService 종료
+    logger.info("멀티스레드 작업 종료");
+}
+
    ```
 </details>
+
+
+## 🔗 **성능 측정**
+
+### 개요
+
+- **측정 목표** : `Batch Process`를 통해 미리 생성된 정산의 **응답 속도 효율 실험**
+- **측정 대상** : 사용자의 영상과 광고에 대한 **조회수와 정산 금액 호출** 기능
+- **측정 도구** : `JMeter`
+
+### 측정 과정
+
+1. **`Python`기반의 테스트 데이터 생성**
+    <details>
+    <summary>Python 코드</summary>
+    
+    ```python
+    import pymysql
+    import random
+    import faker
+    from datetime import datetime, timedelta
+    import pytz  # 타임존 관리 라이브러리
+    
+    # MySQL 연결
+    connection = pymysql.connect(
+        host='**',  # MySQL 컨테이너의 IP 주소
+        user='**',        # MySQL 사용자
+        password='**',    # MySQL 비밀번호
+        database='**'  # 사용하려는 데이터베이스 이름
+    )
+    
+    # Faker 라이브러리로 랜덤 데이터 생성
+    fake = faker.Faker()
+    
+    # KST (Asia/Seoul) 타임존 설정
+    kst = pytz.timezone('Asia/Seoul')
+    
+    def generate_random_video_sql(user_id):
+        # 랜덤 제목, URL, 썸네일 생성
+        title = fake.sentence(nb_words=5)  # 5개의 단어로 이루어진 랜덤 문장
+        url = fake.url()
+        thumbnail = fake.image_url()
+        duration = random.randint(10, 200)  # 10초에서 200초 사이의 랜덤 영상 길이
+    
+        # 랜덤으로 1년 이내의 날짜 생성
+        today = datetime.today()
+        random_days = random.randint(0, 365)  # 0일부터 365일까지 랜덤
+        random_date = today - timedelta(days=random_days)
+    
+        # 전날 15시로 시간 설정
+        random_date = random_date.replace(hour=15, minute=0, second=0, microsecond=0)
+    
+        # KST 타임존에 맞게 로컬라이즈
+        random_date_kst = kst.localize(random_date)
+        registration_date = random_date_kst.strftime('%Y-%m-%d %H:%M:%S')
+    
+        # SQL 생성
+        sql = f"""
+            INSERT INTO video (url, thumbnail, user_id, title, view_count, registration_date, duration)
+            VALUES ('{url}', '{thumbnail}', {user_id}, '{title}', 0, '{registration_date}', {duration});
+        """
+        return sql
+    
+    def generate_random_adlist_sql(video_id):
+        # 광고 ID는 2008부터 2108까지 범위에서 랜덤으로 선택
+        ad_ids = random.sample(range(2008, 2107), random.randint(1, 5))  # 1개에서 5개 사이의 랜덤 광고 선택
+    
+        # AdList SQL 생성
+        adlist_sqls = []
+        for ad_id in ad_ids:
+            adlist_sql = f"""
+                INSERT INTO ad_list (video_id, ad_id, view_count)
+                VALUES ({video_id}, {ad_id}, 0);
+            """
+            adlist_sqls.append(adlist_sql)
+    
+        return adlist_sqls
+    
+    def generate_daily_record_sql(video_id, start_date, today):
+        # start_date부터 오늘까지 하루씩 증가하는 데이터를 생성
+        daily_records = []
+    
+        total_video_views = 0
+        total_ad_views = 0
+    
+        current_date = start_date
+        while current_date <= today:
+            # 전날 15시로 설정
+            current_date = current_date.replace(hour=15, minute=0, second=0, microsecond=0)
+    
+            # 영상 조회수와 광고 조회수 랜덤 증가
+            daily_video_views = random.randint(100, 1000)  # 100 ~ 1000 사이의 랜덤 증가
+            daily_ad_views = random.randint(10, 100)  # 10 ~ 100 사이의 랜덤 증가
+    
+            # 총합 업데이트
+            total_video_views += daily_video_views
+            total_ad_views += daily_ad_views
+    
+            # DailyRecord SQL 생성
+            daily_record_sql = f"""
+                INSERT INTO daily_record (date, video_id, total_video_views, total_ad_views)
+                VALUES ('{current_date.strftime('%Y-%m-%d %H:%M:%S')}', {video_id}, {total_video_views}, {total_ad_views});
+            """
+            daily_records.append(daily_record_sql)
+    
+            # 하루씩 증가
+            current_date += timedelta(days=1)
+    
+        return daily_records
+    
+    try:
+        with connection.cursor() as cursor:
+            # 사용자 ID는 1
+            user_id = 1
+    
+            # 50개의 영상 데이터를 생성하고 관계 테이블에 추가
+            for _ in range(47):
+                # 영상 데이터 생성 및 삽입
+                video_sql = generate_random_video_sql(user_id)
+                cursor.execute(video_sql)
+                # 생성된 영상의 ID 가져오기
+                video_id = cursor.lastrowid
+    
+                # 생성된 영상에 대해 일자별 DailyRecord 데이터 삽입
+                start_date = datetime.strptime("2023-11-01", "%Y-%m-%d")  # 예시로 11월 1일 시작
+                today = datetime.today()  # 오늘 날짜
+                daily_record_sqls = generate_daily_record_sql(video_id, start_date, today)
+                for daily_record_sql in daily_record_sqls:
+                    cursor.execute(daily_record_sql)
+    
+                # 광고-영상 관계 삽입
+                adlist_sqls = generate_random_adlist_sql(video_id)
+                for adlist_sql in adlist_sqls:
+                    cursor.execute(adlist_sql)
+    
+                print(f"Video {video_id} added successfully!")
+    
+            connection.commit()  # 커밋하여 변경 사항 반영
+    finally:
+        connection.close()
+    ```
+      </details>
+
+   - **영상 데이터 생성**
+     - 영상의 제목, URL, 썸네일을 랜덤으로 생성
+     - 영상 길이는 10초에서 200초 사이의 랜덤 값으로 설정
+     - 등록일은 오늘 날짜를 기준으로 0일부터 365일 사이의 랜덤 날짜로 설정
+   - **광고-영상 관계 데이터 생성**
+     - 광고 ID를 100개의 실제 광고 데이터 중 1개에서 5개 사이의 랜덤 값으로 설정
+   - **일별 기록 데이터 생성**
+     - 영상 생성일부터 오늘까지 하루씩 증가하는 데이터를 생성
+     - 영상 조회수는 각 날짜마다 100에서 1000 사이의 랜덤값으로 증가
+     - 광고 조회수는 각 날짜마다 10에서 100 사이의 랜덤값으로 증가
+
+3. **배치 작업 수행**
+   - 오늘 날짜로 배치 작업을 실행하여, 데이터의 배치 결과를 처리
+   - 실제 작업은 Batch 스케줄러로 매일 진행됨
+
+4. **실험 환경 설정**
+   - JMeter에서 연결 테스트 및 반환 결과 검증
+
+5. **실험 진행**
+   - **단일 사용자 실험** (1명이 100번 반복)
+     - **즉시 로딩**을 통해 요청을 진행하고 측정
+     - **배치된 결과 로딩**을 통해 요청을 진행하고 측정
+   - **다중 사용자 실험** (100명이 1번씩 반복)
+     - **즉시 로딩**을 통해 요청을 진행하고 측정
+     - **배치된 결과 로딩**을 통해 요청을 진행하고 측정
+   - **데이터 수 확장**
+     - **50개** 데이터에서 시작하여, **100개**, **1000개**, **10000개**로 데이터 수를 증가
+
+6. **결과 분석**
+   - 단일 사용자 및 다중 사용자 각각의 **응답 시간**을 비교하여 배치 처리 방식이 성능에 미치는 영향을 분석
+   - 각 데이터 수에 따른 **응답 시간**을 분석하여, 배치 처리의 효과를 시각적으로 확인
+
+### 측정 결과
+
+- **데이터 수 50개**
+  - **단일 사용자**
+    - **즉시**: 평균 응답 시간 56ms, 최소 48ms, 최대 104ms
+    - **배치**: 평균 응답 시간 33ms, 최소 23ms, 최대 110ms
+  - **다중 사용자**
+    - **즉시**: 평균 응답 시간 796ms, 최소 139ms, 최대 2255ms
+    - **배치**: 평균 응답 시간 568ms, 최소 32ms, 최대 1603ms
+
+- **데이터 수 100개**
+  - **단일 사용자**
+    - **즉시**: 평균 응답 시간 97ms, 최소 87ms, 최대 150ms
+    - **배치**: 평균 응답 시간 46ms, 최소 36ms, 최대 166ms
+  - **다중 사용자**
+    - **즉시**: 평균 응답 시간 1622ms, 최소 286ms, 최대 4131ms
+    - **배치**: 평균 응답 시간 1321ms, 최소 108ms, 최대 4113ms
+
+- **데이터 수 1000개**
+  - **단일 사용자**
+    - **즉시**: 평균 응답 시간 201ms, 최소 173ms, 최대 318ms
+    - **배치**: 평균 응답 시간 29ms, 최소 17ms, 최대 120ms
+  - **다중 사용자**
+    - **즉시**: 평균 응답 시간 2735ms, 최소 642ms, 최대 5903ms
+    - **배치**: 평균 응답 시간 2067ms, 최소 144ms, 최대 5965ms
+
+- **데이터 수 10000개**
+  - **단일 사용자**
+    - **즉시**: 평균 응답 시간 781ms, 최소 656ms, 최대 1459ms
+    - **배치**: 평균 응답 시간 78ms, 최소 64ms, 최대 208ms
+  - **다중 사용자**
+    - **즉시**: 평균 응답 시간 13472ms, 최소 2087ms, 최대 11962ms
+    - **배치**: 평균 응답 시간 6541ms, 최소 546ms, 최대 11612ms
+
+### 성능 향상 분석
+
+- **단일 사용자 실험**
+  - 데이터 수가 적을수록 **즉시 처리**와 **배치 처리**의 차이가 크지 않지만, 데이터 수가 많아질수록 **배치 처리**의 성능 향상 효과가 두드러짐.
+  - **1000개 이상**의 데이터에서 배치 처리 방식이 **응답 시간**을 크게 단축시킴.
+  - **10000개 데이터**에서는 배치 처리 방식이 **응답 시간**을 **85% 이상** 향상시킴.
+
+- **다중 사용자 실험**
+  - 다중 사용자 환경에서는 배치 처리의 효과가 더 크게 나타나며, 특히 **응답 시간**에서 **30% 이상** 향상이 발생.
+  - 배치 처리 방식은 대량 데이터 요청 시 성능을 크게 향상시키고, **서버 자원**을 효율적으로 활용할 수 있게 도와줌.
+
+### 결론
+
+배치 처리 방식은 특히 데이터 양이 많을 경우 성능을 크게 향상시킬 수 있는 방법입니다. 실험 결과, **즉시 로딩**보다 **배치된 결과 로딩**이 **응답 속도** 면에서 유리하며, 데이터 수가 많아질수록 그 차이는 더욱 두드러집니다. 다중 사용자 환경에서도 배치 처리의 이점이 확연히 나타나며, 서버 성능과 사용자 경험을 최적화하는 데 중요한 역할을 합니다.
