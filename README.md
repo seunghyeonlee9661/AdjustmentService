@@ -21,16 +21,16 @@
 | **Swagger**                      | **API 명세**를 자동으로 생성하고 관리                                                                                                                   |
 | **Github Actions**               | CI/CD를 통한 **빌드와 배포의 자동화**                                                                                                                   |
 | **Nginx**                        | 프로젝트들을 구분하여 관리하는 **리버스 프록시 서버**로 사용                                                                                                  |
-### 1. **Spring Eureka + Spring Gateway**
+#### 1. **Spring Eureka + Spring Gateway**
 - **Eureka**는 서비스의 **자동 탐색과 등록**을, **Gateway**는 외부 요청에 대해 **라우팅**을 관리
 - **Eureka 서버**의 문제가 발생하면 **전체 서비스로 전파** 가능
 
-### 2. **Spring Batch > Apache Camel**
+#### 2. **Spring Batch > Apache Camel**
 - **Spring Batch**는 **대규모 배치 처리**와 대량 데이터의 **일괄 처리 작업**에서 뛰어남
 - **Apache Camel**은 실시간 **메시징과 라우팅**에 강점을 가짐
 - **트랜잭션 관리와 대량 배치 처리**를 위해 **Spring Batch** 선택
 
-### 3. **Docker Compose > Kubernetes**
+#### 3. **Docker Compose > Kubernetes**
 - 작은 규모의 프로젝트에서 **Docker Compose**를 통해 빠르고 간편하게 개발 가능
 - **Kubernetes**는 **고가용성과 대규모 배포**에 유용하지만 **설정이 복잡하고 프로젝트 규모에 부적합**
 - **Docker Compose**는 리소스 소모가 적어 **배포에 유리**, **컨테이너 수에 따라 성능 저하 가능**
